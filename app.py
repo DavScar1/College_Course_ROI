@@ -253,12 +253,26 @@ def suggest_alternative(result):
 
 @app.route('/')
 def home():
+    """Serve the calculator as the homepage"""
+    try:
+        return send_file('index.html')
+    except FileNotFoundError:
+        return jsonify({
+            "error": "Calculator page not found. Make sure index.html is in the same directory as app.py"
+        }), 404
+    except Exception as e:
+        return jsonify({"error": f"Could not load calculator page: {str(e)}"}), 500
+
+@app.route('/api')
+def api_status():
+    """API status endpoint"""
     return jsonify({
         "status": "online",
         "message": "Irish College ROI Calculator API",
         "version": "1.0.0",
         "endpoints": {
-            "/": "API status and documentation",
+            "/": "Calculator web interface",
+            "/api": "API status and documentation",
             "/courses": "List all available courses",
             "/calculate": "Calculate ROI for a specific course (GET with ?course=NAME)",
             "/compare-multiple": "Compare multiple courses (POST with JSON)",
@@ -508,7 +522,7 @@ def not_found(e):
     return jsonify({
         "success": False,
         "error": "Endpoint not found",
-        "available_endpoints": ["/", "/courses", "/calculate", "/compare-multiple", "/calculator"]
+        "available_endpoints": ["/", "/api", "/courses", "/calculate", "/compare-multiple", "/calculator"]
     }), 404
 
 @app.errorhandler(500)
@@ -536,8 +550,8 @@ if __name__ == '__main__':
     print(f"\n✅ Loaded {len(COURSE_DATA)} courses from database")
     print("\nServer starting at: http://127.0.0.1:5000")
     print("\n📱 Available endpoints:")
-    print("  - http://127.0.0.1:5000/")
-    print("  - http://127.0.0.1:5000/calculator  <- OPEN THIS FOR WEB INTERFACE")
+    print("  - http://127.0.0.1:5000/  <- CALCULATOR WEB INTERFACE")
+    print("  - http://127.0.0.1:5000/api")
     print("  - http://127.0.0.1:5000/courses")
     print("  - http://127.0.0.1:5000/calculate?course=Computer Science - UCD")
     print("  - http://127.0.0.1:5000/compare-multiple (POST)")
