@@ -1,0 +1,1007 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Course Matcher Quiz - Find Your Perfect Course</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1e40af;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-600: #4b5563;
+            --gray-700: #374151;
+            --gray-800: #1f2937;
+            --gray-900: #111827;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            background: var(--gray-50);
+            min-height: 100vh;
+            padding: 0;
+            margin: 0;
+        }
+
+        .quiz-container {
+            background: white;
+            border-radius: 12px;
+            border: 1px solid var(--gray-200);
+            max-width: 800px;
+            width: 100%;
+            margin: 0 auto;
+            overflow: hidden;
+        }
+
+        .quiz-header {
+            background: white;
+            border-bottom: 1px solid var(--gray-200);
+            padding: 32px 40px;
+            text-align: center;
+        }
+
+        .quiz-header h1 {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 8px;
+            letter-spacing: -0.02em;
+        }
+
+        .quiz-header p {
+            color: var(--gray-600);
+            font-size: 15px;
+        }
+
+        .icon {
+            display: inline-block;
+            width: 22px;
+            height: 22px;
+            vertical-align: middle;
+            margin-right: 6px;
+            stroke-width: 2.5;
+            color: var(--primary);
+        }
+        
+        .option-title .icon {
+            color: var(--gray-700);
+            transition: color 0.15s ease;
+        }
+        
+        .option:hover .icon,
+        .option.selected .icon {
+            color: var(--primary);
+        }
+
+        .progress-bar {
+            height: 4px;
+            background: var(--gray-200);
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--primary);
+            transition: width 0.3s ease;
+            width: 0%;
+        }
+
+        .quiz-body {
+            padding: 40px;
+        }
+
+        .question {
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .question.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .question-number {
+            color: var(--primary);
+            font-weight: 600;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+        }
+
+        .question-text {
+            font-size: 22px;
+            font-weight: 600;
+            color: var(--gray-900);
+            margin-bottom: 24px;
+            line-height: 1.4;
+        }
+
+        .options {
+            display: grid;
+            gap: 12px;
+        }
+
+        .option {
+            background: var(--gray-50);
+            border: 1px solid var(--gray-200);
+            border-radius: 8px;
+            padding: 16px;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            position: relative;
+        }
+
+        .option:hover {
+            border-color: var(--primary);
+            background: white;
+            box-shadow: 0 2px 8px rgba(37, 99, 235, 0.1);
+        }
+
+        .option.selected {
+            border-color: var(--primary);
+            background: white;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .option-title {
+            font-weight: 600;
+            color: var(--gray-900);
+            margin-bottom: 4px;
+            font-size: 15px;
+        }
+
+        .option-desc {
+            color: var(--gray-600);
+            font-size: 13px;
+        }
+
+        .slider-container {
+            margin: 24px 0;
+        }
+
+        .slider-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            font-size: 13px;
+            color: var(--gray-600);
+        }
+
+        .slider {
+            width: 100%;
+            height: 4px;
+            border-radius: 2px;
+            background: var(--gray-200);
+            outline: none;
+            -webkit-appearance: none;
+            cursor: pointer;
+        }
+
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: var(--primary);
+            cursor: pointer;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+            transition: all 0.15s;
+        }
+
+        .slider::-webkit-slider-thumb:hover {
+            background: var(--primary-dark);
+            transform: scale(1.2);
+        }
+
+        .slider::-moz-range-thumb {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: var(--primary);
+            cursor: pointer;
+            border: none;
+        }
+
+        .slider-value {
+            text-align: center;
+            margin-top: 8px;
+            font-weight: 600;
+            font-size: 16px;
+            color: var(--primary);
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: var(--gray-700);
+            border: 1px solid var(--gray-300);
+        }
+
+        .btn-secondary:hover {
+            background: var(--gray-50);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .results {
+            display: none;
+        }
+
+        .results.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .results-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .results-header h2 {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 8px;
+            letter-spacing: -0.02em;
+        }
+
+        .results-header p {
+            color: var(--gray-600);
+            font-size: 15px;
+        }
+
+        .match-card {
+            background: white;
+            border: 1px solid var(--gray-200);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 16px;
+            transition: all 0.2s ease;
+        }
+
+        .match-card:hover {
+            border-color: var(--primary);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            transform: translateY(-2px);
+        }
+
+        .match-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 15px;
+        }
+
+        .match-rank {
+            background: var(--primary);
+            color: white;
+            width: 44px;
+            height: 44px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .match-info {
+            flex: 1;
+            margin-left: 16px;
+        }
+
+        .match-title {
+            font-size: 17px;
+            font-weight: 600;
+            color: var(--gray-900);
+            margin-bottom: 4px;
+        }
+
+        .match-university {
+            color: var(--gray-600);
+            font-size: 13px;
+        }
+
+        .match-score {
+            text-align: right;
+            flex-shrink: 0;
+        }
+
+        .score-label {
+            font-size: 11px;
+            color: var(--gray-600);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .score-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .match-details {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .detail-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            background: var(--gray-50);
+            border-radius: 6px;
+        }
+
+        .detail-label {
+            color: var(--gray-600);
+            font-size: 13px;
+        }
+
+        .detail-value {
+            font-weight: 600;
+            color: var(--gray-900);
+            font-size: 13px;
+        }
+
+        .match-reasons {
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid var(--gray-200);
+        }
+
+        .reason-title {
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 10px;
+            font-size: 13px;
+        }
+
+        .reason-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .reason-tag {
+            background: #dbeafe;
+            color: #1e40af;
+            padding: 4px 10px;
+            border-radius: 100px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .view-course-btn {
+            width: 100%;
+            margin-top: 16px;
+            padding: 12px 20px;
+            background: white;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        .view-course-btn:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+        }
+
+        .restart-btn {
+            width: 100%;
+            margin-top: 30px;
+        }
+
+        @media (max-width: 768px) {
+            .quiz-header {
+                padding: 30px 20px;
+            }
+
+            .quiz-header h1 {
+                font-size: 24px;
+            }
+
+            .quiz-body {
+                padding: 30px 20px;
+            }
+
+            .question-text {
+                font-size: 20px;
+            }
+
+            .match-details {
+                grid-template-columns: 1fr;
+            }
+
+            .match-header {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+
+            .match-info {
+                margin-left: 0;
+                margin-top: 15px;
+            }
+
+            .match-score {
+                margin-top: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="quiz-container">
+        <div class="quiz-header">
+            <h1><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg> Find Your Perfect Course</h1>
+            <p>Answer 8 questions to get personalized recommendations</p>
+        </div>
+
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressBar"></div>
+        </div>
+
+        <div class="quiz-body">
+            <!-- Question 1: Career Goals -->
+            <div class="question active" data-question="1">
+                <div class="question-number">Question 1 of 8</div>
+                <div class="question-text">What's your primary career goal?</div>
+                <div class="options">
+                    <div class="option" data-value="high-salary">
+                        <div class="option-title"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v12M9 9h6M9 15h6"/></svg> Maximize my earning potential</div>
+                        <div class="option-desc">I want the highest possible salary and strong financial returns</div>
+                    </div>
+                    <div class="option" data-value="job-security">
+                        <div class="option-title"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> Long-term job security</div>
+                        <div class="option-desc">I want stability and guaranteed employment</div>
+                    </div>
+                    <div class="option" data-value="passion">
+                        <div class="option-title"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg> Follow my passion</div>
+                        <div class="option-desc">I want to do what I love, salary is secondary</div>
+                    </div>
+                    <div class="option" data-value="balance">
+                        <div class="option-title"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 1v6m0 6v6m5.2-11.8l-4.2 4.2m0 0l-4.2 4.2m8.4 0l-4.2-4.2m0 0L8.8 6.8"/></svg> Work-life balance</div>
+                        <div class="option-desc">I want good pay with reasonable hours and flexibility</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 2: Field of Interest -->
+            <div class="question" data-question="2">
+                <div class="question-number">Question 2 of 8</div>
+                <div class="question-text">Which field interests you most?</div>
+                <div class="options">
+                    <div class="option" data-value="technology">
+                        <div class="option-title"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg> Technology & Computing</div>
+                        <div class="option-desc">Software, data, AI, cybersecurity</div>
+                    </div>
+                    <div class="option" data-value="healthcare">
+                        <div class="option-title"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7v10c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-10-5z"/><path d="M12 8v8m-4-4h8"/></svg> Healthcare & Medicine</div>
+                        <div class="option-desc">Medicine, nursing, therapy, allied health</div>
+                    </div>
+                    <div class="option" data-value="business">
+                        <div class="option-title"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M8 7h8M8 11h8M8 15h5"/></svg> Business & Finance</div>
+                        <div class="option-desc">Commerce, accounting, management</div>
+                    </div>
+                    <div class="option" data-value="engineering">
+                        <div class="option-title"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 1v6m0 6v6m5.2-11.8l-4.2 4.2m0 0l-4.2 4.2m8.4 0l-4.2-4.2m0 0L8.8 6.8"/></svg> Engineering</div>
+                        <div class="option-desc">Civil, mechanical, biomedical, electrical</div>
+                    </div>
+                    <div class="option" data-value="other">
+                        <div class="option-title"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg> Other Fields</div>
+                        <div class="option-desc">Law, education, communications, psychology</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 3: Budget -->
+            <div class="question" data-question="3">
+                <div class="question-number">Question 3 of 8</div>
+                <div class="question-text">What's your budget for annual tuition?</div>
+                <div class="slider-container">
+                    <div class="slider-label">
+                        <span>€5,000</span>
+                        <span>€35,000+</span>
+                    </div>
+                    <input type="range" class="slider" id="budgetSlider" min="5000" max="35000" step="1000" value="10000">
+                    <div class="slider-value" id="budgetValue">€10,000 per year</div>
+                </div>
+            </div>
+
+            <!-- Question 4: Course Length -->
+            <div class="question" data-question="4">
+                <div class="question-number">Question 4 of 8</div>
+                <div class="question-text">How long are you willing to study?</div>
+                <div class="options">
+                    <div class="option" data-value="4">
+                        <div class="option-title"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> 4 years or less</div>
+                        <div class="option-desc">I want to start earning quickly</div>
+                    </div>
+                    <div class="option" data-value="5">
+                        <div class="option-title"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg> 5 years</div>
+                        <div class="option-desc">Happy with a standard longer program</div>
+                    </div>
+                    <div class="option" data-value="6">
+                        <div class="option-title"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg> 6+ years</div>
+                        <div class="option-desc">Committed to extensive education (e.g., Medicine)</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 5: Location -->
+            <div class="question" data-question="5">
+                <div class="question-number">Question 5 of 8</div>
+                <div class="question-text">Where would you prefer to study?</div>
+                <div class="options">
+                    <div class="option" data-value="dublin">
+                        <div class="option-title"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg> Dublin</div>
+                        <div class="option-desc">Capital city, most opportunities</div>
+                    </div>
+                    <div class="option" data-value="cork-galway">
+                        <div class="option-title"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg> Cork or Galway</div>
+                        <div class="option-desc">Vibrant cities, lower cost of living</div>
+                    </div>
+                    <div class="option" data-value="other">
+                        <div class="option-title"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg> Other locations</div>
+                        <div class="option-desc">Limerick, Maynooth, anywhere really</div>
+                    </div>
+                    <div class="option" data-value="no-preference">
+                        <div class="option-title"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/><line x1="2" y1="12" x2="22" y2="12"/></svg> No preference</div>
+                        <div class="option-desc">I'll go wherever has the best course</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 6: Work Style -->
+            <div class="question" data-question="6">
+                <div class="question-number">Question 6 of 8</div>
+                <div class="question-text">What work environment appeals to you?</div>
+                <div class="options">
+                    <div class="option" data-value="remote">
+                        <div class="option-title"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg> Remote/flexible work</div>
+                        <div class="option-desc">Work from anywhere, digital nomad lifestyle</div>
+                    </div>
+                    <div class="option" data-value="hands-on">
+                        <div class="option-title"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> Hands-on, in-person work</div>
+                        <div class="option-desc">Direct interaction with people/equipment</div>
+                    </div>
+                    <div class="option" data-value="hybrid">
+                        <div class="option-title"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg> Mix of both</div>
+                        <div class="option-desc">Some remote work, some in-office</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 7: Skills Demand -->
+            <div class="question" data-question="7">
+                <div class="question-number">Question 7 of 8</div>
+                <div class="question-text">How important is high demand for your skills?</div>
+                <div class="slider-container">
+                    <div class="slider-label">
+                        <span>Not important</span>
+                        <span>Critical</span>
+                    </div>
+                    <input type="range" class="slider" id="demandSlider" min="1" max="10" step="1" value="7">
+                    <div class="slider-value" id="demandValue">7/10</div>
+                </div>
+            </div>
+
+            <!-- Question 8: International Opportunities -->
+            <div class="question" data-question="8">
+                <div class="question-number">Question 8 of 8</div>
+                <div class="question-text">Do you want international career opportunities?</div>
+                <div class="options">
+                    <div class="option" data-value="yes">
+                        <div class="option-title"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg> Yes, definitely</div>
+                        <div class="option-desc">I want to work abroad or have that option</div>
+                    </div>
+                    <div class="option" data-value="maybe">
+                        <div class="option-title"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> Maybe someday</div>
+                        <div class="option-desc">It's nice to have but not essential</div>
+                    </div>
+                    <div class="option" data-value="no">
+                        <div class="option-title"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/></svg> Prefer to stay in Ireland</div>
+                        <div class="option-desc">I want to build my career in Ireland</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Results -->
+            <div class="results" id="results">
+                <div class="results-header">
+                    <h2>Your Perfect Matches</h2>
+                    <p>Based on your preferences, here are your top recommended courses</p>
+                </div>
+                <div id="matchesContainer"></div>
+                <button class="btn btn-primary restart-btn" onclick="restartQuiz()">Take Quiz Again</button>
+            </div>
+
+            <!-- Navigation -->
+            <div class="nav-buttons">
+                <button class="btn btn-secondary" id="prevBtn" onclick="previousQuestion()" style="display: none;">Previous</button>
+                <button class="btn btn-primary" id="nextBtn" onclick="nextQuestion()" disabled>Next</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'http://127.0.0.1:5000';
+        let currentQuestion = 1;
+        let totalQuestions = 8;
+        let answers = {};
+        let allCourses = [];
+
+        // Load courses on page load
+        window.addEventListener('load', async () => {
+            try {
+                const response = await fetch(`${API_URL}/courses`);
+                const data = await response.json();
+                if (data.success) {
+                    // Load full course data for each course
+                    const coursePromises = data.courses.map(async (courseName) => {
+                        const res = await fetch(`${API_URL}/calculate?course=${encodeURIComponent(courseName)}`);
+                        const courseData = await res.json();
+                        return courseData.success ? courseData.data : null;
+                    });
+                    allCourses = (await Promise.all(coursePromises)).filter(c => c !== null);
+                    console.log('Loaded courses:', allCourses.length);
+                }
+            } catch (error) {
+                console.error('Error loading courses:', error);
+            }
+        });
+
+        // Handle option selection
+        document.querySelectorAll('.option').forEach(option => {
+            option.addEventListener('click', function() {
+                const question = this.closest('.question');
+                const questionNum = question.dataset.question;
+                
+                // Remove selected from siblings
+                question.querySelectorAll('.option').forEach(opt => opt.classList.remove('selected'));
+                
+                // Add selected to clicked
+                this.classList.add('selected');
+                
+                // Store answer
+                answers[questionNum] = this.dataset.value;
+                
+                // Enable next button
+                document.getElementById('nextBtn').disabled = false;
+            });
+        });
+
+        // Handle slider input
+        document.getElementById('budgetSlider').addEventListener('input', function() {
+            const value = parseInt(this.value);
+            document.getElementById('budgetValue').textContent = `€${value.toLocaleString()} per year`;
+            answers['3'] = value;
+            document.getElementById('nextBtn').disabled = false;
+        });
+
+        document.getElementById('demandSlider').addEventListener('input', function() {
+            const value = parseInt(this.value);
+            document.getElementById('demandValue').textContent = `${value}/10`;
+            answers['7'] = value;
+            document.getElementById('nextBtn').disabled = false;
+        });
+
+        function nextQuestion() {
+            if (currentQuestion < totalQuestions) {
+                // Hide current question
+                document.querySelector(`.question[data-question="${currentQuestion}"]`).classList.remove('active');
+                
+                // Show next question
+                currentQuestion++;
+                document.querySelector(`.question[data-question="${currentQuestion}"]`).classList.add('active');
+                
+                // Update progress
+                updateProgress();
+                
+                // Update buttons
+                document.getElementById('prevBtn').style.display = 'block';
+                document.getElementById('nextBtn').disabled = !answers[currentQuestion];
+                
+                if (currentQuestion === totalQuestions) {
+                    document.getElementById('nextBtn').textContent = 'See My Matches';
+                }
+            } else {
+                // Show results
+                calculateMatches();
+            }
+        }
+
+        function previousQuestion() {
+            if (currentQuestion > 1) {
+                document.querySelector(`.question[data-question="${currentQuestion}"]`).classList.remove('active');
+                currentQuestion--;
+                document.querySelector(`.question[data-question="${currentQuestion}"]`).classList.add('active');
+                
+                updateProgress();
+                
+                if (currentQuestion === 1) {
+                    document.getElementById('prevBtn').style.display = 'none';
+                }
+                
+                document.getElementById('nextBtn').textContent = 'Next';
+                document.getElementById('nextBtn').disabled = !answers[currentQuestion];
+            }
+        }
+
+        function updateProgress() {
+            const progress = (currentQuestion / totalQuestions) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+        }
+
+        function calculateMatches() {
+            if (allCourses.length === 0) {
+                alert('Courses are still loading. Please wait a moment and try again.');
+                return;
+            }
+
+            // Score each course based on user answers
+            const scoredCourses = allCourses.map(course => {
+                let score = 0;
+                let reasons = [];
+                const courseData = course.course_data || {};
+
+                // Q1: Career Goals
+                if (answers['1'] === 'high-salary' && course.roi_5_years > 350) {
+                    score += 25;
+                    reasons.push('Excellent ROI');
+                }
+                if (answers['1'] === 'job-security' && courseData.job_security >= 4.5) {
+                    score += 25;
+                    reasons.push('High job security');
+                }
+                if (answers['1'] === 'balance' && courseData.work_life_balance >= 3.7) {
+                    score += 25;
+                    reasons.push('Good work-life balance');
+                }
+
+                // Q2: Field of Interest
+                const courseName = course.course_name.toLowerCase();
+                if (answers['2'] === 'technology' && (courseName.includes('computer') || courseName.includes('data') || courseName.includes('software') || courseName.includes('cyber'))) {
+                    score += 30;
+                    reasons.push('Matches tech interest');
+                }
+                if (answers['2'] === 'healthcare' && (courseName.includes('medicine') || courseName.includes('nursing') || courseName.includes('therapy') || courseName.includes('pharma'))) {
+                    score += 30;
+                    reasons.push('Matches healthcare interest');
+                }
+                if (answers['2'] === 'business' && (courseName.includes('business') || courseName.includes('commerce') || courseName.includes('account'))) {
+                    score += 30;
+                    reasons.push('Matches business interest');
+                }
+                if (answers['2'] === 'engineering' && courseName.includes('engineering')) {
+                    score += 30;
+                    reasons.push('Matches engineering interest');
+                }
+
+                // Q3: Budget
+                const budget = parseInt(answers['3']);
+                if (course.tuition_per_year <= budget) {
+                    score += 20;
+                    reasons.push('Within budget');
+                } else if (course.tuition_per_year <= budget * 1.2) {
+                    score += 10;
+                }
+
+                // Q4: Course Length
+                const maxLength = parseInt(answers['4']);
+                if (course.course_length <= maxLength) {
+                    score += 15;
+                    reasons.push('Right duration');
+                }
+
+                // Q5: Location
+                if (answers['5'] === 'dublin' && (course.university.includes('Dublin') || course.university.includes('UCD') || course.university.includes('Trinity'))) {
+                    score += 15;
+                    reasons.push('Dublin location');
+                }
+                if (answers['5'] === 'cork-galway' && (course.university.includes('Cork') || course.university.includes('Galway'))) {
+                    score += 15;
+                    reasons.push('Preferred location');
+                }
+                if (answers['5'] === 'no-preference') {
+                    score += 10;
+                }
+
+                // Q6: Work Style
+                if (answers['6'] === 'remote' && courseData.remote_work_availability === 'High') {
+                    score += 20;
+                    reasons.push('Remote work options');
+                }
+                if (answers['6'] === 'hands-on' && courseData.remote_work_availability === 'Low') {
+                    score += 20;
+                    reasons.push('Hands-on career');
+                }
+
+                // Q7: Skills Demand
+                const demandImportance = parseInt(answers['7']);
+                if (demandImportance >= 7 && courseData.skills_demand === 'Very High') {
+                    score += 20;
+                    reasons.push('High demand field');
+                }
+
+                // Q8: International Opportunities
+                if (answers['8'] === 'yes' && courseData.international_opportunities === 'Excellent') {
+                    score += 15;
+                    reasons.push('International opportunities');
+                }
+
+                return {
+                    ...course,
+                    matchScore: Math.min(100, score),
+                    reasons: reasons
+                };
+            });
+
+            // Sort by score and get top 5
+            const topMatches = scoredCourses
+                .sort((a, b) => b.matchScore - a.matchScore)
+                .slice(0, 5);
+
+            displayResults(topMatches);
+        }
+
+        function displayResults(matches) {
+            const container = document.getElementById('matchesContainer');
+            container.innerHTML = '';
+
+            matches.forEach((match, index) => {
+                const courseData = match.course_data || {};
+                
+                const card = document.createElement('div');
+                card.className = 'match-card';
+                card.innerHTML = `
+                    <div class="match-header">
+                        <div class="match-rank">${index + 1}</div>
+                        <div class="match-info">
+                            <div class="match-title">${match.course_name}</div>
+                            <div class="match-university">${match.university}</div>
+                        </div>
+                        <div class="match-score">
+                            <div class="score-label">Match</div>
+                            <div class="score-value">${match.matchScore}%</div>
+                        </div>
+                    </div>
+                    
+                    <div class="match-details">
+                        <div class="detail-item">
+                            <span class="detail-label">Starting Salary</span>
+                            <span class="detail-value">€${match.starting_salary.toLocaleString()}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">5-Year ROI</span>
+                            <span class="detail-value">${match.roi_5_years}%</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Payback Period</span>
+                            <span class="detail-value">${match.payback_years.toFixed(1)} years</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Employment Rate</span>
+                            <span class="detail-value">${courseData.employment_rate || 'N/A'}%</span>
+                        </div>
+                    </div>
+                    
+                    <div class="match-reasons">
+                        <div class="reason-title">Why this matches you:</div>
+                        <div class="reason-list">
+                            ${match.reasons.map(reason => `<span class="reason-tag">✓ ${reason}</span>`).join('')}
+                        </div>
+                    </div>
+                    
+                    <button class="view-course-btn" onclick="viewCourse('${match.course_name.replace(/'/g, "\\'")}')">
+                        View Full Analysis
+                    </button>
+                `;
+                
+                container.appendChild(card);
+            });
+
+            // Hide questions, show results
+            document.querySelector('.question.active').classList.remove('active');
+            document.querySelector('.nav-buttons').style.display = 'none';
+            document.getElementById('results').classList.add('active');
+        }
+
+        function viewCourse(courseName) {
+            console.log('viewCourse called with:', courseName);
+            
+            // Send message to parent window to switch to calculator and select course
+            if (window.parent !== window) {
+                // We're in an iframe, send message to parent
+                console.log('Sending message to parent:', { action: 'selectCourse', course: courseName });
+                window.parent.postMessage({
+                    action: 'selectCourse',
+                    course: courseName
+                }, '*');
+            } else {
+                // We're standalone, redirect to calculator
+                console.log('Standalone mode - redirecting');
+                window.location.href = `${API_URL}/calculator#course=${encodeURIComponent(courseName)}`;
+            }
+        }
+
+        function restartQuiz() {
+            currentQuestion = 1;
+            answers = {};
+            
+            // Reset UI
+            document.querySelectorAll('.question').forEach(q => q.classList.remove('active'));
+            document.querySelector('.question[data-question="1"]').classList.add('active');
+            document.querySelectorAll('.option').forEach(opt => opt.classList.remove('selected'));
+            document.getElementById('budgetSlider').value = 10000;
+            document.getElementById('budgetValue').textContent = '€10,000 per year';
+            document.getElementById('demandSlider').value = 7;
+            document.getElementById('demandValue').textContent = '7/10';
+            
+            // Reset buttons
+            document.getElementById('prevBtn').style.display = 'none';
+            document.getElementById('nextBtn').textContent = 'Next';
+            document.getElementById('nextBtn').disabled = true;
+            document.querySelector('.nav-buttons').style.display = 'flex';
+            
+            // Hide results
+            document.getElementById('results').classList.remove('active');
+            
+            // Reset progress
+            document.getElementById('progressBar').style.width = '0%';
+        }
+    </script>
+</body>
+</html>
