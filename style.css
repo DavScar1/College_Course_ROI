@@ -1046,7 +1046,7 @@ input, select, textarea {
 /* Metrics Grid */
 .metrics-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr;
     gap: 10px;
     padding: 16px;
     background: var(--gray-50);
@@ -1058,6 +1058,7 @@ input, select, textarea {
     border: 1px solid var(--gray-200);
     border-radius: 8px;
     padding: 12px;
+    text-align: center;
 }
 
 .metric-label {
