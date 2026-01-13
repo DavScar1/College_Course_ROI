@@ -1790,3 +1790,128 @@ body {
         grid-template-columns: repeat(2, 1fr);
     }
 }
+
+/* MOBILE: Hide search completely */
+@media (max-width: 768px) {
+    /* Hide the search form group */
+    .form-group:has(.search-wrapper) {
+        display: none;
+    }
+    
+    /* Alternative if above doesn't work - add class to HTML */
+    .desktop-only-search {
+        display: none;
+    }
+    
+    /* Show filter pills on mobile */
+    .filter-pills {
+        display: flex !important;
+        gap: 8px;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        padding-bottom: 4px;
+        flex-wrap: nowrap;
+        scrollbar-width: none;
+        margin-top: 12px;
+    }
+    
+    .filter-pills::-webkit-scrollbar {
+        display: none;
+    }
+    
+    /* Make course select taller on mobile since no search */
+    .form-select[size] {
+        max-height: 300px !important;
+    }
+}
+
+/* DESKTOP: Show search, adjust pills */
+@media (min-width: 769px) {
+    /* Show search on desktop */
+    .form-group:has(.search-wrapper),
+    .desktop-only-search {
+        display: block;
+    }
+    
+    /* Search styling for desktop */
+    .search-wrapper {
+        position: relative;
+        display: block;
+    }
+    
+    .search-icon {
+        position: absolute;
+        left: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--gray-400);
+        pointer-events: none;
+        z-index: 1;
+    }
+    
+    .search-input {
+        padding: 10px 36px 10px 36px;
+        font-size: 14px;
+        border-radius: 6px;
+    }
+    
+    .clear-search-btn {
+        position: absolute;
+        right: 8px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 24px;
+        height: 24px;
+        border-radius: 4px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .search-dropdown {
+        position: absolute;
+        top: 48px;
+        left: 0;
+        right: 0;
+        background: var(--white);
+        border: 1px solid var(--gray-300);
+        border-radius: 8px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+        max-height: 320px;
+        overflow-y: auto;
+        z-index: 9999;
+    }
+    
+    .search-result-item {
+        padding: 12px 14px;
+        cursor: pointer;
+        border-bottom: 1px solid var(--gray-100);
+        font-size: 14px;
+    }
+    
+    .search-result-item:hover {
+        background: var(--primary);
+        color: var(--white);
+    }
+    
+    .search-result-item:hover .search-result-meta {
+        color: rgba(255, 255, 255, 0.8);
+    }
+    
+    /* Pills wrap on desktop */
+    .filter-pills {
+        flex-wrap: wrap;
+    }
+    
+    .pill {
+        padding: 6px 14px;
+        font-size: 13px;
+        border-radius: 100px;
+        min-height: auto;
+    }
+    
+    .pill:hover {
+        background: var(--gray-50);
+        border-color: var(--gray-400);
+    }
+}
