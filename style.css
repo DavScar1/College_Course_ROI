@@ -429,7 +429,7 @@ input, select, textarea {
     margin-top: 3px;
 }
 
-/* Pills */
+/* Pills - Mobile Optimized */
 .filter-pills {
     display: flex;
     gap: 8px;
@@ -445,16 +445,19 @@ input, select, textarea {
 }
 
 .pill {
-    padding: 8px 16px;
+    padding: 10px 18px;
     background: var(--white);
-    border: 1px solid var(--gray-300);
+    border: 2px solid var(--gray-300);
     border-radius: 8px;
-    font-size: 13px;
+    font-size: 14px;
     font-weight: 500;
     color: var(--gray-700);
     cursor: pointer;
     white-space: nowrap;
     flex-shrink: 0;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
 }
 
 .pill:active {
@@ -476,6 +479,7 @@ input, select, textarea {
     background: var(--gray-50);
     border-radius: 8px;
     cursor: pointer;
+    min-height: 52px;
 }
 
 .checkbox-wrapper:active {
@@ -483,8 +487,8 @@ input, select, textarea {
 }
 
 .checkbox {
-    width: 18px;
-    height: 18px;
+    width: 22px;
+    height: 22px;
     cursor: pointer;
     accent-color: var(--primary);
     flex-shrink: 0;
@@ -527,14 +531,14 @@ input, select, textarea {
     font-weight: 600;
     color: var(--gray-900);
     background: var(--gray-100);
-    padding: 3px 10px;
+    padding: 4px 12px;
     border-radius: 4px;
 }
 
 .range-slider {
     width: 100%;
-    height: 6px;
-    border-radius: 3px;
+    height: 8px;
+    border-radius: 4px;
     background: var(--gray-200);
     outline: none;
     cursor: pointer;
@@ -544,8 +548,8 @@ input, select, textarea {
 
 .range-slider::-webkit-slider-thumb {
     -webkit-appearance: none;
-    width: 20px;
-    height: 20px;
+    width: 24px;
+    height: 24px;
     border-radius: 50%;
     background: var(--primary);
     cursor: pointer;
@@ -553,8 +557,8 @@ input, select, textarea {
 }
 
 .range-slider::-moz-range-thumb {
-    width: 20px;
-    height: 20px;
+    width: 24px;
+    height: 24px;
     border-radius: 50%;
     background: var(--primary);
     cursor: pointer;
@@ -608,10 +612,10 @@ input, select, textarea {
     text-align: center;
 }
 
-/* Buttons */
+/* Buttons - Larger touch targets */
 .btn-primary {
     width: 100%;
-    padding: 14px 20px;
+    padding: 16px 20px;
     background: var(--primary);
     color: var(--white);
     border: none;
@@ -620,6 +624,7 @@ input, select, textarea {
     font-weight: 600;
     cursor: pointer;
     box-shadow: 0 2px 8px rgba(37, 99, 235, 0.2);
+    min-height: 52px;
 }
 
 .btn-primary:active {
@@ -628,7 +633,7 @@ input, select, textarea {
 }
 
 .btn-secondary {
-    padding: 10px 16px;
+    padding: 12px 20px;
     background: var(--white);
     color: var(--gray-700);
     border: 1px solid var(--gray-300);
@@ -636,6 +641,7 @@ input, select, textarea {
     font-size: 14px;
     font-weight: 500;
     cursor: pointer;
+    min-height: 44px;
 }
 
 .btn-secondary:active {
@@ -649,7 +655,8 @@ input, select, textarea {
     font-size: 13px;
     font-weight: 500;
     cursor: pointer;
-    padding: 0;
+    padding: 8px;
+    min-height: 44px;
 }
 
 /* Notice */
@@ -744,11 +751,12 @@ input, select, textarea {
     align-items: center;
     justify-content: center;
     gap: 6px;
-    padding: 8px 12px;
+    padding: 10px 12px;
     border-radius: 8px;
     font-size: 13px;
     font-weight: 500;
     width: 100%;
+    min-height: 40px;
 }
 
 .badge-success {
@@ -779,11 +787,12 @@ input, select, textarea {
     background: var(--white);
     border: 1px solid var(--gray-200);
     border-radius: 12px;
-    padding: 16px;
+    padding: 18px;
     cursor: pointer;
     display: flex;
     align-items: center;
     gap: 14px;
+    min-height: 80px;
 }
 
 .stat-card:active {
@@ -791,8 +800,8 @@ input, select, textarea {
 }
 
 .stat-icon {
-    width: 44px;
-    height: 44px;
+    width: 48px;
+    height: 48px;
     border-radius: 10px;
     background: var(--gray-100);
     display: flex;
@@ -818,7 +827,7 @@ input, select, textarea {
     color: var(--gray-900);
 }
 
-/* Filters Bar */
+/* Filters Bar - Mobile Optimized */
 .filters-bar {
     background: var(--white);
     border-top: 1px solid var(--gray-200);
@@ -843,6 +852,7 @@ input, select, textarea {
     letter-spacing: 0.3px;
 }
 
+/* Mobile-friendly filter chips with larger touch targets */
 .filter-chips {
     display: flex;
     gap: 8px;
@@ -857,41 +867,50 @@ input, select, textarea {
     display: none;
 }
 
+/* Simple button-based filters instead of checkboxes */
 .chip-checkbox {
     display: inline-flex;
     align-items: center;
+    justify-content: center;
     gap: 6px;
-    padding: 8px 14px;
+    padding: 10px 18px;
     background: var(--white);
-    border: 1px solid var(--gray-300);
+    border: 2px solid var(--gray-300);
     border-radius: 8px;
-    font-size: 13px;
+    font-size: 14px;
     font-weight: 500;
     color: var(--gray-700);
     cursor: pointer;
     user-select: none;
     white-space: nowrap;
     flex-shrink: 0;
+    min-height: 44px;
 }
 
+/* Hide the actual checkbox */
 .chip-checkbox input {
-    width: 14px;
-    height: 14px;
-    cursor: pointer;
-    accent-color: var(--primary);
+    display: none;
+}
+
+/* Active state when checked */
+.chip-checkbox:has(input:checked) {
+    background: var(--primary);
+    color: var(--white);
+    border-color: var(--primary);
 }
 
 .chip-btn {
-    padding: 8px 14px;
+    padding: 10px 18px;
     background: var(--white);
-    border: 1px solid var(--gray-300);
+    border: 2px solid var(--gray-300);
     border-radius: 8px;
-    font-size: 13px;
+    font-size: 14px;
     font-weight: 500;
     color: var(--gray-700);
     cursor: pointer;
     white-space: nowrap;
     flex-shrink: 0;
+    min-height: 44px;
 }
 
 .chip-btn.active {
@@ -902,12 +921,13 @@ input, select, textarea {
 
 .sort-select {
     width: 100%;
-    padding: 10px 12px;
+    padding: 12px 14px;
     border: 1px solid var(--gray-300);
     border-radius: 8px;
     font-size: 15px;
     color: var(--gray-700);
     background: var(--white);
+    min-height: 48px;
 }
 
 /* Course Grid */
@@ -923,6 +943,7 @@ input, select, textarea {
     border-bottom: 1px solid var(--gray-200);
     padding: 16px;
     cursor: pointer;
+    min-height: 120px;
 }
 
 .course-card-item:active {
@@ -1057,7 +1078,7 @@ input, select, textarea {
     background: var(--white);
     border: 1px solid var(--gray-200);
     border-radius: 8px;
-    padding: 12px;
+    padding: 14px;
     text-align: center;
 }
 
@@ -1130,6 +1151,11 @@ body {
     
     .metric-value {
         font-size: 20px;
+    }
+    
+    .pill, .chip-checkbox, .chip-btn {
+        padding: 8px 14px;
+        font-size: 13px;
     }
 }
 
@@ -1230,6 +1256,7 @@ body {
         order: 1;
         position: sticky;
         top: 90px;
+        align-self: start;
     }
     
     .right-column {
@@ -1320,9 +1347,10 @@ body {
     }
     
     .pill {
-        padding: 4px 12px;
-        font-size: 12px;
+        padding: 6px 14px;
+        font-size: 13px;
         border-radius: 100px;
+        min-height: auto;
     }
     
     .pill:hover {
@@ -1337,6 +1365,7 @@ body {
     .checkbox-wrapper {
         padding: 12px;
         border-radius: 6px;
+        min-height: auto;
     }
     
     .checkbox {
@@ -1420,6 +1449,7 @@ body {
         padding: 12px 20px;
         font-size: 14px;
         border-radius: 6px;
+        min-height: auto;
     }
     
     .btn-primary:hover {
@@ -1436,6 +1466,7 @@ body {
         padding: 8px 16px;
         font-size: 13px;
         border-radius: 6px;
+        min-height: auto;
     }
     
     .btn-secondary:hover {
@@ -1518,6 +1549,7 @@ body {
         padding: 4px 10px;
         font-size: 12px;
         border-radius: 100px;
+        min-height: auto;
     }
     
     /* Desktop Stats Grid */
@@ -1532,6 +1564,7 @@ body {
         padding: 24px;
         border-radius: 12px;
         gap: 16px;
+        min-height: auto;
     }
     
     .stat-card:hover {
@@ -1582,6 +1615,7 @@ body {
         padding: 6px 12px;
         font-size: 13px;
         border-radius: 100px;
+        min-height: auto;
     }
     
     .chip-checkbox:hover, .chip-btn:hover {
@@ -1592,6 +1626,7 @@ body {
         padding: 8px 12px;
         font-size: 13px;
         border-radius: 6px;
+        min-height: auto;
     }
     
     /* Desktop Course Grid */
@@ -1604,6 +1639,7 @@ body {
         border: 1px solid var(--gray-200);
         border-radius: 12px;
         padding: 20px;
+        min-height: auto;
     }
     
     .course-card-item:hover {
