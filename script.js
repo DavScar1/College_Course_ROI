@@ -806,7 +806,7 @@ function displaySingleResult(d) {
             </div>
 
             <!-- Two Column Layout -->
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 24px;">
+            <div style="grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 20px; margin-bottom: 24px;">
                 <!-- Work Environment -->
                 <div style="background: white; border: 2px solid var(--gray-200); padding: 20px; border-radius: 12px;">
                     <h4 style="font-size: 15px; font-weight: 600; margin-bottom: 16px; color: var(--gray-900); display: flex; align-items: center; gap: 8px;">
@@ -915,7 +915,7 @@ function displaySingleResult(d) {
                     </svg>
                     Common Career Paths
                 </h4>
-                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;">
+                <div style="grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px;">
                     ${cd.typical_roles.map(role => `
                         <div style="display: flex; align-items: center; gap: 10px; padding: 12px; background: white; border-radius: 8px; border: 1px solid #e9d5ff;">
                             <span style="color: #7c3aed; font-size: 18px; font-weight: 700;">→</span>
