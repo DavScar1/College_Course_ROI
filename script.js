@@ -806,7 +806,7 @@ function displaySingleResult(d) {
             </div>
 
             <!-- Two Column Layout -->
-            <div style="grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 20px; margin-bottom: 24px;">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 24px;">
                 <!-- Work Environment -->
                 <div style="background: white; border: 2px solid var(--gray-200); padding: 20px; border-radius: 12px;">
                     <h4 style="font-size: 15px; font-weight: 600; margin-bottom: 16px; color: var(--gray-900); display: flex; align-items: center; gap: 8px;">
@@ -915,7 +915,7 @@ function displaySingleResult(d) {
                     </svg>
                     Common Career Paths
                 </h4>
-                <div style="grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px;">
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;">
                     ${cd.typical_roles.map(role => `
                         <div style="display: flex; align-items: center; gap: 10px; padding: 12px; background: white; border-radius: 8px; border: 1px solid #e9d5ff;">
                             <span style="color: #7c3aed; font-size: 18px; font-weight: 700;">â†’</span>
@@ -943,21 +943,21 @@ function displaySingleResult(d) {
                 <div style="font-size: 64px; font-weight: 800; color: #1e40af; letter-spacing: -0.03em; line-height: 1;">${d.roi_5_years}%</div>
             </div>
             
-            <div style="grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 16px;">
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;">
                 <div style="text-align: center; padding: 24px; background: white; border-radius: 10px; border: 1px solid #e5e7eb; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);">
-                    <div style="font-size: 11px; color: #6b7280; margin-bottom: 8px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">TOTAL COST</div>
+                    <div style="font-size: 11px; color: #6b7280; margin-bottom: 8px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">Total Cost</div>
                     <div style="font-size: 32px; font-weight: 700; color: #111827;">â‚¬${(d.total_cost / 1000).toFixed(0)}k</div>
                     <div style="font-size: 11px; color: #9ca3af; margin-top: 6px;">â‚¬${(d.tuition_per_year / 1000).toFixed(1)}k/year Ã— ${d.course_length} years</div>
                 </div>
                 
                 <div style="text-align: center; padding: 24px; background: white; border-radius: 10px; border: 1px solid #e5e7eb; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);">
-                    <div style="font-size: 11px; color: #6b7280; margin-bottom: 8px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">STARTING SALARY</div>
+                    <div style="font-size: 11px; color: #6b7280; margin-bottom: 8px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">Starting Salary</div>
                     <div style="font-size: 32px; font-weight: 700; color: #111827;">â‚¬${(d.starting_salary / 1000).toFixed(0)}k</div>
                     <div style="font-size: 11px; color: #9ca3af; margin-top: 6px;">â‚¬${Math.round(d.starting_salary / 12).toLocaleString()}/month</div>
                 </div>
                 
                 <div style="text-align: center; padding: 24px; background: white; border-radius: 10px; border: 1px solid #e5e7eb; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);">
-                    <div style="font-size: 11px; color: #6b7280; margin-bottom: 8px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">PAYBACK PERIOD</div>
+                    <div style="font-size: 11px; color: #6b7280; margin-bottom: 8px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">Payback Period</div>
                     <div style="font-size: 32px; font-weight: 700; color: #111827;">${d.payback_years.toFixed(1)}</div>
                     <div style="font-size: 11px; color: #9ca3af; margin-top: 6px;">years to recover</div>
                 </div>
@@ -1042,10 +1042,77 @@ function displaySingleResult(d) {
     
     document.getElementById('results').innerHTML = html;
     
-    // Create investment chart
+    // Create investment chart only (removed salary chart)
     setTimeout(() => {
         createInvestmentChart(d);
     }, 100);
+}
+
+function createSalaryChart(data) {
+    const canvas = document.getElementById('salaryChart');
+    
+    if (salaryChartInstance) {
+        salaryChartInstance.destroy();
+        salaryChartInstance = null;
+    }
+    
+    const ctx = canvas.getContext('2d');
+    
+    const startSalary = data.starting_salary;
+    const endSalary = data.salary_after_5_years;
+    const salaryData = [];
+    
+    for (let year = 0; year <= 5; year++) {
+        const salary = startSalary + ((endSalary - startSalary) / 5) * year;
+        salaryData.push(Math.round(salary));
+    }
+    
+    salaryChartInstance = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: ['Start', 'Year 1', 'Year 2', 'Year 3', 'Year 4', 'Year 5'],
+            datasets: [{
+                label: 'Salary',
+                data: salaryData,
+                borderColor: '#2563eb',
+                backgroundColor: 'rgba(37, 99, 235, 0.1)',
+                borderWidth: 3,
+                fill: true,
+                tension: 0.4,
+                pointBackgroundColor: '#2563eb',
+                pointBorderColor: '#fff',
+                pointBorderWidth: 2,
+                pointRadius: 5,
+                pointHoverRadius: 7
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return 'â‚¬' + context.parsed.y.toLocaleString();
+                        }
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: false,
+                    ticks: {
+                        callback: function(value) {
+                            return 'â‚¬' + (value / 1000) + 'k';
+                        }
+                    },
+                    grid: { color: 'rgba(0, 0, 0, 0.05)' }
+                },
+                x: { grid: { display: false } }
+            }
+        }
+    });
 }
 
 function createInvestmentChart(data) {
