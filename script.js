@@ -137,38 +137,40 @@ document.addEventListener('DOMContentLoaded', function() {
         updatePartTimeCalculations();
     });
     
-    // Search functionality
+   // MOBILE OPTIMIZED SEARCH
     const searchInput = document.getElementById('courseSearch');
     const searchResults = document.getElementById('searchResults');
-    const clearSearchBtn = document.getElementById('clearSearch');
-    
+
     searchInput.addEventListener('input', function() {
-        const query = this.value.trim();
+        const query = this.value.trim().toLowerCase();
+        if (query.length < 2) {
+            searchResults.style.display = 'none';
+            return;
+        }
+
+        // Filter global allCourses array
+        const matches = allCourses.filter(c => c.toLowerCase().includes(query)).slice(0, 10);
         
-        if (query.length > 0) {
-            clearSearchBtn.style.display = 'flex';
-            const results = searchCourses(query);
-            displaySearchResults(results, query);
+        if (matches.length > 0) {
+            searchResults.innerHTML = matches.map(course => {
+                const [name, uni] = course.split(' - ');
+                return `
+                    <div class="search-item" onclick="selectMobileCourse('${course.replace(/'/g, "\\'")}')">
+                        <span class="search-item-title">${name}</span>
+                        <span class="search-item-uni">${uni || ''}</span>
+                    </div>`;
+            }).join('');
+            searchResults.style.display = 'block';
         } else {
-            clearSearchBtn.style.display = 'none';
-            searchResults.style.display = 'none';
+            searchResults.innerHTML = '<div class="search-item">No results found</div>';
+            searchResults.style.display = 'block';
         }
     });
-    
-    clearSearchBtn.addEventListener('click', function() {
-        searchInput.value = '';
-        clearSearchBtn.style.display = 'none';
-        searchResults.style.display = 'none';
-        searchInput.focus();
+
+    // Close dropdown when tapping elsewhere
+    document.addEventListener('click', (e) => {
+        if (!e.target.closest('.search-wrapper')) searchResults.style.display = 'none';
     });
-    
-    // Close search results when clicking outside
-    document.addEventListener('click', function(e) {
-        if (!searchInput.contains(e.target) && !searchResults.contains(e.target)) {
-            searchResults.style.display = 'none';
-        }
-    });
-});
 
 // Search courses
 function searchCourses(query) {
@@ -178,40 +180,7 @@ function searchCourses(query) {
     );
 }
 
-// Display search results
-function displaySearchResults(results, query) {
-    const searchResults = document.getElementById('searchResults');
-    
-    if (results.length === 0) {
-        searchResults.innerHTML = '<div style="padding: 15px; text-align: center; color: var(--gray-500);">No courses found</div>';
-        searchResults.style.display = 'block';
-        return;
-    }
-    
-    const lowerQuery = query.toLowerCase();
-    let html = '';
-    
-    results.slice(0, 8).forEach(course => {
-        const parts = course.split(' - ');
-        const field = parts[0];
-        const university = parts[1];
-        
-        // Highlight matching text
-        const highlightedCourse = course.replace(new RegExp(query, 'gi'), match => `<mark>${match}</mark>`);
-        
-        html += `
-            <div class="search-result-item" onclick="selectCourseFromSearch('${course.replace(/'/g, "\\'")}')">
-                <div>${highlightedCourse}</div>
-                <div class="search-result-meta">${university}</div>
-            </div>
-        `;
-    });
-    
-    searchResults.innerHTML = html;
-    searchResults.style.display = 'block';
-    
-    console.log('Search dropdown displayed with', results.length, 'results');
-}
+
 
 // Select course from search
 function selectCourseFromSearch(course) {
@@ -1772,3 +1741,22 @@ function createComparisonCharts(courses) {
         }
     }
 }
+
+    // Function to handle the selection on mobile/desktop
+    window.selectMobileCourse = function(courseName) {
+        const hiddenSelect = document.getElementById('course');
+        const searchInput = document.getElementById('courseSearch');
+        const searchResults = document.getElementById('searchResults');
+
+        // Update the UI
+        searchInput.value = courseName;
+        searchResults.style.display = 'none';
+
+        // Sync with the actual select element
+        hiddenSelect.innerHTML = `<option value="${courseName}">${courseName}</option>`;
+        hiddenSelect.value = courseName;
+
+        // Instantly calculate for a smooth mobile experience
+        calculateROI();
+    };
+})

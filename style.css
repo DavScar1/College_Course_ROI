@@ -1790,3 +1790,49 @@ body {
         grid-template-columns: repeat(2, 1fr);
     }
 }
+
+/* --- Mobile Search Optimization --- */
+.search-results-list {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    max-height: 250px;
+    overflow-y: auto;
+    z-index: 1000;
+    display: none; /* Hidden until user types */
+    margin-top: 5px;
+}
+
+.search-item {
+    padding: 12px 16px;
+    border-bottom: 1px solid #f3f4f6;
+    cursor: pointer;
+}
+
+.search-item:active {
+    background: #f3f4f6; /* Visual feedback on touch */
+}
+
+.search-item-title {
+    font-weight: 600;
+    font-size: 14px;
+    display: block;
+    color: #1f2937;
+}
+
+.search-item-uni {
+    font-size: 12px;
+    color: #6b7280;
+}
+
+/* Fix for mobile keyboard zoom */
+@media (max-width: 768px) {
+    .form-input {
+        font-size: 16px !important; /* Prevents iOS from zooming in automatically */
+    }
+}
