@@ -943,7 +943,7 @@ function displaySingleResult(d) {
                 <div style="font-size: 64px; font-weight: 800; color: #1e40af; letter-spacing: -0.03em; line-height: 1;">${d.roi_5_years}%</div>
             </div>
             
-            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;">
+            <div style="grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 16px;">
                 <div style="text-align: center; padding: 24px; background: white; border-radius: 10px; border: 1px solid #e5e7eb; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);">
                     <div style="font-size: 11px; color: #6b7280; margin-bottom: 8px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">TOTAL COST</div>
                     <div style="font-size: 32px; font-weight: 700; color: #111827;">€${(d.total_cost / 1000).toFixed(0)}k</div>
