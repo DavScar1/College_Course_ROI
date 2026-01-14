@@ -435,11 +435,11 @@ function renderCourseGrid(courses) {
                     </div>
                     <div class="course-stat">
                         <div class="course-stat-label">Total Cost</div>
-                        <div class="course-stat-value">â‚¬${(course.total_cost / 1000).toFixed(0)}k</div>
+                        <div class="course-stat-value">€${(course.total_cost / 1000).toFixed(0)}k</div>
                     </div>
                     <div class="course-stat">
                         <div class="course-stat-label">Start Salary</div>
-                        <div class="course-stat-value">â‚¬${(course.starting_salary / 1000).toFixed(0)}k</div>
+                        <div class="course-stat-value">€${(course.starting_salary / 1000).toFixed(0)}k</div>
                     </div>
                 </div>
                 
@@ -486,10 +486,10 @@ function updatePartTimeCalculations() {
     
     const totalIncome = annualIncome * courseLength;
     
-    document.getElementById('weeklyIncome').textContent = 'â‚¬' + Math.round(weeklyIncome).toLocaleString();
-    document.getElementById('partTimeIncome').textContent = 'â‚¬' + Math.round(annualIncome).toLocaleString();
-    document.getElementById('partTimeTotal').textContent = 'â‚¬' + Math.round(totalIncome).toLocaleString();
-    document.getElementById('costReduction').textContent = 'â‚¬' + Math.round(totalIncome).toLocaleString();
+    document.getElementById('weeklyIncome').textContent = '€' + Math.round(weeklyIncome).toLocaleString();
+    document.getElementById('partTimeIncome').textContent = '€' + Math.round(annualIncome).toLocaleString();
+    document.getElementById('partTimeTotal').textContent = '€' + Math.round(totalIncome).toLocaleString();
+    document.getElementById('costReduction').textContent = '€' + Math.round(totalIncome).toLocaleString();
 }
 
 // Save preferences to localStorage
@@ -569,6 +569,561 @@ window.onload = function() {
                 throw new Error('Failed to load courses from server');
             }
             return response.json();
+    })
+    .then(data => {
+        if (data.success) {
+            displayComparisonResults(data);
+        } else {
+            showError(data.error || 'Comparison failed');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        showError(error.message || 'Failed to compare. Make sure Flask is running.');
+    });
+}
+
+function displayComparisonResults(data) {
+    const winners = data.winners;
+    const courses = data.courses;
+    
+    // Build winners summary HTML
+    let winnersHTML = `
+        <div class="card" style="background: #ecfdf5; border-color: #a7f3d0;">
+            <div class="card-body">
+                <h3 style="font-size: 18px; font-weight: 600; margin-bottom: 16px; color: var(--gray-900);">Winners by Category</h3>
+                <div style="display: grid; gap: 12px;">
+    `;
+    
+    if (winners.best_roi) {
+        winnersHTML += `
+            <div style="display: flex; align-items: center; gap: 10px; font-size: 14px;">
+                <span style="font-size: 20px;">🏆</span>
+                <strong>Best ROI:</strong> ${winners.best_roi}
+            </div>
+        `;
+    }
+    if (winners.fastest_payback) {
+        winnersHTML += `
+            <div style="display: flex; align-items: center; gap: 10px; font-size: 14px;">
+                <span style="font-size: 20px;">⚡</span>
+                <strong>Fastest Payback:</strong> ${winners.fastest_payback}
+            </div>
+        `;
+    }
+    if (winners.lowest_cost) {
+        winnersHTML += `
+            <div style="display: flex; align-items: center; gap: 10px; font-size: 14px;">
+                <span style="font-size: 20px;">💰</span>
+                <strong>Lowest Cost:</strong> ${winners.lowest_cost}
+            </div>
+        `;
+    }
+    if (winners.highest_salary) {
+        winnersHTML += `
+            <div style="display: flex; align-items: center; gap: 10px; font-size: 14px;">
+                <span style="font-size: 20px;">💵</span>
+                <strong>Highest Starting Salary:</strong> ${winners.highest_salary}
+            </div>
+        `;
+    }
+    
+    winnersHTML += `
+                </div>
+            </div>
+        </div>
+    `;
+    
+    // Add comparison charts section
+    let chartsHTML = `
+        <div class="card" style="margin-top: 24px;">
+            <div class="card-header">
+                <h3 class="card-title">Visual Comparison</h3>
+            </div>
+            <div class="card-body">
+                <div class="chart-grid">
+                    <div class="chart-card">
+                        <div class="chart-title">ROI Comparison (5 Years)</div>
+                        <div style="height: 300px;">
+                            <canvas id="comparisonROIChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="chart-card">
+                        <div class="chart-title">Payback Period (Years)</div>
+                        <div style="height: 300px;">
+                            <canvas id="comparisonPaybackChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="chart-grid" style="margin-top: 20px;">
+                    <div class="chart-card">
+                        <div class="chart-title">Starting Salary Comparison</div>
+                        <div style="height: 300px;">
+                            <canvas id="comparisonSalaryChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="chart-card">
+                        <div class="chart-title">Total Cost vs 5-Year Earnings</div>
+                        <div style="height: 300px;">
+                            <canvas id="comparisonCostEarningsChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    // Add additional stats comparison if course_data exists
+    let additionalStatsHTML = '';
+    const hasAdditionalData = courses.some(c => c.course_data);
+    
+    if (hasAdditionalData) {
+        additionalStatsHTML = `
+        <div class="card" style="margin-top: 24px;">
+            <div class="card-header">
+                <h3 class="card-title">📊 Additional Statistics Comparison</h3>
+            </div>
+            <div class="card-body">
+                <div class="chart-grid">
+                    <div class="chart-card">
+                        <div class="chart-title">Employment Rate (%)</div>
+                        <div style="height: 300px;">
+                            <canvas id="comparisonEmploymentChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="chart-card">
+                        <div class="chart-title">Graduate Satisfaction (out of 5)</div>
+                        <div style="height: 300px;">
+                            <canvas id="comparisonSatisfactionChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="chart-grid" style="margin-top: 20px;">
+                    <div class="chart-card">
+                        <div class="chart-title">Job Security Rating</div>
+                        <div style="height: 300px;">
+                            <canvas id="comparisonJobSecurityChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="chart-card">
+                        <div class="chart-title">Work-Life Balance Rating</div>
+                        <div style="height: 300px;">
+                            <canvas id="comparisonWorkLifeChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        `;
+    }
+    
+    // Build comparison cards
+    let cardsHTML = '<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; margin-top: 24px;">';
+    
+    courses.forEach(course => {
+        const isWinner = Object.values(winners).includes(course.course_name);
+        const paybackBadgeClass = course.payback_years < 1.5 ? 'badge-success' : 
+                                  course.payback_years < 2.5 ? 'badge-warning' : 'badge-warning';
+        const roiBadgeClass = course.roi_5_years > 400 ? 'badge-success' : 
+                             course.roi_5_years > 300 ? 'badge-info' : 'badge-warning';
+        
+        cardsHTML += `
+            <div class="card" style="background: var(--white); ${isWinner ? 'border: 2px solid var(--success);' : ''}">
+                <div class="card-body">
+                    <div style="margin-bottom: 16px; padding-bottom: 16px; border-bottom: 1px solid var(--gray-200);">
+                        <h4 style="font-size: 17px; font-weight: 600; color: var(--gray-900); margin-bottom: 4px;">
+                            ${course.course_name}
+                            ${isWinner ? '<span class="badge badge-success" style="margin-left: 8px;">WINNER</span>' : ''}
+                        </h4>
+                        <p style="font-size: 14px; color: var(--gray-600);">${course.university}</p>
+                    </div>
+                    
+                    <div style="display: flex; flex-direction: column; gap: 12px;">
+                        <div style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--gray-100);">
+                            <span style="font-size: 13px; color: var(--gray-600); font-weight: 500;">Total Cost</span>
+                            <span style="font-size: 15px; color: var(--gray-900); font-weight: 600; ${course.course_name === winners.lowest_cost ? 'color: var(--success);' : ''}">
+                                €${course.total_cost.toLocaleString()}
+                            </span>
+                        </div>
+                        
+                        <div style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--gray-100);">
+                            <span style="font-size: 13px; color: var(--gray-600); font-weight: 500;">Starting Salary</span>
+                            <span style="font-size: 15px; color: var(--gray-900); font-weight: 600; ${course.course_name === winners.highest_salary ? 'color: var(--success);' : ''}">
+                                €${course.starting_salary.toLocaleString()}
+                            </span>
+                        </div>
+                        
+                        <div style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--gray-100);">
+                            <span style="font-size: 13px; color: var(--gray-600); font-weight: 500;">After 5 Years</span>
+                            <span style="font-size: 15px; color: var(--gray-900); font-weight: 600;">
+                                €${course.salary_after_5_years.toLocaleString()}
+                            </span>
+                        </div>
+                        
+                        <div style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--gray-100);">
+                            <span style="font-size: 13px; color: var(--gray-600); font-weight: 500;">Payback Period</span>
+                            <span style="font-size: 15px; color: var(--gray-900); font-weight: 600; ${course.course_name === winners.fastest_payback ? 'color: var(--success);' : ''}">
+                                ${course.payback_years.toFixed(1)} years
+                            </span>
+                        </div>
+                        
+                        <div style="display: flex; justify-content: space-between; padding: 10px 0;">
+                            <span style="font-size: 13px; color: var(--gray-600); font-weight: 500;">5-Year ROI</span>
+                            <span style="font-size: 15px; color: var(--gray-900); font-weight: 600; ${course.course_name === winners.best_roi ? 'color: var(--success);' : ''}">
+                                ${course.roi_5_years}%
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <div class="badges" style="margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--gray-200);">
+                        <span class="badge ${paybackBadgeClass}">${course.analysis.payback_label}</span>
+                        <span class="badge ${roiBadgeClass}">${course.analysis.roi_rating} ROI</span>
+                    </div>
+                </div>
+            </div>
+        `;
+    });
+    
+    cardsHTML += '</div>';
+    
+    const comparisonResults = document.getElementById('comparisonResults');
+    comparisonResults.innerHTML = winnersHTML + chartsHTML + additionalStatsHTML + cardsHTML;
+    comparisonResults.style.display = 'block';
+    
+    // Create all charts after DOM is updated
+    setTimeout(() => {
+        createComparisonCharts(courses);
+    }, 100);
+    
+    // Scroll to results
+    comparisonResults.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// Create comparison charts
+function createComparisonCharts(courses) {
+    const labels = courses.map(c => c.course_name.split(' - ')[0]);
+    const colors = ['#2563eb', '#059669', '#d97706', '#dc2626', '#7c3aed'];
+    
+    // ROI Comparison Chart
+    const roiCanvas = document.getElementById('comparisonROIChart');
+    if (roiCanvas) {
+        new Chart(roiCanvas, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: '5-Year ROI (%)',
+                    data: courses.map(c => c.roi_5_years),
+                    backgroundColor: colors.slice(0, courses.length),
+                    borderRadius: 8,
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return context.parsed.y + '% ROI';
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            callback: function(value) {
+                                return value + '%';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
+    
+    // Payback Period Chart
+    const paybackCanvas = document.getElementById('comparisonPaybackChart');
+    if (paybackCanvas) {
+        new Chart(paybackCanvas, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Payback Period (years)',
+                    data: courses.map(c => c.payback_years),
+                    backgroundColor: colors.slice(0, courses.length),
+                    borderRadius: 8,
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return context.parsed.y.toFixed(1) + ' years';
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            callback: function(value) {
+                                return value + 'y';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
+    
+    // Starting Salary Chart
+    const salaryCanvas = document.getElementById('comparisonSalaryChart');
+    if (salaryCanvas) {
+        new Chart(salaryCanvas, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Starting Salary (€)',
+                    data: courses.map(c => c.starting_salary),
+                    backgroundColor: colors.slice(0, courses.length),
+                    borderRadius: 8,
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return '€' + context.parsed.y.toLocaleString();
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            callback: function(value) {
+                                return '€' + (value / 1000) + 'k';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
+    
+    // Cost vs Earnings Chart
+    const costEarningsCanvas = document.getElementById('comparisonCostEarningsChart');
+    if (costEarningsCanvas) {
+        new Chart(costEarningsCanvas, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: 'Total Cost',
+                        data: courses.map(c => c.total_cost),
+                        backgroundColor: 'rgba(220, 53, 69, 0.7)',
+                        borderRadius: 6,
+                    },
+                    {
+                        label: '5-Year Earnings',
+                        data: courses.map(c => c.annual_net_income * 5),
+                        backgroundColor: 'rgba(5, 150, 105, 0.7)',
+                        borderRadius: 6,
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { 
+                        display: true,
+                        position: 'top'
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return context.dataset.label + ': €' + context.parsed.y.toLocaleString();
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            callback: function(value) {
+                                return '€' + (value / 1000) + 'k';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
+    
+    // Additional stats charts (only if data exists)
+    const hasAdditionalData = courses.some(c => c.course_data);
+    
+    if (hasAdditionalData) {
+        // Employment Rate Chart
+        const employmentCanvas = document.getElementById('comparisonEmploymentChart');
+        if (employmentCanvas) {
+            new Chart(employmentCanvas, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Employment Rate (%)',
+                        data: courses.map(c => c.course_data ? c.course_data.employment_rate : 0),
+                        backgroundColor: colors.slice(0, courses.length),
+                        borderRadius: 8,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                            ticks: {
+                                callback: function(value) {
+                                    return value + '%';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        
+        // Graduate Satisfaction Chart
+        const satisfactionCanvas = document.getElementById('comparisonSatisfactionChart');
+        if (satisfactionCanvas) {
+            new Chart(satisfactionCanvas, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Graduate Satisfaction (out of 5)',
+                        data: courses.map(c => c.course_data ? c.course_data.graduate_satisfaction : 0),
+                        backgroundColor: colors.slice(0, courses.length),
+                        borderRadius: 8,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 5,
+                            ticks: {
+                                callback: function(value) {
+                                    return value + '/5';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        
+        // Job Security Chart
+        const jobSecurityCanvas = document.getElementById('comparisonJobSecurityChart');
+        if (jobSecurityCanvas) {
+            new Chart(jobSecurityCanvas, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Job Security (out of 5)',
+                        data: courses.map(c => c.course_data ? c.course_data.job_security : 0),
+                        backgroundColor: colors.slice(0, courses.length),
+                        borderRadius: 8,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 5,
+                            ticks: {
+                                callback: function(value) {
+                                    return value + '/5';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        
+        // Work-Life Balance Chart
+        const workLifeCanvas = document.getElementById('comparisonWorkLifeChart');
+        if (workLifeCanvas) {
+            new Chart(workLifeCanvas, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Work-Life Balance (out of 5)',
+                        data: courses.map(c => c.course_data ? c.course_data.work_life_balance : 0),
+                        backgroundColor: colors.slice(0, courses.length),
+                        borderRadius: 8,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 5,
+                            ticks: {
+                                callback: function(value) {
+                                    return value + '/5';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+    }
+}
         })
         .then(data => {
             if (!data.courses || !Array.isArray(data.courses)) {
@@ -716,7 +1271,7 @@ function displaySingleResult(d) {
     if (useCustomTuition) {
         const customTuition = document.getElementById('customTuition').value;
         if (customTuition) {
-            customizationHTML += `<div class="badge badge-info">Custom tuition: â‚¬${parseFloat(customTuition).toLocaleString()}/year</div>`;
+            customizationHTML += `<div class="badge badge-info">Custom tuition: €${parseFloat(customTuition).toLocaleString()}/year</div>`;
             hasCustomization = true;
         }
     }
@@ -725,12 +1280,12 @@ function displaySingleResult(d) {
     if (enablePartTime && d.part_time_earnings) {
         const hours = document.getElementById('partTimeHours').value;
         const rate = document.getElementById('hourlyRate').value;
-        customizationHTML += `<div class="badge badge-info">Part-time: ${hours} hrs/week at â‚¬${parseFloat(rate).toFixed(2)}/hr</div>`;
+        customizationHTML += `<div class="badge badge-info">Part-time: ${hours} hrs/week at €${parseFloat(rate).toFixed(2)}/hr</div>`;
         hasCustomization = true;
     }
     
-    const paybackBadgeClass = d.analysis.payback_emoji === 'ðŸŸ¢' ? 'badge-success' : 
-                             d.analysis.payback_emoji === 'ðŸŸ¡' ? 'badge-warning' : 'badge-warning';
+    const paybackBadgeClass = d.analysis.payback_emoji === '🟢' ? 'badge-success' : 
+                             d.analysis.payback_emoji === '🟡' ? 'badge-warning' : 'badge-warning';
     
     // NEW: Build additional statistics section if course_data exists
     let additionalStatsHTML = '';
@@ -760,13 +1315,13 @@ function displaySingleResult(d) {
                 <div style="background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); padding: 20px; border-radius: 12px; text-align: center;">
                     <div style="font-size: 36px; font-weight: 700; color: #92400e; margin-bottom: 4px;">${cd.graduate_satisfaction}</div>
                     <div style="font-size: 13px; color: #92400e; font-weight: 600;">Student Rating</div>
-                    <div style="font-size: 11px; color: #b45309; margin-top: 4px;">out of 5 â­</div>
+                    <div style="font-size: 11px; color: #b45309; margin-top: 4px;">out of 5 ⭐</div>
                 </div>
                 
                 <div style="background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%); padding: 20px; border-radius: 12px; text-align: center;">
                     <div style="font-size: 36px; font-weight: 700; color: #065f46; margin-bottom: 4px;">${cd.job_security}</div>
                     <div style="font-size: 13px; color: #065f46; font-weight: 600;">Job Security</div>
-                    <div style="font-size: 11px; color: #047857; margin-top: 4px;">stability rating ðŸ›¡ï¸</div>
+                    <div style="font-size: 11px; color: #047857; margin-top: 4px;">stability rating 🛡️</div>
                 </div>
             </div>
 
@@ -806,7 +1361,7 @@ function displaySingleResult(d) {
             </div>
 
             <!-- Two Column Layout -->
-            <div style="grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 20px; margin-bottom: 24px;">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 20px; margin-bottom: 24px;">
                 <!-- Work Environment -->
                 <div style="background: white; border: 2px solid var(--gray-200); padding: 20px; border-radius: 12px;">
                     <h4 style="font-size: 15px; font-weight: 600; margin-bottom: 16px; color: var(--gray-900); display: flex; align-items: center; gap: 8px;">
@@ -877,12 +1432,12 @@ function displaySingleResult(d) {
                 <div style="display: flex; justify-content: space-around; align-items: center;">
                     <div style="text-align: center;">
                         <div style="font-size: 12px; color: #047857; margin-bottom: 4px;">MINIMUM</div>
-                        <div style="font-size: 28px; font-weight: 700; color: #065f46;">â‚¬${(cd.startup_salary_range.min / 1000).toFixed(0)}k</div>
+                        <div style="font-size: 28px; font-weight: 700; color: #065f46;">€${(cd.startup_salary_range.min / 1000).toFixed(0)}k</div>
                     </div>
-                    <div style="font-size: 24px; color: #059669;">â†’</div>
+                    <div style="font-size: 24px; color: #059669;">→</div>
                     <div style="text-align: center;">
                         <div style="font-size: 12px; color: #047857; margin-bottom: 4px;">MAXIMUM</div>
-                        <div style="font-size: 28px; font-weight: 700; color: #065f46;">â‚¬${(cd.startup_salary_range.max / 1000).toFixed(0)}k</div>
+                        <div style="font-size: 28px; font-weight: 700; color: #065f46;">€${(cd.startup_salary_range.max / 1000).toFixed(0)}k</div>
                     </div>
                 </div>
             </div>
@@ -915,10 +1470,10 @@ function displaySingleResult(d) {
                     </svg>
                     Common Career Paths
                 </h4>
-                <div style="grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px;">
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px;">
                     ${cd.typical_roles.map(role => `
                         <div style="display: flex; align-items: center; gap: 10px; padding: 12px; background: white; border-radius: 8px; border: 1px solid #e9d5ff;">
-                            <span style="color: #7c3aed; font-size: 18px; font-weight: 700;">â†’</span>
+                            <span style="color: #7c3aed; font-size: 18px; font-weight: 700;">→</span>
                             <span style="color: var(--gray-800); font-weight: 500; font-size: 14px;">${role}</span>
                         </div>
                     `).join('')}
@@ -937,29 +1492,29 @@ function displaySingleResult(d) {
         ${hasCustomization ? `<div class="badges" style="margin-bottom: 24px;">${customizationHTML}</div>` : ''}
         
         <!-- Hero ROI Section -->
-        <div style="background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%); padding: 40px; border-radius: 12px; margin-bottom: 24px; border: 1px solid #93c5fd;">
+        <div style="background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%); padding: 40px 20px; border-radius: 12px; margin-bottom: 24px; border: 1px solid #93c5fd;">
             <div style="text-align: center; margin-bottom: 32px;">
                 <div style="font-size: 12px; color: #3b82f6; margin-bottom: 8px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;">5-Year Return on Investment</div>
-                <div style="font-size: 64px; font-weight: 800; color: #1e40af; letter-spacing: -0.03em; line-height: 1;">${d.roi_5_years}%</div>
+                <div style="font-size: 48px; font-weight: 800; color: #1e40af; letter-spacing: -0.03em; line-height: 1;">${d.roi_5_years}%</div>
             </div>
             
-            <div style="grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 16px;">
-                <div style="text-align: center; padding: 24px; background: white; border-radius: 10px; border: 1px solid #e5e7eb; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);">
-                    <div style="font-size: 11px; color: #6b7280; margin-bottom: 8px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">TOTAL COST</div>
-                    <div style="font-size: 32px; font-weight: 700; color: #111827;">â‚¬${(d.total_cost / 1000).toFixed(0)}k</div>
-                    <div style="font-size: 11px; color: #9ca3af; margin-top: 6px;">â‚¬${(d.tuition_per_year / 1000).toFixed(1)}k/year Ã— ${d.course_length} years</div>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px;">
+                <div style="text-align: center; padding: 16px; background: white; border-radius: 10px; border: 1px solid #e5e7eb; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);">
+                    <div style="font-size: 10px; color: #6b7280; margin-bottom: 6px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">TOTAL COST</div>
+                    <div style="font-size: 24px; font-weight: 700; color: #111827;">€${(d.total_cost / 1000).toFixed(0)}k</div>
+                    <div style="font-size: 10px; color: #9ca3af; margin-top: 4px;">€${(d.tuition_per_year / 1000).toFixed(1)}k/year × ${d.course_length} years</div>
                 </div>
                 
-                <div style="text-align: center; padding: 24px; background: white; border-radius: 10px; border: 1px solid #e5e7eb; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);">
-                    <div style="font-size: 11px; color: #6b7280; margin-bottom: 8px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">STARTING SALARY</div>
-                    <div style="font-size: 32px; font-weight: 700; color: #111827;">â‚¬${(d.starting_salary / 1000).toFixed(0)}k</div>
-                    <div style="font-size: 11px; color: #9ca3af; margin-top: 6px;">â‚¬${Math.round(d.starting_salary / 12).toLocaleString()}/month</div>
+                <div style="text-align: center; padding: 16px; background: white; border-radius: 10px; border: 1px solid #e5e7eb; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);">
+                    <div style="font-size: 10px; color: #6b7280; margin-bottom: 6px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">STARTING SALARY</div>
+                    <div style="font-size: 24px; font-weight: 700; color: #111827;">€${(d.starting_salary / 1000).toFixed(0)}k</div>
+                    <div style="font-size: 10px; color: #9ca3af; margin-top: 4px;">€${Math.round(d.starting_salary / 12).toLocaleString()}/month</div>
                 </div>
                 
-                <div style="text-align: center; padding: 24px; background: white; border-radius: 10px; border: 1px solid #e5e7eb; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);">
-                    <div style="font-size: 11px; color: #6b7280; margin-bottom: 8px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">PAYBACK PERIOD</div>
-                    <div style="font-size: 32px; font-weight: 700; color: #111827;">${d.payback_years.toFixed(1)}</div>
-                    <div style="font-size: 11px; color: #9ca3af; margin-top: 6px;">years to recover</div>
+                <div style="text-align: center; padding: 16px; background: white; border-radius: 10px; border: 1px solid #e5e7eb; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);">
+                    <div style="font-size: 10px; color: #6b7280; margin-bottom: 6px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">PAYBACK PERIOD</div>
+                    <div style="font-size: 24px; font-weight: 700; color: #111827;">${d.payback_years.toFixed(1)}</div>
+                    <div style="font-size: 10px; color: #9ca3af; margin-top: 4px;">years to recover</div>
                 </div>
             </div>
         </div>
@@ -990,20 +1545,20 @@ function displaySingleResult(d) {
                 </svg>
                 Salary Progression
             </h3>
-            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
-                <div style="text-align: center; flex: 1;">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; flex-wrap: wrap; gap: 12px;">
+                <div style="text-align: center; flex: 1; min-width: 120px;">
                     <div style="font-size: 11px; color: var(--gray-600); margin-bottom: 4px; text-transform: uppercase; font-weight: 600;">STARTING</div>
-                    <div style="font-size: 28px; font-weight: 700; color: var(--gray-900);">â‚¬${(d.starting_salary / 1000).toFixed(0)}k</div>
+                    <div style="font-size: 24px; font-weight: 700; color: var(--gray-900);">€${(d.starting_salary / 1000).toFixed(0)}k</div>
                     <div style="font-size: 11px; color: var(--gray-500);">Year 1</div>
                 </div>
-                <div style="flex: 0 0 60px; text-align: center;">
-                    <svg width="60" height="24" viewBox="0 0 60 24" fill="none">
-                        <path d="M0 12 L50 12 M40 4 L50 12 L40 20" stroke="#10b981" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                <div style="flex: 0 0 40px; text-align: center;">
+                    <svg width="40" height="24" viewBox="0 0 40 24" fill="none">
+                        <path d="M0 12 L30 12 M20 4 L30 12 L20 20" stroke="#10b981" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>
                 </div>
-                <div style="text-align: center; flex: 1;">
+                <div style="text-align: center; flex: 1; min-width: 120px;">
                     <div style="font-size: 11px; color: var(--gray-600); margin-bottom: 4px; text-transform: uppercase; font-weight: 600;">AFTER 5 YEARS</div>
-                    <div style="font-size: 28px; font-weight: 700; color: #059669;">â‚¬${(d.salary_after_5_years / 1000).toFixed(0)}k</div>
+                    <div style="font-size: 24px; font-weight: 700; color: #059669;">€${(d.salary_after_5_years / 1000).toFixed(0)}k</div>
                     <div style="font-size: 11px; color: #047857;">+${Math.round(((d.salary_after_5_years - d.starting_salary) / d.starting_salary) * 100)}% increase</div>
                 </div>
             </div>
@@ -1035,7 +1590,7 @@ function displaySingleResult(d) {
                 </svg>
                 Lifetime Earnings Potential
             </div>
-            <div style="font-size: 48px; font-weight: 800; margin: 12px 0; letter-spacing: -0.02em;">â‚¬${(d.analysis.lifetime.total_earnings / 1000000).toFixed(2)}M</div>
+            <div style="font-size: 48px; font-weight: 800; margin: 12px 0; letter-spacing: -0.02em;">€${(d.analysis.lifetime.total_earnings / 1000000).toFixed(2)}M</div>
             <div style="font-size: 15px; opacity: 0.9; font-weight: 500;">Over a 30-year career, you'll earn ${d.analysis.lifetime.times_earned_back}x your investment back</div>
         </div>
     `;
@@ -1090,7 +1645,7 @@ function createInvestmentChart(data) {
                     bodyFont: { size: 13 },
                     callbacks: {
                         label: function(context) {
-                            return 'â‚¬' + context.parsed.y.toLocaleString();
+                            return '€' + context.parsed.y.toLocaleString();
                         }
                     }
                 }
@@ -1100,7 +1655,7 @@ function createInvestmentChart(data) {
                     beginAtZero: true,
                     ticks: {
                         callback: function(value) {
-                            return 'â‚¬' + (value / 1000) + 'k';
+                            return '€' + (value / 1000) + 'k';
                         },
                         font: { size: 12 }
                     },
@@ -1154,6 +1709,7 @@ function compareMultipleCourses() {
             });
         }
         return response.json();
+        
     })
     .then(data => {
         if (data.success) {
