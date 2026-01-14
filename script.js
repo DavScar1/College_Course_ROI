@@ -435,11 +435,11 @@ function renderCourseGrid(courses) {
                     </div>
                     <div class="course-stat">
                         <div class="course-stat-label">Total Cost</div>
-                        <div class="course-stat-value">Ã¢â€šÂ¬${(course.total_cost / 1000).toFixed(0)}k</div>
+                        <div class="course-stat-value">€${(course.total_cost / 1000).toFixed(0)}k</div>
                     </div>
                     <div class="course-stat">
                         <div class="course-stat-label">Start Salary</div>
-                        <div class="course-stat-value">Ã¢â€šÂ¬${(course.starting_salary / 1000).toFixed(0)}k</div>
+                        <div class="course-stat-value">€${(course.starting_salary / 1000).toFixed(0)}k</div>
                     </div>
                 </div>
                 
@@ -486,10 +486,10 @@ function updatePartTimeCalculations() {
     
     const totalIncome = annualIncome * courseLength;
     
-    document.getElementById('weeklyIncome').textContent = 'Ã¢â€šÂ¬' + Math.round(weeklyIncome).toLocaleString();
-    document.getElementById('partTimeIncome').textContent = 'Ã¢â€šÂ¬' + Math.round(annualIncome).toLocaleString();
-    document.getElementById('partTimeTotal').textContent = 'Ã¢â€šÂ¬' + Math.round(totalIncome).toLocaleString();
-    document.getElementById('costReduction').textContent = 'Ã¢â€šÂ¬' + Math.round(totalIncome).toLocaleString();
+    document.getElementById('weeklyIncome').textContent = '€' + Math.round(weeklyIncome).toLocaleString();
+    document.getElementById('partTimeIncome').textContent = '€' + Math.round(annualIncome).toLocaleString();
+    document.getElementById('partTimeTotal').textContent = '€' + Math.round(totalIncome).toLocaleString();
+    document.getElementById('costReduction').textContent = '€' + Math.round(totalIncome).toLocaleString();
 }
 
 // Save preferences to localStorage
@@ -716,7 +716,7 @@ function displaySingleResult(d) {
     if (useCustomTuition) {
         const customTuition = document.getElementById('customTuition').value;
         if (customTuition) {
-            customizationHTML += `<div class="badge badge-info">Custom tuition: Ã¢â€šÂ¬${parseFloat(customTuition).toLocaleString()}/year</div>`;
+            customizationHTML += `<div class="badge badge-info">Custom tuition: €${parseFloat(customTuition).toLocaleString()}/year</div>`;
             hasCustomization = true;
         }
     }
@@ -725,12 +725,12 @@ function displaySingleResult(d) {
     if (enablePartTime && d.part_time_earnings) {
         const hours = document.getElementById('partTimeHours').value;
         const rate = document.getElementById('hourlyRate').value;
-        customizationHTML += `<div class="badge badge-info">Part-time: ${hours} hrs/week at Ã¢â€šÂ¬${parseFloat(rate).toFixed(2)}/hr</div>`;
+        customizationHTML += `<div class="badge badge-info">Part-time: ${hours} hrs/week at €${parseFloat(rate).toFixed(2)}/hr</div>`;
         hasCustomization = true;
     }
     
-    const paybackBadgeClass = d.analysis.payback_emoji === 'Ã°Å¸Å¸Â¢' ? 'badge-success' : 
-                             d.analysis.payback_emoji === 'Ã°Å¸Å¸Â¡' ? 'badge-warning' : 'badge-warning';
+    const paybackBadgeClass = d.analysis.payback_emoji === '🟢' ? 'badge-success' : 
+                             d.analysis.payback_emoji === '🟡' ? 'badge-warning' : 'badge-warning';
     
     // NEW: Build additional statistics section if course_data exists
     let additionalStatsHTML = '';
@@ -760,13 +760,13 @@ function displaySingleResult(d) {
                 <div style="background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); padding: 20px; border-radius: 12px; text-align: center;">
                     <div style="font-size: 36px; font-weight: 700; color: #92400e; margin-bottom: 4px;">${cd.graduate_satisfaction}</div>
                     <div style="font-size: 13px; color: #92400e; font-weight: 600;">Student Rating</div>
-                    <div style="font-size: 11px; color: #b45309; margin-top: 4px;">out of 5 Ã¢Â­Â</div>
+                    <div style="font-size: 11px; color: #b45309; margin-top: 4px;">out of 5 ⭐</div>
                 </div>
                 
                 <div style="background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%); padding: 20px; border-radius: 12px; text-align: center;">
                     <div style="font-size: 36px; font-weight: 700; color: #065f46; margin-bottom: 4px;">${cd.job_security}</div>
                     <div style="font-size: 13px; color: #065f46; font-weight: 600;">Job Security</div>
-                    <div style="font-size: 11px; color: #047857; margin-top: 4px;">stability rating Ã°Å¸â€ºÂ¡Ã¯Â¸Â</div>
+                    <div style="font-size: 11px; color: #047857; margin-top: 4px;">stability rating 🛡️</div>
                 </div>
             </div>
 
@@ -877,12 +877,12 @@ function displaySingleResult(d) {
                 <div style="display: flex; justify-content: space-around; align-items: center;">
                     <div style="text-align: center;">
                         <div style="font-size: 12px; color: #047857; margin-bottom: 4px;">MINIMUM</div>
-                        <div style="font-size: 28px; font-weight: 700; color: #065f46;">Ã¢â€šÂ¬${(cd.startup_salary_range.min / 1000).toFixed(0)}k</div>
+                        <div style="font-size: 28px; font-weight: 700; color: #065f46;">€${(cd.startup_salary_range.min / 1000).toFixed(0)}k</div>
                     </div>
-                    <div style="font-size: 24px; color: #059669;">Ã¢â€ â€™</div>
+                    <div style="font-size: 24px; color: #059669;">→</div>
                     <div style="text-align: center;">
                         <div style="font-size: 12px; color: #047857; margin-bottom: 4px;">MAXIMUM</div>
-                        <div style="font-size: 28px; font-weight: 700; color: #065f46;">Ã¢â€šÂ¬${(cd.startup_salary_range.max / 1000).toFixed(0)}k</div>
+                        <div style="font-size: 28px; font-weight: 700; color: #065f46;">€${(cd.startup_salary_range.max / 1000).toFixed(0)}k</div>
                     </div>
                 </div>
             </div>
@@ -918,7 +918,7 @@ function displaySingleResult(d) {
                 <div style="grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px;">
                     ${cd.typical_roles.map(role => `
                         <div style="display: flex; align-items: center; gap: 10px; padding: 12px; background: white; border-radius: 8px; border: 1px solid #e9d5ff;">
-                            <span style="color: #7c3aed; font-size: 18px; font-weight: 700;">Ã¢â€ â€™</span>
+                            <span style="color: #7c3aed; font-size: 18px; font-weight: 700;">→</span>
                             <span style="color: var(--gray-800); font-weight: 500; font-size: 14px;">${role}</span>
                         </div>
                     `).join('')}
@@ -946,14 +946,14 @@ function displaySingleResult(d) {
             <div style="grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 16px;">
                 <div style="text-align: center; padding: 24px; background: white; border-radius: 10px; border: 1px solid #e5e7eb; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);">
                     <div style="font-size: 11px; color: #6b7280; margin-bottom: 8px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">TOTAL COST</div>
-                    <div style="font-size: 32px; font-weight: 700; color: #111827;">Ã¢â€šÂ¬${(d.total_cost / 1000).toFixed(0)}k</div>
-                    <div style="font-size: 11px; color: #9ca3af; margin-top: 6px;">Ã¢â€šÂ¬${(d.tuition_per_year / 1000).toFixed(1)}k/year Ãƒâ€” ${d.course_length} years</div>
+                    <div style="font-size: 32px; font-weight: 700; color: #111827;">€${(d.total_cost / 1000).toFixed(0)}k</div>
+                    <div style="font-size: 11px; color: #9ca3af; margin-top: 6px;">€${(d.tuition_per_year / 1000).toFixed(1)}k/year × ${d.course_length} years</div>
                 </div>
                 
                 <div style="text-align: center; padding: 24px; background: white; border-radius: 10px; border: 1px solid #e5e7eb; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);">
                     <div style="font-size: 11px; color: #6b7280; margin-bottom: 8px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">STARTING SALARY</div>
-                    <div style="font-size: 32px; font-weight: 700; color: #111827;">Ã¢â€šÂ¬${(d.starting_salary / 1000).toFixed(0)}k</div>
-                    <div style="font-size: 11px; color: #9ca3af; margin-top: 6px;">Ã¢â€šÂ¬${Math.round(d.starting_salary / 12).toLocaleString()}/month</div>
+                    <div style="font-size: 32px; font-weight: 700; color: #111827;">€${(d.starting_salary / 1000).toFixed(0)}k</div>
+                    <div style="font-size: 11px; color: #9ca3af; margin-top: 6px;">€${Math.round(d.starting_salary / 12).toLocaleString()}/month</div>
                 </div>
                 
                 <div style="text-align: center; padding: 24px; background: white; border-radius: 10px; border: 1px solid #e5e7eb; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);">
@@ -993,7 +993,7 @@ function displaySingleResult(d) {
             <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
                 <div style="text-align: center; flex: 1;">
                     <div style="font-size: 11px; color: var(--gray-600); margin-bottom: 4px; text-transform: uppercase; font-weight: 600;">STARTING</div>
-                    <div style="font-size: 28px; font-weight: 700; color: var(--gray-900);">Ã¢â€šÂ¬${(d.starting_salary / 1000).toFixed(0)}k</div>
+                    <div style="font-size: 28px; font-weight: 700; color: var(--gray-900);">€${(d.starting_salary / 1000).toFixed(0)}k</div>
                     <div style="font-size: 11px; color: var(--gray-500);">Year 1</div>
                 </div>
                 <div style="flex: 0 0 60px; text-align: center;">
@@ -1003,7 +1003,7 @@ function displaySingleResult(d) {
                 </div>
                 <div style="text-align: center; flex: 1;">
                     <div style="font-size: 11px; color: var(--gray-600); margin-bottom: 4px; text-transform: uppercase; font-weight: 600;">AFTER 5 YEARS</div>
-                    <div style="font-size: 28px; font-weight: 700; color: #059669;">Ã¢â€šÂ¬${(d.salary_after_5_years / 1000).toFixed(0)}k</div>
+                    <div style="font-size: 28px; font-weight: 700; color: #059669;">€${(d.salary_after_5_years / 1000).toFixed(0)}k</div>
                     <div style="font-size: 11px; color: #047857;">+${Math.round(((d.salary_after_5_years - d.starting_salary) / d.starting_salary) * 100)}% increase</div>
                 </div>
             </div>
@@ -1035,7 +1035,7 @@ function displaySingleResult(d) {
                 </svg>
                 Lifetime Earnings Potential
             </div>
-            <div style="font-size: 48px; font-weight: 800; margin: 12px 0; letter-spacing: -0.02em;">Ã¢â€šÂ¬${(d.analysis.lifetime.total_earnings / 1000000).toFixed(2)}M</div>
+            <div style="font-size: 48px; font-weight: 800; margin: 12px 0; letter-spacing: -0.02em;">€${(d.analysis.lifetime.total_earnings / 1000000).toFixed(2)}M</div>
             <div style="font-size: 15px; opacity: 0.9; font-weight: 500;">Over a 30-year career, you'll earn ${d.analysis.lifetime.times_earned_back}x your investment back</div>
         </div>
     `;
@@ -1090,7 +1090,7 @@ function createInvestmentChart(data) {
                     bodyFont: { size: 13 },
                     callbacks: {
                         label: function(context) {
-                            return 'Ã¢â€šÂ¬' + context.parsed.y.toLocaleString();
+                            return '€' + context.parsed.y.toLocaleString();
                         }
                     }
                 }
@@ -1100,7 +1100,7 @@ function createInvestmentChart(data) {
                     beginAtZero: true,
                     ticks: {
                         callback: function(value) {
-                            return 'Ã¢â€šÂ¬' + (value / 1000) + 'k';
+                            return '€' + (value / 1000) + 'k';
                         },
                         font: { size: 12 }
                     },
@@ -1183,7 +1183,7 @@ function displayComparisonResults(data) {
     if (winners.best_roi) {
         winnersHTML += `
             <div style="display: flex; align-items: center; gap: 10px; font-size: 14px;">
-                <span style="font-size: 20px;">Ã°Å¸Ââ€ </span>
+                <span style="font-size: 20px;">🏆</span>
                 <strong>Best ROI:</strong> ${winners.best_roi}
             </div>
         `;
@@ -1191,7 +1191,7 @@ function displayComparisonResults(data) {
     if (winners.fastest_payback) {
         winnersHTML += `
             <div style="display: flex; align-items: center; gap: 10px; font-size: 14px;">
-                <span style="font-size: 20px;">Ã¢Å¡Â¡</span>
+                <span style="font-size: 20px;">⚡</span>
                 <strong>Fastest Payback:</strong> ${winners.fastest_payback}
             </div>
         `;
@@ -1199,7 +1199,7 @@ function displayComparisonResults(data) {
     if (winners.lowest_cost) {
         winnersHTML += `
             <div style="display: flex; align-items: center; gap: 10px; font-size: 14px;">
-                <span style="font-size: 20px;">Ã°Å¸â€™Â°</span>
+                <span style="font-size: 20px;">💰</span>
                 <strong>Lowest Cost:</strong> ${winners.lowest_cost}
             </div>
         `;
@@ -1207,7 +1207,7 @@ function displayComparisonResults(data) {
     if (winners.highest_salary) {
         winnersHTML += `
             <div style="display: flex; align-items: center; gap: 10px; font-size: 14px;">
-                <span style="font-size: 20px;">Ã°Å¸â€™Âµ</span>
+                <span style="font-size: 20px;">💵</span>
                 <strong>Highest Starting Salary:</strong> ${winners.highest_salary}
             </div>
         `;
@@ -1266,7 +1266,7 @@ function displayComparisonResults(data) {
         additionalStatsHTML = `
         <div class="card" style="margin-top: 24px;">
             <div class="card-header">
-                <h3 class="card-title">Ã°Å¸â€œÅ  Additional Statistics Comparison</h3>
+                <h3 class="card-title">📊 Additional Statistics Comparison</h3>
             </div>
             <div class="card-body">
                 <div class="chart-grid">
@@ -1318,7 +1318,7 @@ function displayComparisonResults(data) {
             const cd = course.course_data;
             courseAdditionalStats = `
                 <div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--gray-200);">
-                    <h5 style="font-size: 13px; font-weight: 600; color: var(--gray-700); margin-bottom: 12px;">Ã°Å¸â€œÅ  Career Metrics</h5>
+                    <h5 style="font-size: 13px; font-weight: 600; color: var(--gray-700); margin-bottom: 12px;">📊 Career Metrics</h5>
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 12px;">
                         <div style="display: flex; justify-content: space-between;">
                             <span style="color: var(--gray-600);">Employment:</span>
@@ -1340,21 +1340,21 @@ function displayComparisonResults(data) {
                     
                     ${cd.industry_growth_rate ? `
                         <div style="margin-top: 12px; padding: 10px; background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%); border-radius: 6px; border: 1px solid #a7f3d0;">
-                            <div style="font-size: 11px; color: #065f46; font-weight: 600; margin-bottom: 4px;">Ã°Å¸â€œË† INDUSTRY GROWTH</div>
+                            <div style="font-size: 11px; color: #065f46; font-weight: 600; margin-bottom: 4px;">📈 INDUSTRY GROWTH</div>
                             <div style="font-size: 13px; color: #047857; font-weight: 700;">${cd.industry_growth_rate}</div>
                         </div>
                     ` : ''}
                     
                     ${cd.avg_class_size ? `
                         <div style="margin-top: 8px; padding: 8px; background: var(--gray-50); border-radius: 6px; display: flex; justify-content: space-between; align-items: center;">
-                            <span style="font-size: 12px; color: var(--gray-600);">Ã°Å¸â€˜Â¥ Class Size:</span>
+                            <span style="font-size: 12px; color: var(--gray-600);">👥 Class Size:</span>
                             <strong style="font-size: 12px;">${cd.avg_class_size} students</strong>
                         </div>
                     ` : ''}
                     
                     ${cd.internship_opportunities ? `
                         <div style="margin-top: 8px; padding: 8px; background: #eff6ff; border-radius: 6px; border: 1px solid #bfdbfe;">
-                            <div style="font-size: 11px; color: #1e40af; font-weight: 600; margin-bottom: 2px;">Ã°Å¸â€™Â¼ Internships</div>
+                            <div style="font-size: 11px; color: #1e40af; font-weight: 600; margin-bottom: 2px;">💼 Internships</div>
                             <div style="font-size: 11px; color: #1d4ed8;">${cd.internship_opportunities}</div>
                         </div>
                     ` : ''}
@@ -1388,21 +1388,21 @@ function displayComparisonResults(data) {
                         <div style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--gray-100);">
                             <span style="font-size: 13px; color: var(--gray-600); font-weight: 500;">Total Cost</span>
                             <span style="font-size: 15px; color: var(--gray-900); font-weight: 600; ${course.course_name === winners.lowest_cost ? 'color: var(--success);' : ''}">
-                                Ã¢â€šÂ¬${course.total_cost.toLocaleString()}
+                                €${course.total_cost.toLocaleString()}
                             </span>
                         </div>
                         
                         <div style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--gray-100);">
                             <span style="font-size: 13px; color: var(--gray-600); font-weight: 500;">Starting Salary</span>
                             <span style="font-size: 15px; color: var(--gray-900); font-weight: 600; ${course.course_name === winners.highest_salary ? 'color: var(--success);' : ''}">
-                                Ã¢â€šÂ¬${course.starting_salary.toLocaleString()}
+                                €${course.starting_salary.toLocaleString()}
                             </span>
                         </div>
                         
                         <div style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--gray-100);">
                             <span style="font-size: 13px; color: var(--gray-600); font-weight: 500;">After 5 Years</span>
                             <span style="font-size: 15px; color: var(--gray-900); font-weight: 600;">
-                                Ã¢â€šÂ¬${course.salary_after_5_years.toLocaleString()}
+                                €${course.salary_after_5_years.toLocaleString()}
                             </span>
                         </div>
                         
@@ -1542,7 +1542,7 @@ function createComparisonCharts(courses) {
             data: {
                 labels: labels,
                 datasets: [{
-                    label: 'Starting Salary (Ã¢â€šÂ¬)',
+                    label: 'Starting Salary (€)',
                     data: courses.map(c => c.starting_salary),
                     backgroundColor: colors.slice(0, courses.length),
                     borderRadius: 8,
@@ -1556,7 +1556,7 @@ function createComparisonCharts(courses) {
                     tooltip: {
                         callbacks: {
                             label: function(context) {
-                                return 'Ã¢â€šÂ¬' + context.parsed.y.toLocaleString();
+                                return '€' + context.parsed.y.toLocaleString();
                             }
                         }
                     }
@@ -1566,7 +1566,7 @@ function createComparisonCharts(courses) {
                         beginAtZero: true,
                         ticks: {
                             callback: function(value) {
-                                return 'Ã¢â€šÂ¬' + (value / 1000) + 'k';
+                                return '€' + (value / 1000) + 'k';
                             }
                         }
                     }
@@ -1608,7 +1608,7 @@ function createComparisonCharts(courses) {
                     tooltip: {
                         callbacks: {
                             label: function(context) {
-                                return context.dataset.label + ': Ã¢â€šÂ¬' + context.parsed.y.toLocaleString();
+                                return context.dataset.label + ': €' + context.parsed.y.toLocaleString();
                             }
                         }
                     }
@@ -1618,7 +1618,7 @@ function createComparisonCharts(courses) {
                         beginAtZero: true,
                         ticks: {
                             callback: function(value) {
-                                return 'Ã¢â€šÂ¬' + (value / 1000) + 'k';
+                                return '€' + (value / 1000) + 'k';
                             }
                         }
                     }
