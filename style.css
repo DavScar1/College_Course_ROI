@@ -1869,3 +1869,40 @@ body {
         display: none !important;
     }
 }
+
+.course-disclaimer {
+        display: block;
+        background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+        border: 1px solid #fbbf24;
+        border-radius: 8px;
+        padding: 12px 14px;
+        margin: 16px 0;
+        font-size: 13px;
+        color: #92400e;
+        line-height: 1.5;
+    }
+    
+    .course-disclaimer strong {
+        font-weight: 600;
+        color: #78350f;
+    }
+}
+
+/* Desktop - hide the disclaimer or keep it subtle */
+@media (min-width: 769px) {
+    .course-disclaimer {
+        display: block;
+        background: #eff6ff;
+        border: 1px solid #bfdbfe;
+        border-radius: 6px;
+        padding: 10px 14px;
+        margin: 16px 0 0 0;
+        font-size: 13px;
+        color: #1e40af;
+        line-height: 1.5;
+    }
+    
+    .course-disclaimer strong {
+        font-weight: 600;
+    }
+}
