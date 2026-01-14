@@ -1785,3 +1785,17 @@ body {
         grid-template-columns: repeat(2, 1fr);
     }
 }
+
+/* Mobile (up to 768px) - HIDE filters and search */
+@media (max-width: 768px) {
+    .desktop-only-filters {
+        display: none !important;
+    }
+}
+
+/* Desktop (769px and up) - SHOW filters and search */
+@media (min-width: 769px) {
+    .desktop-only-filters {
+        display: block;
+    }
+}
