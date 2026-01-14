@@ -429,13 +429,8 @@ input, select, textarea {
     margin-top: 3px;
 }
 
-/* Pills - Hide on calculator page, show on explore page */
+/* Pills - Mobile Optimized */
 .filter-pills {
-    display: none; /* Hidden by default on calculator */
-}
-
-/* Only show on explore page */
-#exploreView .filter-pills {
     display: flex;
     gap: 8px;
     overflow-x: auto;
@@ -445,7 +440,7 @@ input, select, textarea {
     scrollbar-width: none;
 }
 
-#exploreView .filter-pills::-webkit-scrollbar {
+.filter-pills::-webkit-scrollbar {
     display: none;
 }
 
