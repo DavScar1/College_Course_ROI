@@ -898,26 +898,37 @@
                     score -= 10; // Bigger penalty for much longer
                 }
 
-                // Q5: Location (15 points)
+                // Q5: Location (25 points + penalty for mismatch)
+                let locationMatched = false;
                 if (answers['5'] === 'dublin') {
                     if (course.university.includes('Dublin') || course.university.includes('UCD') || 
                         course.university.includes('Trinity') || course.university.includes('DCU') ||
                         course.university.includes('TU Dublin') || course.university.includes('RCSI')) {
-                        score += 15;
+                        score += 25;
                         reasons.push('Dublin location');
+                        locationMatched = true;
+                    } else {
+                        score -= 25; // Penalty for wrong location
                     }
                 } else if (answers['5'] === 'cork-galway') {
                     if (course.university.includes('Cork') || course.university.includes('Galway')) {
-                        score += 15;
+                        score += 25;
                         reasons.push('Preferred location');
+                        locationMatched = true;
+                    } else {
+                        score -= 25; // Penalty for wrong location
                     }
                 } else if (answers['5'] === 'other') {
                     if (course.university.includes('Limerick') || course.university.includes('Maynooth')) {
-                        score += 15;
+                        score += 25;
                         reasons.push('Preferred location');
+                        locationMatched = true;
+                    } else {
+                        score -= 25; // Penalty for wrong location
                     }
                 } else if (answers['5'] === 'no-preference') {
-                    score += 10; // Give some points for flexibility
+                    score += 15; // Give points for flexibility
+                    locationMatched = true; // They don't care about location
                 }
 
                 // Q6: Work Style (20 points)
@@ -978,7 +989,7 @@
                     ...course,
                     matchScore: finalScore,
                     reasons: reasons.length > 0 ? reasons : ['General match'],
-                    debugInfo: { rawScore: score, fieldMatched, courseName } // For debugging
+                    debugInfo: { rawScore: score, fieldMatched, locationMatched, courseName } // For debugging
                 };
             });
 
@@ -990,21 +1001,11 @@
             // Debug: Show what was matched
             console.log('Top 5 matches:');
             topMatches.forEach((match, i) => {
-                console.log(`${i+1}. ${match.course_name} - Score: ${match.matchScore} (Raw: ${match.debugInfo.rawScore}, Field Matched: ${match.debugInfo.fieldMatched})`);
+                console.log(`${i+1}. ${match.course_name} - Score: ${match.matchScore} (Raw: ${match.debugInfo.rawScore}, Field: ${match.debugInfo.fieldMatched}, Location: ${match.debugInfo.locationMatched})`);
             });
 
             displayResults(topMatches);
         }
-
-            
-        
-
-            // Sort by score and get top 5
-            const topMatches = scoredCourses
-                .sort((a, b) => b.matchScore - a.matchScore)
-                .slice(0, 5);
-
-            displayResults(topMatches);
         
 
         function displayResults(matches) {
