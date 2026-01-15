@@ -798,96 +798,182 @@
                 let score = 0;
                 let reasons = [];
                 const courseData = course.course_data || {};
+                const courseName = course.course_name.toLowerCase();
 
-                // Q1: Career Goals
+                // Q1: Career Goals (25 points)
                 if (answers['1'] === 'high-salary' && course.roi_5_years > 350) {
                     score += 25;
                     reasons.push('Excellent ROI');
-                }
-                if (answers['1'] === 'job-security' && courseData.job_security >= 4.5) {
+                } else if (answers['1'] === 'job-security' && courseData.job_security >= 4.5) {
                     score += 25;
                     reasons.push('High job security');
-                }
-                if (answers['1'] === 'balance' && courseData.work_life_balance >= 3.7) {
+                } else if (answers['1'] === 'balance' && courseData.work_life_balance >= 3.7) {
                     score += 25;
                     reasons.push('Good work-life balance');
+                } else if (answers['1'] === 'passion') {
+                    // Give points for graduate satisfaction
+                    if (courseData.graduate_satisfaction >= 4.2) {
+                        score += 25;
+                        reasons.push('High student satisfaction');
+                    } else {
+                        score += 10;
+                    }
                 }
 
-                // Q2: Field of Interest
-                const courseName = course.course_name.toLowerCase();
-                if (answers['2'] === 'technology' && (courseName.includes('computer') || courseName.includes('data') || courseName.includes('software') || courseName.includes('cyber'))) {
-                    score += 30;
-                    reasons.push('Matches tech interest');
+                // Q2: Field of Interest (30 points - MOST IMPORTANT)
+                let fieldMatched = false;
+                if (answers['2'] === 'technology') {
+                    if (courseName.includes('computer') || courseName.includes('data') || 
+                        courseName.includes('software') || courseName.includes('cyber') || 
+                        courseName.includes('artificial intelligence') || courseName.includes('ai')) {
+                        score += 30;
+                        reasons.push('Matches tech interest');
+                        fieldMatched = true;
+                    }
+                } else if (answers['2'] === 'healthcare') {
+                    if (courseName.includes('medicine') || courseName.includes('nursing') || 
+                        courseName.includes('therapy') || courseName.includes('pharma') ||
+                        courseName.includes('physiotherapy') || courseName.includes('occupational') ||
+                        courseName.includes('speech') || courseName.includes('radiography') ||
+                        courseName.includes('dentistry')) {
+                        score += 30;
+                        reasons.push('Matches healthcare interest');
+                        fieldMatched = true;
+                    }
+                } else if (answers['2'] === 'business') {
+                    if (courseName.includes('business') || courseName.includes('commerce') || 
+                        courseName.includes('account') || courseName.includes('finance') ||
+                        courseName.includes('actuarial')) {
+                        score += 30;
+                        reasons.push('Matches business interest');
+                        fieldMatched = true;
+                    }
+                } else if (answers['2'] === 'engineering') {
+                    if (courseName.includes('engineering')) {
+                        score += 30;
+                        reasons.push('Matches engineering interest');
+                        fieldMatched = true;
+                    }
+                } else if (answers['2'] === 'other') {
+                    // Law, education, psychology, communications, social work, architecture
+                    if (courseName.includes('law') || courseName.includes('education') || 
+                        courseName.includes('psychology') || courseName.includes('communication') ||
+                        courseName.includes('social work') || courseName.includes('architecture') ||
+                        courseName.includes('veterinary')) {
+                        score += 30;
+                        reasons.push('Matches your field interest');
+                        fieldMatched = true;
+                    }
                 }
-                if (answers['2'] === 'healthcare' && (courseName.includes('medicine') || courseName.includes('nursing') || courseName.includes('therapy') || courseName.includes('pharma'))) {
-                    score += 30;
-                    reasons.push('Matches healthcare interest');
-                }
-                if (answers['2'] === 'business' && (courseName.includes('business') || courseName.includes('commerce') || courseName.includes('account'))) {
-                    score += 30;
-                    reasons.push('Matches business interest');
-                }
-                if (answers['2'] === 'engineering' && courseName.includes('engineering')) {
-                    score += 30;
-                    reasons.push('Matches engineering interest');
+                
+                // If field doesn't match, heavily penalize (this is critical)
+                if (!fieldMatched) {
+                    score -= 20;
                 }
 
-                // Q3: Budget
+                // Q3: Budget (20 points)
                 const budget = parseInt(answers['3']);
                 if (course.tuition_per_year <= budget) {
                     score += 20;
                     reasons.push('Within budget');
                 } else if (course.tuition_per_year <= budget * 1.2) {
                     score += 10;
+                    reasons.push('Slightly over budget');
+                } else {
+                    score -= 5; // Penalize if way over budget
                 }
 
-                // Q4: Course Length
+                // Q4: Course Length (15 points)
                 const maxLength = parseInt(answers['4']);
                 if (course.course_length <= maxLength) {
                     score += 15;
                     reasons.push('Right duration');
+                } else if (course.course_length === maxLength + 1) {
+                    score += 5; // Slight penalty for 1 year over
+                } else {
+                    score -= 10; // Bigger penalty for much longer
                 }
 
-                // Q5: Location
-                if (answers['5'] === 'dublin' && (course.university.includes('Dublin') || course.university.includes('UCD') || course.university.includes('Trinity'))) {
-                    score += 15;
-                    reasons.push('Dublin location');
-                }
-                if (answers['5'] === 'cork-galway' && (course.university.includes('Cork') || course.university.includes('Galway'))) {
-                    score += 15;
-                    reasons.push('Preferred location');
-                }
-                if (answers['5'] === 'no-preference') {
-                    score += 10;
+                // Q5: Location (15 points)
+                if (answers['5'] === 'dublin') {
+                    if (course.university.includes('Dublin') || course.university.includes('UCD') || 
+                        course.university.includes('Trinity') || course.university.includes('DCU') ||
+                        course.university.includes('TU Dublin') || course.university.includes('RCSI')) {
+                        score += 15;
+                        reasons.push('Dublin location');
+                    }
+                } else if (answers['5'] === 'cork-galway') {
+                    if (course.university.includes('Cork') || course.university.includes('Galway')) {
+                        score += 15;
+                        reasons.push('Preferred location');
+                    }
+                } else if (answers['5'] === 'other') {
+                    if (course.university.includes('Limerick') || course.university.includes('Maynooth')) {
+                        score += 15;
+                        reasons.push('Preferred location');
+                    }
+                } else if (answers['5'] === 'no-preference') {
+                    score += 10; // Give some points for flexibility
                 }
 
-                // Q6: Work Style
+                // Q6: Work Style (20 points)
                 if (answers['6'] === 'remote' && courseData.remote_work_availability === 'High') {
                     score += 20;
                     reasons.push('Remote work options');
-                }
-                if (answers['6'] === 'hands-on' && courseData.remote_work_availability === 'Low') {
+                } else if (answers['6'] === 'hands-on' && courseData.remote_work_availability === 'Low') {
                     score += 20;
                     reasons.push('Hands-on career');
-                }
-
-                // Q7: Skills Demand
-                const demandImportance = parseInt(answers['7']);
-                if (demandImportance >= 7 && courseData.skills_demand === 'Very High') {
+                } else if (answers['6'] === 'hybrid' && courseData.remote_work_availability === 'Medium') {
                     score += 20;
-                    reasons.push('High demand field');
+                    reasons.push('Hybrid work available');
+                } else if (answers['6'] === 'hybrid') {
+                    score += 10; // Give partial credit for hybrid preference
                 }
 
-                // Q8: International Opportunities
-                if (answers['8'] === 'yes' && courseData.international_opportunities === 'Excellent') {
-                    score += 15;
-                    reasons.push('International opportunities');
+                // Q7: Skills Demand (15 points)
+                const demandImportance = parseInt(answers['7']);
+                if (demandImportance >= 7) {
+                    if (courseData.skills_demand === 'Very High') {
+                        score += 15;
+                        reasons.push('High demand field');
+                    } else if (courseData.skills_demand === 'High') {
+                        score += 10;
+                        reasons.push('Good demand');
+                    }
+                } else if (demandImportance <= 4) {
+                    // Not important to them, so give points regardless
+                    score += 10;
                 }
+
+                // Q8: International Opportunities (15 points)
+                if (answers['8'] === 'yes') {
+                    if (courseData.international_opportunities === 'Excellent') {
+                        score += 15;
+                        reasons.push('International opportunities');
+                    } else if (courseData.international_opportunities === 'Very Good') {
+                        score += 10;
+                        reasons.push('Good international prospects');
+                    }
+                } else if (answers['8'] === 'maybe') {
+                    if (courseData.international_opportunities === 'Excellent' || 
+                        courseData.international_opportunities === 'Very Good') {
+                        score += 10;
+                        reasons.push('International options available');
+                    } else {
+                        score += 5;
+                    }
+                } else if (answers['8'] === 'no') {
+                    // Prefer Ireland-focused careers
+                    score += 10;
+                }
+
+                // Ensure score is between 0 and 100
+                const finalScore = Math.max(0, Math.min(100, score));
 
                 return {
                     ...course,
-                    matchScore: Math.min(100, score),
-                    reasons: reasons
+                    matchScore: finalScore,
+                    reasons: reasons.length > 0 ? reasons : ['General match']
                 };
             });
 
@@ -898,6 +984,14 @@
 
             displayResults(topMatches);
         }
+
+            // Sort by score and get top 5
+            const topMatches = scoredCourses
+                .sort((a, b) => b.matchScore - a.matchScore)
+                .slice(0, 5);
+
+            displayResults(topMatches);
+        
 
         function displayResults(matches) {
             const container = document.getElementById('matchesContainer');
