@@ -787,11 +787,15 @@
             document.getElementById('progressBar').style.width = progress + '%';
         }
 
-        function calculateMatches() {
+         function calculateMatches() {
             if (allCourses.length === 0) {
                 alert('Courses are still loading. Please wait a moment and try again.');
                 return;
             }
+
+            console.log('=== QUIZ MATCHING DEBUG ===');
+            console.log('User Answers:', answers);
+            console.log('Total courses loaded:', allCourses.length);
 
             // Score each course based on user answers
             const scoredCourses = allCourses.map(course => {
@@ -868,7 +872,7 @@
                 
                 // If field doesn't match, heavily penalize (this is critical)
                 if (!fieldMatched) {
-                    score -= 20;
+                    score -= 50; // INCREASED PENALTY - was -20
                 }
 
                 // Q3: Budget (20 points)
@@ -973,7 +977,8 @@
                 return {
                     ...course,
                     matchScore: finalScore,
-                    reasons: reasons.length > 0 ? reasons : ['General match']
+                    reasons: reasons.length > 0 ? reasons : ['General match'],
+                    debugInfo: { rawScore: score, fieldMatched, courseName } // For debugging
                 };
             });
 
@@ -982,8 +987,17 @@
                 .sort((a, b) => b.matchScore - a.matchScore)
                 .slice(0, 5);
 
+            // Debug: Show what was matched
+            console.log('Top 5 matches:');
+            topMatches.forEach((match, i) => {
+                console.log(`${i+1}. ${match.course_name} - Score: ${match.matchScore} (Raw: ${match.debugInfo.rawScore}, Field Matched: ${match.debugInfo.fieldMatched})`);
+            });
+
             displayResults(topMatches);
         }
+
+            
+        
 
             // Sort by score and get top 5
             const topMatches = scoredCourses
