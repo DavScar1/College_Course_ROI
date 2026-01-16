@@ -1906,3 +1906,14 @@ body {
         font-weight: 600;
     }
 }
+
+.logo-icon-wrapper {
+    width: 36px;
+    height: 36px;
+    background: linear-gradient(135deg, #64748b 0%, #475569 100%);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
