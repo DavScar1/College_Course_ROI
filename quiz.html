@@ -796,6 +796,12 @@
             console.log('=== QUIZ MATCHING DEBUG ===');
             console.log('User Answers:', answers);
             console.log('Total courses loaded:', allCourses.length);
+            console.log('');
+            console.log('SCORING BREAKDOWN:');
+            console.log('- Field Match: +50 points | No Match: -200 points ⚠️');
+            console.log('- Location Match: +50 points | No Match: -100 points ⚠️');
+            console.log('- All other questions: ~11 points total (just for tie-breaking)');
+            console.log('');
 
             // Score each course based on user answers
             const scoredCourses = allCourses.map(course => {
@@ -804,33 +810,15 @@
                 const courseData = course.course_data || {};
                 const courseName = course.course_name.toLowerCase();
 
-                // Q1: Career Goals (25 points)
-                if (answers['1'] === 'high-salary' && course.roi_5_years > 350) {
-                    score += 25;
-                    reasons.push('Excellent ROI');
-                } else if (answers['1'] === 'job-security' && courseData.job_security >= 4.5) {
-                    score += 25;
-                    reasons.push('High job security');
-                } else if (answers['1'] === 'balance' && courseData.work_life_balance >= 3.7) {
-                    score += 25;
-                    reasons.push('Good work-life balance');
-                } else if (answers['1'] === 'passion') {
-                    // Give points for graduate satisfaction
-                    if (courseData.graduate_satisfaction >= 4.2) {
-                        score += 25;
-                        reasons.push('High student satisfaction');
-                    } else {
-                        score += 10;
-                    }
-                }
-
-                // Q2: Field of Interest (30 points - MOST IMPORTANT)
+                // ==================== PRIORITY 1: FIELD OF INTEREST ====================
+                // Q2: Field of Interest (50 points - MOST IMPORTANT!)
                 let fieldMatched = false;
+                
                 if (answers['2'] === 'technology') {
                     if (courseName.includes('computer') || courseName.includes('data') || 
                         courseName.includes('software') || courseName.includes('cyber') || 
                         courseName.includes('artificial intelligence') || courseName.includes('ai')) {
-                        score += 30;
+                        score += 50;
                         reasons.push('Matches tech interest');
                         fieldMatched = true;
                     }
@@ -840,7 +828,7 @@
                         courseName.includes('physiotherapy') || courseName.includes('occupational') ||
                         courseName.includes('speech') || courseName.includes('radiography') ||
                         courseName.includes('dentistry')) {
-                        score += 30;
+                        score += 50;
                         reasons.push('Matches healthcare interest');
                         fieldMatched = true;
                     }
@@ -848,13 +836,13 @@
                     if (courseName.includes('business') || courseName.includes('commerce') || 
                         courseName.includes('account') || courseName.includes('finance') ||
                         courseName.includes('actuarial')) {
-                        score += 30;
+                        score += 50;
                         reasons.push('Matches business interest');
                         fieldMatched = true;
                     }
                 } else if (answers['2'] === 'engineering') {
                     if (courseName.includes('engineering')) {
-                        score += 30;
+                        score += 50;
                         reasons.push('Matches engineering interest');
                         fieldMatched = true;
                     }
@@ -864,122 +852,113 @@
                         courseName.includes('psychology') || courseName.includes('communication') ||
                         courseName.includes('social work') || courseName.includes('architecture') ||
                         courseName.includes('veterinary')) {
-                        score += 30;
+                        score += 50;
                         reasons.push('Matches your field interest');
                         fieldMatched = true;
                     }
                 }
                 
-                // If field doesn't match, heavily penalize (this is critical)
+                // CRITICAL: If field doesn't match, give massive penalty
                 if (!fieldMatched) {
-                    score -= 50; // INCREASED PENALTY - was -20
+                    score -= 200; // Wrong field = completely disqualified
                 }
 
-                // Q3: Budget (20 points)
-                const budget = parseInt(answers['3']);
-                if (course.tuition_per_year <= budget) {
-                    score += 20;
-                    reasons.push('Within budget');
-                } else if (course.tuition_per_year <= budget * 1.2) {
-                    score += 10;
-                    reasons.push('Slightly over budget');
-                } else {
-                    score -= 5; // Penalize if way over budget
-                }
-
-                // Q4: Course Length (15 points)
-                const maxLength = parseInt(answers['4']);
-                if (course.course_length <= maxLength) {
-                    score += 15;
-                    reasons.push('Right duration');
-                } else if (course.course_length === maxLength + 1) {
-                    score += 5; // Slight penalty for 1 year over
-                } else {
-                    score -= 10; // Bigger penalty for much longer
-                }
-
-                // Q5: Location (25 points + penalty for mismatch)
+                // ==================== PRIORITY 2: LOCATION ====================
+                // Q5: Location (50 points - SECOND MOST IMPORTANT!)
                 let locationMatched = false;
+                
                 if (answers['5'] === 'dublin') {
                     if (course.university.includes('Dublin') || course.university.includes('UCD') || 
                         course.university.includes('Trinity') || course.university.includes('DCU') ||
                         course.university.includes('TU Dublin') || course.university.includes('RCSI')) {
-                        score += 25;
+                        score += 50;
                         reasons.push('Dublin location');
                         locationMatched = true;
                     } else {
-                        score -= 25; // Penalty for wrong location
+                        score -= 100; // Heavy penalty for wrong location
                     }
                 } else if (answers['5'] === 'cork-galway') {
                     if (course.university.includes('Cork') || course.university.includes('Galway')) {
-                        score += 25;
+                        score += 50;
                         reasons.push('Preferred location');
                         locationMatched = true;
                     } else {
-                        score -= 25; // Penalty for wrong location
+                        score -= 100; // Heavy penalty for wrong location
                     }
                 } else if (answers['5'] === 'other') {
                     if (course.university.includes('Limerick') || course.university.includes('Maynooth')) {
-                        score += 25;
+                        score += 50;
                         reasons.push('Preferred location');
                         locationMatched = true;
                     } else {
-                        score -= 25; // Penalty for wrong location
+                        score -= 100; // Heavy penalty for wrong location
                     }
                 } else if (answers['5'] === 'no-preference') {
-                    score += 15; // Give points for flexibility
+                    score += 25; // Give good points for flexibility
                     locationMatched = true; // They don't care about location
                 }
 
-                // Q6: Work Style (20 points)
+                // ==================== EVERYTHING ELSE (Minimal Impact - Just Tie-Breaking) ====================
+                
+                // Q1: Career Goals (3 points - just for tie-breaking)
+                if (answers['1'] === 'high-salary' && course.roi_5_years > 350) {
+                    score += 3;
+                    reasons.push('Excellent ROI');
+                } else if (answers['1'] === 'job-security' && courseData.job_security >= 4.5) {
+                    score += 3;
+                    reasons.push('High job security');
+                } else if (answers['1'] === 'balance' && courseData.work_life_balance >= 3.7) {
+                    score += 3;
+                    reasons.push('Good work-life balance');
+                } else if (answers['1'] === 'passion') {
+                    if (courseData.graduate_satisfaction >= 4.2) {
+                        score += 3;
+                        reasons.push('High student satisfaction');
+                    } else {
+                        score += 1;
+                    }
+                }
+
+                // Q3: Budget (2 points - minor)
+                const budget = parseInt(answers['3']);
+                if (course.tuition_per_year <= budget) {
+                    score += 2;
+                    reasons.push('Within budget');
+                } else if (course.tuition_per_year <= budget * 1.2) {
+                    score += 1;
+                }
+
+                // Q4: Course Length (2 points - minor)
+                const maxLength = parseInt(answers['4']);
+                if (course.course_length <= maxLength) {
+                    score += 2;
+                    reasons.push('Right duration');
+                } else if (course.course_length === maxLength + 1) {
+                    score += 1;
+                }
+
+                // Q6: Work Style (2 points - minor)
                 if (answers['6'] === 'remote' && courseData.remote_work_availability === 'High') {
-                    score += 20;
+                    score += 2;
                     reasons.push('Remote work options');
                 } else if (answers['6'] === 'hands-on' && courseData.remote_work_availability === 'Low') {
-                    score += 20;
+                    score += 2;
                     reasons.push('Hands-on career');
-                } else if (answers['6'] === 'hybrid' && courseData.remote_work_availability === 'Medium') {
-                    score += 20;
-                    reasons.push('Hybrid work available');
                 } else if (answers['6'] === 'hybrid') {
-                    score += 10; // Give partial credit for hybrid preference
+                    score += 1;
                 }
 
-                // Q7: Skills Demand (15 points)
+                // Q7: Skills Demand (1 point - minimal)
                 const demandImportance = parseInt(answers['7']);
-                if (demandImportance >= 7) {
-                    if (courseData.skills_demand === 'Very High') {
-                        score += 15;
-                        reasons.push('High demand field');
-                    } else if (courseData.skills_demand === 'High') {
-                        score += 10;
-                        reasons.push('Good demand');
-                    }
-                } else if (demandImportance <= 4) {
-                    // Not important to them, so give points regardless
-                    score += 10;
+                if (demandImportance >= 7 && courseData.skills_demand === 'Very High') {
+                    score += 1;
+                    reasons.push('High demand field');
                 }
 
-                // Q8: International Opportunities (15 points)
-                if (answers['8'] === 'yes') {
-                    if (courseData.international_opportunities === 'Excellent') {
-                        score += 15;
-                        reasons.push('International opportunities');
-                    } else if (courseData.international_opportunities === 'Very Good') {
-                        score += 10;
-                        reasons.push('Good international prospects');
-                    }
-                } else if (answers['8'] === 'maybe') {
-                    if (courseData.international_opportunities === 'Excellent' || 
-                        courseData.international_opportunities === 'Very Good') {
-                        score += 10;
-                        reasons.push('International options available');
-                    } else {
-                        score += 5;
-                    }
-                } else if (answers['8'] === 'no') {
-                    // Prefer Ireland-focused careers
-                    score += 10;
+                // Q8: International Opportunities (1 point - minimal)
+                if (answers['8'] === 'yes' && courseData.international_opportunities === 'Excellent') {
+                    score += 1;
+                    reasons.push('International opportunities');
                 }
 
                 // Ensure score is between 0 and 100
@@ -999,9 +978,15 @@
                 .slice(0, 5);
 
             // Debug: Show what was matched
+            console.log('=== RESULTS ===');
             console.log('Top 5 matches:');
             topMatches.forEach((match, i) => {
-                console.log(`${i+1}. ${match.course_name} - Score: ${match.matchScore} (Raw: ${match.debugInfo.rawScore}, Field: ${match.debugInfo.fieldMatched}, Location: ${match.debugInfo.locationMatched})`);
+                const fieldStatus = match.debugInfo.fieldMatched ? '✅ FIELD MATCH' : '❌ WRONG FIELD';
+                const locationStatus = match.debugInfo.locationMatched ? '✅ LOCATION MATCH' : '❌ WRONG LOCATION';
+                console.log(`${i+1}. ${match.course_name}`);
+                console.log(`   Score: ${match.matchScore}/100 (Raw: ${match.debugInfo.rawScore})`);
+                console.log(`   ${fieldStatus} | ${locationStatus}`);
+                console.log('');
             });
 
             displayResults(topMatches);
