@@ -1910,10 +1910,11 @@ body {
 .logo-icon-wrapper {
     width: 36px;
     height: 36px;
-    background: linear-gradient(135deg, #64748b 0%, #475569 100%);
+    background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
     border-radius: 8px;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
+    border: 2px solid #cbd5e1;
 }
