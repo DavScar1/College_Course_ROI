@@ -875,27 +875,27 @@
                     score -= 50; // INCREASED PENALTY - was -20
                 }
 
-                // Q3: Budget (x points)
+                // Q3: Budget (20 points)
                 const budget = parseInt(answers['3']);
                 if (course.tuition_per_year <= budget) {
-                    score += 15;
+                    score += 20;
                     reasons.push('Within budget');
                 } else if (course.tuition_per_year <= budget * 1.2) {
-                    score += 7;
+                    score += 10;
                     reasons.push('Slightly over budget');
                 } else {
                     score -= 5; // Penalize if way over budget
                 }
 
-                // Q4: Course Length (x points)
+                // Q4: Course Length (15 points)
                 const maxLength = parseInt(answers['4']);
                 if (course.course_length <= maxLength) {
-                    score += 10;
+                    score += 15;
                     reasons.push('Right duration');
                 } else if (course.course_length === maxLength + 1) {
                     score += 5; // Slight penalty for 1 year over
                 } else {
-                    score -= 5; // Bigger penalty for much longer
+                    score -= 10; // Bigger penalty for much longer
                 }
 
                 // Q5: Location (25 points + penalty for mismatch)
@@ -904,7 +904,7 @@
                     if (course.university.includes('Dublin') || course.university.includes('UCD') || 
                         course.university.includes('Trinity') || course.university.includes('DCU') ||
                         course.university.includes('TU Dublin') || course.university.includes('RCSI')) {
-                        score += 35;
+                        score += 25;
                         reasons.push('Dublin location');
                         locationMatched = true;
                     } else {
@@ -912,7 +912,7 @@
                     }
                 } else if (answers['5'] === 'cork-galway') {
                     if (course.university.includes('Cork') || course.university.includes('Galway')) {
-                        score += 35;
+                        score += 25;
                         reasons.push('Preferred location');
                         locationMatched = true;
                     } else {
@@ -920,7 +920,7 @@
                     }
                 } else if (answers['5'] === 'other') {
                     if (course.university.includes('Limerick') || course.university.includes('Maynooth')) {
-                        score += 35;
+                        score += 25;
                         reasons.push('Preferred location');
                         locationMatched = true;
                     } else {
@@ -945,14 +945,14 @@
                     score += 10; // Give partial credit for hybrid preference
                 }
 
-                // Q7: Skills Demand (x points)
+                // Q7: Skills Demand (15 points)
                 const demandImportance = parseInt(answers['7']);
                 if (demandImportance >= 7) {
                     if (courseData.skills_demand === 'Very High') {
-                        score += 10;
+                        score += 15;
                         reasons.push('High demand field');
                     } else if (courseData.skills_demand === 'High') {
-                        score += 5;
+                        score += 10;
                         reasons.push('Good demand');
                     }
                 } else if (demandImportance <= 4) {
