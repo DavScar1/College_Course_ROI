@@ -708,6 +708,12 @@ function displaySingleResult(d) {
     document.getElementById('resultsPlaceholder').style.display = 'none';
     document.getElementById('results').style.display = 'block';
     
+    // Scroll to top of results on mobile
+    if (window.innerWidth <= 768) {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+    
+    
     // Build the results HTML
     let customizationHTML = '';
     let hasCustomization = false;
