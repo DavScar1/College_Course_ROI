@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog | ROI College Ireland</title>
+    <meta name="description" content="Guides and data on Irish college courses — salaries, ROI, employment rates and whether your degree is worth it.">
+    <link rel="stylesheet" href="/style.css">
+    <style>
+        .blog-page {
+            max-width: 740px;
+            margin: 0 auto;
+            padding: 24px 16px 100px;
+        }
+
+        .blog-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--primary);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 24px;
+        }
+
+        .blog-back:hover {
+            color: var(--primary-dark);
+        }
+
+        .blog-hero {
+            margin-bottom: 32px;
+        }
+
+        .blog-hero h1 {
+            font-size: 26px;
+            font-weight: 700;
+            color: var(--gray-900);
+            letter-spacing: -0.02em;
+            margin-bottom: 8px;
+        }
+
+        .blog-hero p {
+            font-size: 15px;
+            color: var(--gray-500);
+        }
+
+        .post-card {
+            background: var(--white);
+            border: 1px solid var(--gray-200);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 16px;
+            text-decoration: none;
+            display: block;
+            color: inherit;
+            transition: border-color 0.15s, box-shadow 0.15s, transform 0.15s;
+        }
+
+        .post-card:hover {
+            border-color: var(--primary);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.08);
+            transform: translateY(-2px);
+        }
+
+        .post-tag {
+            display: inline-block;
+            background: #eff6ff;
+            color: var(--primary);
+            font-size: 11px;
+            font-weight: 600;
+            padding: 3px 8px;
+            border-radius: 100px;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            margin-bottom: 10px;
+        }
+
+        .post-card h2 {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 8px;
+            line-height: 1.4;
+            letter-spacing: -0.01em;
+        }
+
+        .post-card p {
+            font-size: 14px;
+            color: var(--gray-500);
+            line-height: 1.5;
+            margin-bottom: 12px;
+        }
+
+        .post-meta {
+            font-size: 12px;
+            color: var(--gray-400);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .post-meta-dot {
+            width: 3px;
+            height: 3px;
+            background: var(--gray-300);
+            border-radius: 50%;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+    <div class="header-content" style="padding-left: 20px;">
+        <a href="/" style="text-decoration:none;">
+            <div class="logo">
+                <div class="logo-icon-wrapper">
+                    <svg class="logo-svg" width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M20 8L4 16L20 24L36 16L20 8Z" fill="#334155" stroke="#1e293b" stroke-width="1.5" stroke-linejoin="round"/>
+                        <path d="M8 18V26C8 26 12 30 20 30C28 30 32 26 32 26V18" stroke="#334155" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M36 16V24" stroke="#1e293b" stroke-width="2" stroke-linecap="round"/>
+                        <path d="M24 14L28 10L32 14M28 10V18" stroke="#10b981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                <div class="logo-text">
+                    <span class="logo-title">CollegeROI</span>
+                </div>
+            </div>
+        </a>
+    </div>
+    </header>
+
+    <div class="blog-page">
+        <a href="/" class="blog-back">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+            Back to Calculator
+        </a>
+
+        <div class="blog-hero">
+            <h1>Blog</h1>
+            <p>Data-driven guides on Irish college courses, salaries and ROI.</p>
+        </div>
+
+        <a href="/blog/is-computer-science-worth-it-ireland" class="post-card">
+            <span class="post-tag">Computer Science</span>
+            <h2>Is Computer Science Worth It in Ireland in 2025?</h2>
+            <p>With AI tools writing code, is a CS degree still a smart investment? We look at the salaries, ROI and employment data for Irish CS graduates.</p>
+            <div class="post-meta">
+                <span>March 2025</span>
+                <span class="post-meta-dot"></span>
+                <span>4 min read</span>
+            </div>
+        </a>
+
+    </div>
+</body>
+</html>
