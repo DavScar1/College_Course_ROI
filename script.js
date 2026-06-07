@@ -508,23 +508,18 @@ function displaySingleResult(d) {
 
     const lifetime = d.analysis && d.analysis.lifetime;
 
+    const shortName = d.course_name.includes(' - ') ? d.course_name.split(' - ').slice(0,-1).join(' - ') : d.course_name;
+
     const html = `
     <div class="rv2" style="--accent:${accentColor}">
 
-        <!-- Header -->
-        <div class="rv2-header" style="border-left-color:${accentColor}">
-            <div>
-                <div class="rv2-course-name">${d.course_name.includes(' - ') ? d.course_name.split(' - ').slice(0,-1).join(' - ') : d.course_name}</div>
+        <!-- ROI hero (includes course name) -->
+        <div class="rv2-roi-hero" style="border-left:4px solid ${accentColor};background:${accentColor}07">
+            <div class="rv2-hero-left">
+                <div class="rv2-course-name">${shortName}</div>
                 <div class="rv2-university">${d.university}</div>
-                ${customPills ? `<div class="rv2-pills">${customPills}</div>` : ''}
-            </div>
-            <span class="rv2-field-badge" style="background:${accentColor}18;color:${accentColor};border-color:${accentColor}40">${d.course_name.split(' - ')[0]}</span>
-        </div>
-
-        <!-- ROI hero -->
-        <div class="rv2-roi-hero" style="background:linear-gradient(135deg,${accentColor}12 0%,${accentColor}06 100%);border-color:${accentColor}20">
-            <div>
-                <div class="rv2-roi-label">5-Year Return on Investment</div>
+                ${customPills ? `<div class="rv2-pills" style="margin-top:10px">${customPills}</div>` : ''}
+                <div class="rv2-roi-label" style="margin-top:20px">5-Year Return on Investment</div>
                 <div class="rv2-roi-num" id="roiCounter" style="color:${accentColor}">0<span class="rv2-roi-pct">%</span></div>
                 <div class="rv2-roi-tags">
                     <span class="result-roi-badge ${roiBadgeClass}">${roiRating}</span>
@@ -601,7 +596,7 @@ function displaySingleResult(d) {
 
     el.innerHTML = html;
     animateCounter('roiCounter', roi, '%');
-    requestAnimationFrame(() => createInvestmentChart(d));
+    requestAnimationFrame(() => createInvestmentChart(d, accentColor));
     if (window.innerWidth < 768) {
         setTimeout(() => el.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
     }
@@ -631,7 +626,7 @@ function animateCounter(elementId, target, suffix, duration = 900) {
    Investment Chart
    ============================================================ */
 
-function createInvestmentChart(data) {
+function createInvestmentChart(data, accent) {
     const canvas = document.getElementById('investmentChart');
     if (!canvas || typeof Chart === 'undefined') return;
 
@@ -640,9 +635,14 @@ function createInvestmentChart(data) {
         investmentChartInstance = null;
     }
 
+    const ac = accent || '#2563eb';
     const totalCost = data.total_cost;
     const earnings  = data.annual_net_income * 5;
     const profit    = earnings - totalCost;
+
+    const chartDefaults = {
+        font: { family: "'Inter', -apple-system, sans-serif" },
+    };
 
     investmentChartInstance = new Chart(canvas.getContext('2d'), {
         type: 'bar',
@@ -650,10 +650,11 @@ function createInvestmentChart(data) {
             labels: ['You Invest', 'You Earn (5 yrs)', 'Net Profit'],
             datasets: [{
                 data: [totalCost, earnings, profit],
-                backgroundColor: ['rgba(220,38,38,0.7)', 'rgba(37,99,235,0.7)', 'rgba(22,163,74,0.8)'],
-                borderColor:     ['#dc2626', '#2563eb', '#16a34a'],
+                backgroundColor: [`#94a3b820`, `${ac}28`, `${ac}50`],
+                borderColor:     ['#94a3b8', ac, ac],
                 borderWidth: 2,
-                borderRadius: 6,
+                borderRadius: 10,
+                borderSkipped: false,
             }],
         },
         options: {
@@ -662,22 +663,29 @@ function createInvestmentChart(data) {
             plugins: {
                 legend: { display: false },
                 tooltip: {
-                    backgroundColor: 'rgba(17,24,39,0.92)',
-                    padding: 10,
-                    titleFont: { size: 13, weight: '600' },
-                    bodyFont: { size: 13 },
-                    callbacks: { label: ctx => '€' + ctx.parsed.y.toLocaleString() },
+                    backgroundColor: '#fff',
+                    borderColor: '#e2e8f0',
+                    borderWidth: 1,
+                    titleColor: '#0f172a',
+                    bodyColor: '#475569',
+                    padding: 12,
+                    cornerRadius: 8,
+                    titleFont: { size: 13, weight: '600', family: "'Inter', sans-serif" },
+                    bodyFont: { size: 13, family: "'Inter', sans-serif" },
+                    callbacks: { label: ctx => '  €' + ctx.parsed.y.toLocaleString() },
                 },
             },
             scales: {
                 y: {
                     beginAtZero: true,
-                    ticks: { callback: v => '€' + (v / 1000) + 'k', font: { size: 12 } },
-                    grid: { color: 'rgba(0,0,0,0.04)' },
+                    ticks: { callback: v => '€' + (v / 1000) + 'k', font: { size: 11, family: "'Inter', sans-serif" }, color: '#94a3b8' },
+                    grid: { color: '#f1f5f9' },
+                    border: { display: false },
                 },
                 x: {
                     grid: { display: false },
-                    ticks: { font: { size: 12, weight: '600' } },
+                    border: { display: false },
+                    ticks: { font: { size: 12, weight: '600', family: "'Inter', sans-serif" }, color: '#475569' },
                 },
             },
         },
@@ -1000,31 +1008,57 @@ function displayComparisonResults(data) {
 function buildComparisonCharts(courses) {
     if (typeof Chart === 'undefined') return;
     const labels = courses.map(c => c.course_name.split(' - ')[0]);
-    const colors = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#7c3aed'];
+    const FIELD_HEX = { 'field-tech':'#2563eb','field-health':'#16a34a','field-business':'#7c3aed','field-law':'#b45309','field-engineering':'#0891b2','field-education':'#db2777','field-arts':'#ea580c','field-default':'#64748b' };
+    const colors = courses.map(c => FIELD_HEX[fieldColorClass(c.course_name)] || '#2563eb');
+    const bg     = colors.map(c => c + '30');
+    const interFont = { family: "'Inter', -apple-system, sans-serif" };
+
+    const sharedTooltip = {
+        backgroundColor: '#fff',
+        borderColor: '#e2e8f0',
+        borderWidth: 1,
+        titleColor: '#0f172a',
+        bodyColor: '#475569',
+        padding: 12,
+        cornerRadius: 8,
+        titleFont: { size: 12, weight: '600', ...interFont },
+        bodyFont: { size: 12, ...interFont },
+    };
+
+    const sharedScales = (yFmt) => ({
+        y: {
+            beginAtZero: true,
+            ticks: { callback: yFmt, font: { size: 11, ...interFont }, color: '#94a3b8' },
+            grid: { color: '#f1f5f9' },
+            border: { display: false },
+        },
+        x: {
+            grid: { display: false },
+            border: { display: false },
+            ticks: { font: { size: 11, ...interFont }, color: '#475569', maxRotation: 30 },
+        },
+    });
 
     const makeBar = (id, data, yFmt, ttFmt) => {
         const c = document.getElementById(id);
         if (!c) return;
         new Chart(c, {
             type: 'bar',
-            data: { labels, datasets: [{ data, backgroundColor: colors.slice(0, courses.length), borderRadius: 6 }] },
+            data: { labels, datasets: [{ data, backgroundColor: bg, borderColor: colors, borderWidth: 2, borderRadius: 10, borderSkipped: false }] },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
                 plugins: {
                     legend: { display: false },
-                    tooltip: { callbacks: { label: ctx => ttFmt(ctx.parsed.y) } },
+                    tooltip: { ...sharedTooltip, callbacks: { label: ctx => '  ' + ttFmt(ctx.parsed.y) } },
                 },
-                scales: {
-                    y: { beginAtZero: true, ticks: { callback: yFmt, font: { size: 11 } }, grid: { color: 'rgba(0,0,0,0.04)' } },
-                    x: { grid: { display: false }, ticks: { font: { size: 11 } } },
-                },
+                scales: sharedScales(yFmt),
             },
         });
     };
 
     makeBar('compROI',     courses.map(c => c.roi_5_years),    v => v + '%',               v => v + '% ROI');
-    makeBar('compPayback', courses.map(c => c.payback_years),  v => v + 'y',               v => v.toFixed(1) + ' years');
+    makeBar('compPayback', courses.map(c => c.payback_years),  v => v + 'y',               v => v.toFixed(1) + ' yrs payback');
     makeBar('compSalary',  courses.map(c => c.starting_salary),v => '€' + (v/1000) + 'k', v => '€' + v.toLocaleString());
 
     const ce = document.getElementById('compCostEarnings');
@@ -1034,21 +1068,18 @@ function buildComparisonCharts(courses) {
             data: {
                 labels,
                 datasets: [
-                    { label: 'Total Cost',      data: courses.map(c => c.total_cost),            backgroundColor: 'rgba(239,68,68,0.7)', borderRadius: 6 },
-                    { label: '5-yr Net Earn.', data: courses.map(c => c.annual_net_income * 5),  backgroundColor: 'rgba(22,163,74,0.75)', borderRadius: 6 },
+                    { label: 'Total Cost',     data: courses.map(c => c.total_cost),           backgroundColor: '#94a3b820', borderColor: '#94a3b8', borderWidth: 2, borderRadius: 10, borderSkipped: false },
+                    { label: '5-yr Net Earn.', data: courses.map(c => c.annual_net_income * 5), backgroundColor: '#16a34a28', borderColor: '#16a34a', borderWidth: 2, borderRadius: 10, borderSkipped: false },
                 ],
             },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
                 plugins: {
-                    legend: { display: true, position: 'top', labels: { font: { size: 11 } } },
-                    tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': €' + ctx.parsed.y.toLocaleString() } },
+                    legend: { display: true, position: 'top', labels: { font: { size: 11, ...interFont }, color: '#475569', padding: 16 } },
+                    tooltip: { ...sharedTooltip, callbacks: { label: ctx => '  ' + ctx.dataset.label + ': €' + ctx.parsed.y.toLocaleString() } },
                 },
-                scales: {
-                    y: { beginAtZero: true, ticks: { callback: v => '€' + (v / 1000) + 'k', font: { size: 11 } }, grid: { color: 'rgba(0,0,0,0.04)' } },
-                    x: { grid: { display: false }, ticks: { font: { size: 11 } } },
-                },
+                scales: sharedScales(v => '€' + (v / 1000) + 'k'),
             },
         });
     }

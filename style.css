@@ -1297,33 +1297,20 @@ input, select, textarea { font-size: 16px !important; } /* prevent iOS zoom */
   gap: 12px;
 }
 
-/* Header */
-.rv2-header {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-left: 4px solid var(--border);
-  border-radius: var(--radius);
-  padding: 18px 20px;
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 12px;
-  box-shadow: var(--shadow);
-}
-
 .rv2-course-name {
-  font-size: 18px;
+  font-size: 22px;
   font-weight: 700;
   color: var(--text);
   letter-spacing: -0.03em;
-  line-height: 1.25;
-  margin-bottom: 4px;
+  line-height: 1.2;
+  margin-bottom: 3px;
 }
 
 .rv2-university {
   font-size: 13px;
   color: var(--faint);
   font-weight: 400;
+  margin-bottom: 0;
 }
 
 .rv2-pills {
@@ -1355,12 +1342,17 @@ input, select, textarea { font-size: 16px !important; } /* prevent iOS zoom */
 
 /* ROI hero */
 .rv2-roi-hero {
-  border: 1px solid;
+  border: 1px solid var(--border);
   border-radius: var(--radius);
-  padding: 24px 20px 20px;
+  padding: 28px 24px 24px;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 24px;
+}
+
+.rv2-hero-left {
+  flex: 1;
+  min-width: 0;
 }
 
 .rv2-roi-label {
