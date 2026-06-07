@@ -26,23 +26,25 @@
   --red-border:  #fecaca;
   --red-text:    #991b1b;
 
-  --bg:          #f9fafb;
+  --bg:          #f5f7fa;
   --surface:     #ffffff;
-  --border:      #e5e7eb;
+  --border:      #e8eaed;
   --border-dark: #d1d5db;
 
-  --text:        #111827;
-  --muted:       #6b7280;
-  --faint:       #9ca3af;
+  --text:        #0f172a;
+  --muted:       #64748b;
+  --faint:       #94a3b8;
 
-  --radius:      8px;
-  --shadow:      0 1px 3px rgba(0,0,0,0.07), 0 1px 2px rgba(0,0,0,0.04);
+  --radius:      10px;
+  --radius-sm:   6px;
+  --shadow:      0 1px 4px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-md:   0 4px 16px rgba(0,0,0,0.08), 0 1px 4px rgba(0,0,0,0.04);
 }
 
 html { scroll-behavior: smooth; }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
   background: var(--bg);
   color: var(--text);
   font-size: 15px;
@@ -305,8 +307,7 @@ input, select, textarea { font-size: 16px !important; } /* prevent iOS zoom */
   font-size: 13px;
   font-weight: 600;
   color: var(--text);
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
+  letter-spacing: -0.01em;
 }
 
 .card-body { padding: 16px; }
@@ -328,12 +329,11 @@ input, select, textarea { font-size: 16px !important; } /* prevent iOS zoom */
 
 .label {
   display: block;
-  font-size: 11px;
-  font-weight: 600;
+  font-size: 12px;
+  font-weight: 500;
   color: var(--muted);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
   margin-bottom: 6px;
+  letter-spacing: -0.01em;
 }
 
 .hint {
@@ -669,34 +669,67 @@ input, select, textarea { font-size: 16px !important; } /* prevent iOS zoom */
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  padding: 12px 14px;
+  padding: 14px 16px;
   cursor: pointer;
-  transition: border-color 0.12s, box-shadow 0.12s;
+  transition: border-color 0.15s, box-shadow 0.15s, transform 0.1s;
   box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .qp-card:hover {
   border-color: var(--blue);
-  box-shadow: 0 2px 8px rgba(37,99,235,0.12);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
 }
+
+.qp-card:active { transform: translateY(0); }
 
 .qp-name {
   font-size: 13px;
   font-weight: 600;
   color: var(--text);
-  margin-bottom: 2px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  letter-spacing: -0.02em;
 }
 
-.qp-uni { font-size: 11px; color: var(--faint); margin-bottom: 8px; }
+.qp-uni {
+  font-size: 11px;
+  color: var(--faint);
+  margin-top: -6px;
+  font-weight: 400;
+}
 
-.qp-stats { display: flex; gap: 10px; }
+.qp-stats {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
 
-.qp-stat { }
-.qp-stat-val { font-size: 13px; font-weight: 700; color: var(--blue); }
-.qp-stat-label { font-size: 10px; color: var(--faint); text-transform: uppercase; letter-spacing: 0.04em; }
+.qp-stat-val {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--blue);
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+
+.qp-stat-label {
+  font-size: 10px;
+  color: var(--faint);
+  font-weight: 500;
+  margin-top: 2px;
+}
+
+.qp-divider {
+  width: 1px;
+  height: 24px;
+  background: var(--border);
+  flex-shrink: 0;
+}
 
 /* How it works */
 .how-it-works {
@@ -773,12 +806,11 @@ input, select, textarea { font-size: 16px !important; } /* prevent iOS zoom */
 }
 
 .result-roi-label {
-  font-size: 11px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
+  font-size: 12px;
+  font-weight: 500;
   color: var(--muted);
   margin-bottom: 8px;
+  letter-spacing: -0.01em;
 }
 
 .result-roi-num {
@@ -824,12 +856,11 @@ input, select, textarea { font-size: 16px !important; } /* prevent iOS zoom */
 .result-stat:last-child { border-right: none; }
 
 .rs-label {
-  font-size: 10px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
+  font-size: 11px;
+  font-weight: 500;
   color: var(--faint);
   margin-bottom: 5px;
+  letter-spacing: -0.01em;
 }
 
 .rs-value {
@@ -850,12 +881,11 @@ input, select, textarea { font-size: 16px !important; } /* prevent iOS zoom */
 .result-section:last-child { border-bottom: none; }
 
 .section-label {
-  font-size: 11px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
+  font-size: 12px;
+  font-weight: 600;
   color: var(--muted);
   margin-bottom: 12px;
+  letter-spacing: -0.01em;
 }
 
 /* Insight box */
@@ -916,6 +946,18 @@ input, select, textarea { font-size: 16px !important; } /* prevent iOS zoom */
 .dr-value { font-weight: 600; color: var(--text); }
 .dr-value.good { color: var(--green); }
 
+.winner-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.roi-payback-label {
+  font-size: 12px;
+  color: var(--muted);
+  font-weight: 500;
+}
+
 /* Progress bar */
 .prog-wrap { margin-bottom: 12px; }
 .prog-header { display: flex; justify-content: space-between; margin-bottom: 5px; font-size: 13px; }
@@ -972,12 +1014,11 @@ input, select, textarea { font-size: 16px !important; } /* prevent iOS zoom */
 }
 
 .filter-group-label {
-  font-size: 11px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--faint);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted);
   margin-bottom: 6px;
+  letter-spacing: -0.01em;
 }
 
 .chip-wrap {
@@ -1095,7 +1136,7 @@ input, select, textarea { font-size: 16px !important; } /* prevent iOS zoom */
 }
 
 .cc-stat { text-align: center; }
-.cc-stat-label { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--faint); margin-bottom: 3px; }
+.cc-stat-label { font-size: 10px; font-weight: 500; color: var(--faint); margin-bottom: 3px; letter-spacing: -0.01em; }
 .cc-stat-val   { font-size: 13px; font-weight: 700; color: var(--text); }
 
 /* ── Compare ─────────────────────────────────────────────── */

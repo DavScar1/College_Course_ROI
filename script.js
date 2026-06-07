@@ -96,7 +96,8 @@ function renderQuickPicks() {
             <div class="qp-uni">${c.university}</div>
             <div class="qp-stats">
                 <div class="qp-stat"><div class="qp-stat-val">${c.roi_5_years}%</div><div class="qp-stat-label">5yr ROI</div></div>
-                <div class="qp-stat"><div class="qp-stat-val">€${(c.starting_salary/1000).toFixed(0)}k</div><div class="qp-stat-label">Start sal.</div></div>
+                <div class="qp-divider"></div>
+                <div class="qp-stat"><div class="qp-stat-val">€${(c.starting_salary/1000).toFixed(0)}k</div><div class="qp-stat-label">Starting salary</div></div>
             </div>
         </div>`;
     }).join('');
@@ -503,7 +504,7 @@ function displaySingleResult(d) {
             <div class="result-roi-num" id="roiCounter">0<span style="font-size:0.55em;vertical-align:baseline;">%</span></div>
             <div class="result-roi-tag">
                 <span class="result-roi-badge ${roiBadgeClass}">${roiRating}</span>
-                ${d.analysis ? `· ${d.analysis.payback_label}` : ''}
+                ${d.analysis ? `<span class="roi-payback-label">${d.analysis.payback_label}</span>` : ''}
             </div>
         </div>
 
@@ -569,7 +570,7 @@ function displaySingleResult(d) {
             <div class="section-label">30-Year Career Estimate</div>
             <div class="lifetime-row">
                 <div class="lifetime-num">€${(lifetime.total_earnings / 1_000_000).toFixed(2)}M</div>
-                <div class="lifetime-desc">lifetime earnings · ${lifetime.times_earned_back}× your investment</div>
+                <div class="lifetime-desc">lifetime earnings, ${lifetime.times_earned_back}x your investment returned</div>
             </div>
         </div>` : ''}
 
@@ -890,10 +891,10 @@ function displayComparisonResults(data) {
     const { winners, courses } = data;
 
     const winnerRows = [
-        winners.best_roi        ? `<div class="data-row"><span class="dr-label">🏆 Best ROI</span><span class="dr-value">${winners.best_roi.split(' - ')[0]}</span></div>` : '',
-        winners.fastest_payback ? `<div class="data-row"><span class="dr-label">⚡ Fastest Payback</span><span class="dr-value">${winners.fastest_payback.split(' - ')[0]}</span></div>` : '',
-        winners.lowest_cost     ? `<div class="data-row"><span class="dr-label">💰 Lowest Cost</span><span class="dr-value">${winners.lowest_cost.split(' - ')[0]}</span></div>` : '',
-        winners.highest_salary  ? `<div class="data-row"><span class="dr-label">💵 Highest Salary</span><span class="dr-value">${winners.highest_salary.split(' - ')[0]}</span></div>` : '',
+        winners.best_roi        ? `<div class="data-row"><span class="dr-label winner-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/></svg> Best ROI</span><span class="dr-value">${winners.best_roi.split(' - ')[0]}</span></div>` : '',
+        winners.fastest_payback ? `<div class="data-row"><span class="dr-label winner-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Fastest Payback</span><span class="dr-value">${winners.fastest_payback.split(' - ')[0]}</span></div>` : '',
+        winners.lowest_cost     ? `<div class="data-row"><span class="dr-label winner-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg> Lowest Cost</span><span class="dr-value">${winners.lowest_cost.split(' - ')[0]}</span></div>` : '',
+        winners.highest_salary  ? `<div class="data-row"><span class="dr-label winner-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H7"/></svg> Highest Salary</span><span class="dr-value">${winners.highest_salary.split(' - ')[0]}</span></div>` : '',
     ].filter(Boolean).join('');
 
     const cardsHTML = courses.map(c => {
