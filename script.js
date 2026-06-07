@@ -73,6 +73,7 @@ window.onload = function () {
             allCourses     = allCoursesData.map(c => c.course_name);
             coursesLoaded  = true;
             populateCourseDropdowns();
+            renderQuickPicks();
             loadSavedPreferences();
         })
         .catch(err => {
@@ -80,6 +81,32 @@ window.onload = function () {
             showError('Failed to load courses. Make sure the Flask server is running on port 5000.');
         });
 };
+
+function renderQuickPicks() {
+    const grid = document.getElementById('quickPickGrid');
+    if (!grid || allCoursesData.length === 0) return;
+    // Top 6 by ROI
+    const top = [...allCoursesData].sort((a, b) => b.roi_5_years - a.roi_5_years).slice(0, 6);
+    grid.innerHTML = top.map(c => {
+        const shortName = c.course_name.includes(' - ') ? c.course_name.split(' - ').slice(0, -1).join(' - ') : c.course_name;
+        const enc = c.course_name.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+        return `<div class="qp-card" onclick="quickPickCourse('${enc}')" role="button" tabindex="0"
+                     onkeydown="if(event.key==='Enter')quickPickCourse('${enc}')">
+            <div class="qp-name" title="${shortName}">${shortName}</div>
+            <div class="qp-uni">${c.university}</div>
+            <div class="qp-stats">
+                <div class="qp-stat"><div class="qp-stat-val">${c.roi_5_years}%</div><div class="qp-stat-label">5yr ROI</div></div>
+                <div class="qp-stat"><div class="qp-stat-val">€${(c.starting_salary/1000).toFixed(0)}k</div><div class="qp-stat-label">Start sal.</div></div>
+            </div>
+        </div>`;
+    }).join('');
+}
+
+function quickPickCourse(course) {
+    document.getElementById('course').value = course;
+    document.getElementById('resultsPlaceholder').style.display = 'none';
+    calculateROI();
+}
 
 function populateCourseDropdowns() {
     const dd = document.getElementById('course');
@@ -141,7 +168,7 @@ function clearPrefs() {
     if (notice) notice.style.display = 'none';
     // Reset results
     document.getElementById('results').innerHTML = '';
-    document.getElementById('resultsPlaceholder').style.display = 'flex';
+    document.getElementById('resultsPlaceholder').style.display = 'block';
 }
 
 /* ============================================================
@@ -357,6 +384,7 @@ function displaySingleResult(d) {
     const ph = document.getElementById('resultsPlaceholder');
     const el = document.getElementById('results');
     if (ph) ph.style.display = 'none';
+    el.style.display = 'block';
 
     const salaryIncrease = Math.round(((d.salary_after_5_years - d.starting_salary) / d.starting_salary) * 100);
     const roi            = d.roi_5_years;
