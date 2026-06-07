@@ -1289,6 +1289,351 @@ input, select, textarea { font-size: 16px !important; } /* prevent iOS zoom */
 
 .chart-label { font-size: 12px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 10px; }
 
+/* ── Results v2 ──────────────────────────────────────────── */
+
+.rv2 {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Header */
+.rv2-header {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--border);
+  border-radius: var(--radius);
+  padding: 18px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  box-shadow: var(--shadow);
+}
+
+.rv2-course-name {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: -0.03em;
+  line-height: 1.25;
+  margin-bottom: 4px;
+}
+
+.rv2-university {
+  font-size: 13px;
+  color: var(--faint);
+  font-weight: 400;
+}
+
+.rv2-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.rv2-pill {
+  padding: 3px 10px;
+  background: var(--blue-bg);
+  border: 1px solid var(--blue-border);
+  border-radius: 100px;
+  font-size: 11px;
+  font-weight: 500;
+  color: #1e40af;
+}
+
+.rv2-field-badge {
+  padding: 5px 12px;
+  border-radius: 100px;
+  font-size: 12px;
+  font-weight: 600;
+  border: 1px solid;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* ROI hero */
+.rv2-roi-hero {
+  border: 1px solid;
+  border-radius: var(--radius);
+  padding: 24px 20px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.rv2-roi-label {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+
+.rv2-roi-num {
+  font-size: 64px;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1;
+}
+
+.rv2-roi-pct {
+  font-size: 0.45em;
+  vertical-align: middle;
+  font-weight: 700;
+}
+
+.rv2-roi-tags {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+  flex-wrap: wrap;
+}
+
+.rv2-payback-tag {
+  font-size: 12px;
+  color: var(--muted);
+  font-weight: 500;
+}
+
+/* 3 key stats inside hero */
+.rv2-key-stats {
+  display: flex;
+  align-items: stretch;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+
+.rv2-key-stat {
+  flex: 1;
+  padding: 14px 16px;
+  text-align: center;
+}
+
+.rv2-ks-value {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: -0.03em;
+  margin-bottom: 3px;
+}
+
+.rv2-ks-label {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--muted);
+  margin-bottom: 2px;
+}
+
+.rv2-ks-sub {
+  font-size: 11px;
+  color: var(--faint);
+}
+
+.rv2-ks-divider {
+  width: 1px;
+  background: var(--border);
+  flex-shrink: 0;
+}
+
+/* Insight */
+.rv2-insight {
+  border-left: 3px solid;
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  padding: 12px 16px;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--text);
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+/* Sections */
+.rv2-section {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 18px 20px;
+  box-shadow: var(--shadow);
+}
+
+.rv2-section-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--muted);
+  margin-bottom: 16px;
+  letter-spacing: -0.01em;
+}
+
+/* Salary track */
+.rv2-salary-track {
+  display: flex;
+  align-items: center;
+  gap: 0;
+}
+
+.rv2-sal-node {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.rv2-sal-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 2px solid;
+  background: var(--surface);
+}
+
+.rv2-sal-year {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--faint);
+  text-align: center;
+}
+
+.rv2-sal-amount {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: -0.03em;
+  text-align: center;
+}
+
+.rv2-sal-line {
+  flex: 1;
+  height: 2px;
+  margin-top: -28px;
+}
+
+.rv2-sal-growth-badge {
+  font-size: 12px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 100px;
+  margin-top: -28px;
+  flex-shrink: 0;
+  letter-spacing: -0.01em;
+}
+
+/* Career grid */
+.rv2-career-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.rv2-career-stat {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.rv2-cs-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.rv2-cs-val {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 2px;
+  line-height: 1.3;
+}
+
+.rv2-cs-label {
+  font-size: 11px;
+  color: var(--faint);
+  font-weight: 400;
+}
+
+/* Rating dots */
+.rdot {
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--border);
+  margin-right: 3px;
+}
+
+.rdot-on { background: var(--accent, #2563eb); }
+
+/* Employers / Roles */
+.rv2-employer-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.rv2-employer-tag {
+  padding: 5px 14px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text);
+}
+
+.rv2-roles-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.rv2-role-chip {
+  padding: 7px 14px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text);
+  box-shadow: var(--shadow);
+}
+
+/* Lifetime */
+.rv2-lifetime {
+  border: 1px solid;
+  border-radius: var(--radius);
+  padding: 24px 20px;
+  text-align: center;
+}
+
+.rv2-lt-label {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--muted);
+  margin-bottom: 8px;
+}
+
+.rv2-lt-amount {
+  font-size: 48px;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  margin-bottom: 8px;
+}
+
+.rv2-lt-sub {
+  font-size: 13px;
+  color: var(--muted);
+}
+
 /* ── Tablet / Desktop ────────────────────────────────────── */
 
 @media (min-width: 768px) {
@@ -1359,6 +1704,11 @@ input, select, textarea { font-size: 16px !important; } /* prevent iOS zoom */
   /* chart 2-col */
   .chart-grid { grid-template-columns: repeat(2, 1fr); }
 
+  .rv2-roi-hero { flex-direction: row; justify-content: space-between; align-items: flex-start; }
+  .rv2-key-stats { flex-direction: column; width: 220px; flex-shrink: 0; }
+  .rv2-ks-divider { width: auto; height: 1px; }
+  .rv2-roi-num { font-size: 80px; }
+  .rv2-career-grid { grid-template-columns: repeat(3, 1fr); }
   .result-roi-num { font-size: 88px; }
   .sal-value { font-size: 32px; }
 

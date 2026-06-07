@@ -396,6 +396,27 @@ function updatePartTimeCalculations() {
    Display Single Result
    ============================================================ */
 
+function ratingDots(value, max) {
+    const filled = Math.round(value);
+    return Array.from({ length: max }, (_, i) =>
+        `<span class="rdot ${i < filled ? 'rdot-on' : ''}"></span>`
+    ).join('');
+}
+
+function careerStatIcon(key) {
+    const icons = {
+        employment:  `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M20 7H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>`,
+        satisfaction:`<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>`,
+        security:    `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>`,
+        remote:      `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>`,
+        study:       `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>`,
+        internship:  `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>`,
+        growth:      `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>`,
+        balance:     `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>`,
+    };
+    return icons[key] || '';
+}
+
 function displaySingleResult(d) {
     const ph = document.getElementById('resultsPlaceholder');
     const el = document.getElementById('results');
@@ -405,98 +426,82 @@ function displaySingleResult(d) {
     const salaryIncrease = Math.round(((d.salary_after_5_years - d.starting_salary) / d.starting_salary) * 100);
     const roi            = d.roi_5_years;
 
-    // ROI badge colour
-    const roiBadgeClass = roi > 400 ? 'badge-green' : roi > 250 ? 'badge-blue' : 'badge-amber';
-    const roiRating     = d.analysis ? d.analysis.roi_rating : (roi > 400 ? 'Excellent' : roi > 250 ? 'Good' : 'Fair');
+    const colorCls   = fieldColorClass(d.course_name);
+    const accentColor = { 'field-tech':'#2563eb','field-health':'#16a34a','field-business':'#7c3aed','field-law':'#b45309','field-engineering':'#0891b2','field-education':'#db2777','field-arts':'#ea580c','field-default':'#64748b' }[colorCls] || '#2563eb';
 
-    // Customisation badges
-    let customNote = '';
+    const roiRating   = d.analysis ? d.analysis.roi_rating : (roi > 400 ? 'Excellent' : roi > 250 ? 'Good' : 'Fair');
+    const roiBadgeClass = roi > 400 ? 'badge-green' : roi > 250 ? 'badge-blue' : 'badge-amber';
+
+    // Custom tuition / part-time pills
+    let customPills = '';
     if (document.getElementById('useCustomTuition').checked) {
         const v = document.getElementById('customTuition').value;
-        if (v) customNote += `<span class="result-roi-badge badge-blue">Custom tuition: €${parseFloat(v).toLocaleString()}/yr</span>`;
+        if (v) customPills += `<span class="rv2-pill">Custom tuition: €${parseFloat(v).toLocaleString()}/yr</span>`;
     }
     if (document.getElementById('enablePartTime').checked && d.part_time_earnings) {
         const h = document.getElementById('partTimeHours').value;
         const r = document.getElementById('hourlyRate').value;
-        customNote += `<span class="result-roi-badge badge-blue">Part-time: ${h}h/wk @ €${parseFloat(r).toFixed(2)}/hr</span>`;
+        customPills += `<span class="rv2-pill">Part-time: ${h}h/wk @ €${parseFloat(r).toFixed(2)}/hr</span>`;
     }
 
-    // Career insight section
+    // Career section
     let careerHTML = '';
     if (d.course_data) {
         const cd = d.course_data;
-        const progPct  = { 'Excellent': 100, 'Very Good': 85, 'Good': 70, 'Fair': 50 }[cd.career_progression] || 60;
-        const skillPct = { 'Very High': 100, 'High': 75, 'Medium': 50, 'Low': 25 }[cd.skills_demand] || 50;
-
-        const employers = (cd.top_employers || []).map(e => `<span class="tag">${e}</span>`).join('');
-        const roles     = (cd.typical_roles || []).map(r => `<div class="data-row"><span class="dr-label">→</span><span class="dr-value">${r}</span></div>`).join('');
+        const employers = (cd.top_employers || []).map(e => `<span class="rv2-employer-tag">${e}</span>`).join('');
+        const roles     = (cd.typical_roles  || []).map(r => `<span class="rv2-role-chip">${r}</span>`).join('');
 
         careerHTML = `
-        <div class="result-section">
-            <div class="section-label">Career Overview</div>
-
-            <div class="data-rows">
-                <div class="data-row">
-                    <span class="dr-label">Employment Rate</span>
-                    <span class="dr-value good">${cd.employment_rate}% within 9 months</span>
+        <div class="rv2-section">
+            <div class="rv2-section-title">Career snapshot</div>
+            <div class="rv2-career-grid">
+                <div class="rv2-career-stat">
+                    <div class="rv2-cs-icon" style="background:${accentColor}18;color:${accentColor}">${careerStatIcon('employment')}</div>
+                    <div><div class="rv2-cs-val" style="color:${accentColor}">${cd.employment_rate}%</div><div class="rv2-cs-label">Employed within 9 months</div></div>
                 </div>
-                <div class="data-row">
-                    <span class="dr-label">Student Rating</span>
-                    <span class="dr-value">${cd.graduate_satisfaction} / 5 ★</span>
+                <div class="rv2-career-stat">
+                    <div class="rv2-cs-icon" style="background:${accentColor}18;color:${accentColor}">${careerStatIcon('satisfaction')}</div>
+                    <div><div class="rv2-cs-val">${ratingDots(cd.graduate_satisfaction, 5)}</div><div class="rv2-cs-label">Graduate satisfaction</div></div>
                 </div>
-                <div class="data-row">
-                    <span class="dr-label">Job Security</span>
-                    <span class="dr-value good">${cd.job_security}</span>
+                <div class="rv2-career-stat">
+                    <div class="rv2-cs-icon" style="background:${accentColor}18;color:${accentColor}">${careerStatIcon('security')}</div>
+                    <div><div class="rv2-cs-val">${cd.job_security}</div><div class="rv2-cs-label">Job security</div></div>
                 </div>
-                <div class="data-row">
-                    <span class="dr-label">Remote Work</span>
-                    <span class="dr-value">${cd.remote_work_availability}</span>
+                <div class="rv2-career-stat">
+                    <div class="rv2-cs-icon" style="background:${accentColor}18;color:${accentColor}">${careerStatIcon('remote')}</div>
+                    <div><div class="rv2-cs-val">${cd.remote_work_availability}</div><div class="rv2-cs-label">Remote work</div></div>
                 </div>
-                <div class="data-row">
-                    <span class="dr-label">Further Study</span>
-                    <span class="dr-value">${cd.further_study_rate}% pursue postgrad</span>
+                <div class="rv2-career-stat">
+                    <div class="rv2-cs-icon" style="background:${accentColor}18;color:${accentColor}">${careerStatIcon('balance')}</div>
+                    <div><div class="rv2-cs-val">${ratingDots(cd.work_life_balance, 5)}</div><div class="rv2-cs-label">Work-life balance</div></div>
                 </div>
-                ${cd.internship_opportunities ? `<div class="data-row"><span class="dr-label">Internships</span><span class="dr-value good">${cd.internship_opportunities}</span></div>` : ''}
-                ${cd.industry_growth_rate ? `<div class="data-row"><span class="dr-label">Industry Growth</span><span class="dr-value good">${cd.industry_growth_rate}</span></div>` : ''}
-            </div>
-        </div>
-
-        <div class="result-section">
-            <div class="section-label">Skills & Progression</div>
-
-            <div class="prog-wrap">
-                <div class="prog-header">
-                    <span class="prog-label">Work-Life Balance</span>
-                    <span class="prog-val">${cd.work_life_balance} / 5</span>
+                <div class="rv2-career-stat">
+                    <div class="rv2-cs-icon" style="background:${accentColor}18;color:${accentColor}">${careerStatIcon('study')}</div>
+                    <div><div class="rv2-cs-val">${cd.further_study_rate}%</div><div class="rv2-cs-label">Pursue postgrad</div></div>
                 </div>
-                <div class="prog-track"><div class="prog-fill" style="width:${(cd.work_life_balance / 5) * 100}%"></div></div>
-            </div>
-            <div class="prog-wrap">
-                <div class="prog-header">
-                    <span class="prog-label">Career Progression</span>
-                    <span class="prog-val">${cd.career_progression}</span>
-                </div>
-                <div class="prog-track"><div class="prog-fill green" style="width:${progPct}%"></div></div>
-            </div>
-            <div class="prog-wrap">
-                <div class="prog-header">
-                    <span class="prog-label">Skills Demand</span>
-                    <span class="prog-val">${cd.skills_demand}</span>
-                </div>
-                <div class="prog-track"><div class="prog-fill" style="width:${skillPct}%"></div></div>
+                ${cd.internship_opportunities ? `
+                <div class="rv2-career-stat">
+                    <div class="rv2-cs-icon" style="background:${accentColor}18;color:${accentColor}">${careerStatIcon('internship')}</div>
+                    <div><div class="rv2-cs-val">${cd.internship_opportunities.split(' - ')[0]}</div><div class="rv2-cs-label">Internships</div></div>
+                </div>` : ''}
+                ${cd.industry_growth_rate ? `
+                <div class="rv2-career-stat">
+                    <div class="rv2-cs-icon" style="background:${accentColor}18;color:${accentColor}">${careerStatIcon('growth')}</div>
+                    <div><div class="rv2-cs-val">${cd.industry_growth_rate}</div><div class="rv2-cs-label">Industry growth</div></div>
+                </div>` : ''}
             </div>
         </div>
 
         ${employers ? `
-        <div class="result-section">
-            <div class="section-label">Top Employers</div>
-            <div class="tag-wrap">${employers}</div>
+        <div class="rv2-section">
+            <div class="rv2-section-title">Top employers</div>
+            <div class="rv2-employer-wrap">${employers}</div>
         </div>` : ''}
 
         ${roles ? `
-        <div class="result-section">
-            <div class="section-label">Typical Roles</div>
-            <div class="data-rows">${roles}</div>
+        <div class="rv2-section">
+            <div class="rv2-section-title">Typical roles</div>
+            <div class="rv2-roles-wrap">${roles}</div>
         </div>` : ''}
         `;
     }
@@ -504,74 +509,79 @@ function displaySingleResult(d) {
     const lifetime = d.analysis && d.analysis.lifetime;
 
     const html = `
-    <div class="result-card">
+    <div class="rv2" style="--accent:${accentColor}">
 
-        <!-- Course header -->
-        <div class="result-head">
-            <div class="result-course">${d.course_name}</div>
-            <div class="result-uni">${d.university}</div>
-            ${customNote ? `<div style="margin-top:8px;display:flex;gap:6px;flex-wrap:wrap;">${customNote}</div>` : ''}
+        <!-- Header -->
+        <div class="rv2-header" style="border-left-color:${accentColor}">
+            <div>
+                <div class="rv2-course-name">${d.course_name.includes(' - ') ? d.course_name.split(' - ').slice(0,-1).join(' - ') : d.course_name}</div>
+                <div class="rv2-university">${d.university}</div>
+                ${customPills ? `<div class="rv2-pills">${customPills}</div>` : ''}
+            </div>
+            <span class="rv2-field-badge" style="background:${accentColor}18;color:${accentColor};border-color:${accentColor}40">${d.course_name.split(' - ')[0]}</span>
         </div>
 
-        <!-- Big ROI -->
-        <div class="result-roi-block">
-            <div class="result-roi-label">5-Year Return on Investment</div>
-            <div class="result-roi-num" id="roiCounter">0<span style="font-size:0.55em;vertical-align:baseline;">%</span></div>
-            <div class="result-roi-tag">
-                <span class="result-roi-badge ${roiBadgeClass}">${roiRating}</span>
-                ${d.analysis ? `<span class="roi-payback-label">${d.analysis.payback_label}</span>` : ''}
+        <!-- ROI hero -->
+        <div class="rv2-roi-hero" style="background:linear-gradient(135deg,${accentColor}12 0%,${accentColor}06 100%);border-color:${accentColor}20">
+            <div>
+                <div class="rv2-roi-label">5-Year Return on Investment</div>
+                <div class="rv2-roi-num" id="roiCounter" style="color:${accentColor}">0<span class="rv2-roi-pct">%</span></div>
+                <div class="rv2-roi-tags">
+                    <span class="result-roi-badge ${roiBadgeClass}">${roiRating}</span>
+                    ${d.analysis ? `<span class="rv2-payback-tag">${d.analysis.payback_label}</span>` : ''}
+                </div>
             </div>
-        </div>
-
-        <!-- 3-stat row -->
-        <div class="result-stats">
-            <div class="result-stat">
-                <div class="rs-label">Total Cost</div>
-                <div class="rs-value">€${(d.total_cost / 1000).toFixed(0)}k</div>
-                <div class="rs-sub">€${(d.tuition_per_year / 1000).toFixed(1)}k/yr × ${d.course_length} yrs</div>
-            </div>
-            <div class="result-stat">
-                <div class="rs-label">Starting Salary</div>
-                <div class="rs-value">€${(d.starting_salary / 1000).toFixed(0)}k</div>
-                <div class="rs-sub">€${Math.round(d.starting_salary / 12).toLocaleString()}/mo</div>
-            </div>
-            <div class="result-stat">
-                <div class="rs-label">Payback</div>
-                <div class="rs-value">${d.payback_years.toFixed(1)} yr</div>
-                <div class="rs-sub">to recover cost</div>
+            <div class="rv2-key-stats">
+                <div class="rv2-key-stat">
+                    <div class="rv2-ks-value">€${(d.total_cost/1000).toFixed(0)}k</div>
+                    <div class="rv2-ks-label">Total cost</div>
+                    <div class="rv2-ks-sub">€${(d.tuition_per_year/1000).toFixed(1)}k/yr × ${d.course_length} yrs</div>
+                </div>
+                <div class="rv2-ks-divider"></div>
+                <div class="rv2-key-stat">
+                    <div class="rv2-ks-value">€${(d.starting_salary/1000).toFixed(0)}k</div>
+                    <div class="rv2-ks-label">Starting salary</div>
+                    <div class="rv2-ks-sub">€${Math.round(d.starting_salary/12).toLocaleString()}/mo</div>
+                </div>
+                <div class="rv2-ks-divider"></div>
+                <div class="rv2-key-stat">
+                    <div class="rv2-ks-value" style="color:${accentColor}">${d.payback_years.toFixed(1)} yr</div>
+                    <div class="rv2-ks-label">Payback period</div>
+                    <div class="rv2-ks-sub">to recover cost</div>
+                </div>
             </div>
         </div>
 
         <!-- Insight -->
         ${d.analysis ? `
-        <div class="result-section">
-            <div class="insight-box">${d.analysis.recommendation}</div>
+        <div class="rv2-insight" style="border-left-color:${accentColor};background:${accentColor}0a">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="${accentColor}" stroke-width="2" aria-hidden="true" style="flex-shrink:0;margin-top:2px"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            <span>${d.analysis.recommendation}</span>
         </div>` : ''}
 
-        <!-- Salary Progression -->
-        <div class="result-section">
-            <div class="section-label">Salary Progression</div>
-            <div class="salary-row">
-                <div class="sal-item">
-                    <div class="sal-label">Year 1</div>
-                    <div class="sal-value">€${(d.starting_salary / 1000).toFixed(0)}k</div>
+        <!-- Salary progression -->
+        <div class="rv2-section">
+            <div class="rv2-section-title">Salary progression</div>
+            <div class="rv2-salary-track">
+                <div class="rv2-sal-node">
+                    <div class="rv2-sal-dot" style="border-color:${accentColor}40"></div>
+                    <div class="rv2-sal-year">Year 1</div>
+                    <div class="rv2-sal-amount">€${(d.starting_salary/1000).toFixed(0)}k</div>
                 </div>
-                <div class="sal-arrow">
-                    <svg width="32" height="16" viewBox="0 0 32 16" fill="none" aria-hidden="true">
-                        <path d="M0 8 H24 M18 2 L24 8 L18 14" stroke="#d1d5db" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                </div>
-                <div class="sal-item">
-                    <div class="sal-label">After 5 Years</div>
-                    <div class="sal-value green">€${(d.salary_after_5_years / 1000).toFixed(0)}k</div>
-                    <div class="sal-change">+${salaryIncrease}%</div>
+                <div class="rv2-sal-line" style="background:linear-gradient(90deg,${accentColor}30,${accentColor})"></div>
+                <div class="rv2-sal-growth-badge" style="background:${accentColor};color:#fff">+${salaryIncrease}%</div>
+                <div class="rv2-sal-line" style="background:linear-gradient(90deg,${accentColor},${accentColor}30)"></div>
+                <div class="rv2-sal-node">
+                    <div class="rv2-sal-dot" style="background:${accentColor};border-color:${accentColor}"></div>
+                    <div class="rv2-sal-year">After 5 years</div>
+                    <div class="rv2-sal-amount" style="color:${accentColor}">€${(d.salary_after_5_years/1000).toFixed(0)}k</div>
                 </div>
             </div>
         </div>
 
         <!-- Chart -->
-        <div class="result-section">
-            <div class="section-label">Investment vs 5-Year Earnings</div>
+        <div class="rv2-section">
+            <div class="rv2-section-title">Investment vs 5-year earnings</div>
             <div class="chart-wrap">
                 <canvas id="investmentChart" role="img" aria-label="Bar chart comparing investment to 5-year earnings"></canvas>
             </div>
@@ -581,25 +591,17 @@ function displaySingleResult(d) {
 
         <!-- Lifetime -->
         ${lifetime ? `
-        <div class="result-section">
-            <div class="section-label">30-Year Career Estimate</div>
-            <div class="lifetime-row">
-                <div class="lifetime-num">€${(lifetime.total_earnings / 1_000_000).toFixed(2)}M</div>
-                <div class="lifetime-desc">lifetime earnings, ${lifetime.times_earned_back}x your investment returned</div>
-            </div>
+        <div class="rv2-lifetime" style="background:linear-gradient(135deg,${accentColor}14,${accentColor}06);border-color:${accentColor}20">
+            <div class="rv2-lt-label">30-year career estimate</div>
+            <div class="rv2-lt-amount" style="color:${accentColor}">€${(lifetime.total_earnings/1_000_000).toFixed(2)}M</div>
+            <div class="rv2-lt-sub">${lifetime.times_earned_back}x your total investment returned over a career</div>
         </div>` : ''}
 
     </div>`;
 
     el.innerHTML = html;
-
-    // Animate ROI counter
     animateCounter('roiCounter', roi, '%');
-
-    // Draw chart
     requestAnimationFrame(() => createInvestmentChart(d));
-
-    // Scroll to results on mobile
     if (window.innerWidth < 768) {
         setTimeout(() => el.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
     }
