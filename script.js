@@ -82,12 +82,8 @@ window.onload = function () {
 };
 
 function populateCourseDropdowns() {
-    const dd  = document.getElementById('course');
-    const mdd = document.getElementById('coursesMultiple');
-    allCourses.forEach(name => {
-        dd.add(new Option(name, name));
-        if (mdd) mdd.add(new Option(name, name));
-    });
+    const dd = document.getElementById('course');
+    allCourses.forEach(name => dd.add(new Option(name, name)));
 }
 
 /* ============================================================
@@ -153,6 +149,8 @@ function clearPrefs() {
    ============================================================ */
 
 document.addEventListener('DOMContentLoaded', function () {
+
+    initCompareSearch();
 
     // Custom tuition toggle
     document.getElementById('useCustomTuition').addEventListener('change', function () {
@@ -763,13 +761,84 @@ function selectCourseFromGrid(course) {
 }
 
 /* ============================================================
+   Compare — search + chip UI
+   ============================================================ */
+
+let compareSelectedCourses = [];
+
+function initCompareSearch() {
+    const input = document.getElementById('compareSearch');
+    const drop  = document.getElementById('compareSearchDrop');
+    if (!input || !drop) return;
+
+    input.addEventListener('input', function () {
+        const q = this.value.trim();
+        if (q.length === 0) { drop.style.display = 'none'; return; }
+        const results = allCourses.filter(c => c.toLowerCase().includes(q.toLowerCase()) && !compareSelectedCourses.includes(c));
+        if (results.length === 0) {
+            drop.innerHTML = '<div style="padding:12px 14px;font-size:14px;color:var(--faint);text-align:center;">No courses found</div>';
+            drop.style.display = 'block';
+            return;
+        }
+        const escapedQ = q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        const re = new RegExp(escapedQ, 'gi');
+        drop.innerHTML = results.slice(0, 8).map(course => {
+            const safe = course.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+            const hl   = safe.replace(re, m => `<mark>${m}</mark>`);
+            const enc  = course.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+            return `<div class="search-item" onclick="addToCompare('${enc}')" role="option">${hl}</div>`;
+        }).join('');
+        drop.style.display = 'block';
+    });
+
+    document.addEventListener('click', function (e) {
+        if (!input.contains(e.target) && !drop.contains(e.target)) drop.style.display = 'none';
+    });
+}
+
+function addToCompare(course) {
+    if (compareSelectedCourses.includes(course)) return;
+    if (compareSelectedCourses.length >= 5) { showError('Maximum 5 courses. Remove one first.'); return; }
+    compareSelectedCourses.push(course);
+    document.getElementById('compareSearch').value = '';
+    document.getElementById('compareSearchDrop').style.display = 'none';
+    renderCompareChips();
+}
+
+function removeFromCompare(course) {
+    compareSelectedCourses = compareSelectedCourses.filter(c => c !== course);
+    renderCompareChips();
+}
+
+function renderCompareChips() {
+    const container = document.getElementById('compareSelected');
+    const hint      = document.getElementById('compareHint');
+    const btn       = document.getElementById('compareBtn');
+    const n         = compareSelectedCourses.length;
+
+    container.innerHTML = compareSelectedCourses.map(course => {
+        const shortName = course.includes(' - ') ? course.split(' - ').slice(0, -1).join(' - ') : course;
+        const enc       = course.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+        return `<div class="compare-chip">
+            <span class="compare-chip-name" title="${course}">${shortName}</span>
+            <button class="compare-chip-remove" onclick="removeFromCompare('${enc}')" aria-label="Remove ${shortName}">&times;</button>
+        </div>`;
+    }).join('');
+
+    hint.textContent = n === 0 ? 'Select at least 2 courses above.'
+                     : n === 1 ? 'Add 1 more course to compare.'
+                     : `${n} courses selected. Click Compare to see results.`;
+    btn.disabled = n < 2;
+}
+
+/* ============================================================
    Compare Multiple Courses
    ============================================================ */
 
 function compareMultipleCourses() {
     if (!coursesLoaded) { showError('Courses are still loading.'); return; }
 
-    const selected = Array.from(document.getElementById('coursesMultiple').selectedOptions).map(o => o.value);
+    const selected = compareSelectedCourses;
     if (selected.length < 2) { showError('Select at least 2 courses to compare.'); return; }
     if (selected.length > 5) { showError('Select a maximum of 5 courses.'); return; }
 

@@ -902,6 +902,48 @@ input, select, textarea { font-size: 16px !important; } /* prevent iOS zoom */
 
 .compare-grid { display: grid; grid-template-columns: 1fr; gap: 12px; margin-top: 16px; }
 
+.compare-selected {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  min-height: 36px;
+  margin-bottom: 12px;
+}
+
+.compare-chip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 10px 5px 12px;
+  background: var(--blue-bg);
+  border: 1px solid var(--blue-border);
+  border-radius: 100px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #1e40af;
+  max-width: 260px;
+}
+
+.compare-chip-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.compare-chip-remove {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #1e40af;
+  font-size: 16px;
+  line-height: 1;
+  padding: 0 2px;
+  flex-shrink: 0;
+  opacity: 0.7;
+}
+
+.compare-chip-remove:hover { opacity: 1; }
+
 /* ── Empty / Loading ─────────────────────────────────────── */
 
 .empty-state {
