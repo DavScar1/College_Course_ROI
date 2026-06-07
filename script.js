@@ -82,15 +82,30 @@ window.onload = function () {
         });
 };
 
+// Most popular CAO courses by application volume (source: CAO stats 2024-2025)
+const POPULAR_COURSE_NAMES = [
+    'Business/Commerce - UCD',
+    'Nursing - UCD',
+    'Computer Science - UCD',
+    'Medicine - UCD',
+    'Law - UCD',
+    'Psychology - UCD',
+];
+
 function renderQuickPicks() {
     const grid = document.getElementById('quickPickGrid');
     if (!grid || allCoursesData.length === 0) return;
-    // Top 6 by ROI
-    const top = [...allCoursesData].sort((a, b) => b.roi_5_years - a.roi_5_years).slice(0, 6);
+    // Use curated popular list, fall back to top ROI if a course isn't in dataset
+    const nameSet = new Set(allCoursesData.map(c => c.course_name));
+    const popularNames = POPULAR_COURSE_NAMES.filter(n => nameSet.has(n));
+    const top = popularNames.length >= 6
+        ? popularNames.map(n => allCoursesData.find(c => c.course_name === n))
+        : [...allCoursesData].sort((a, b) => b.roi_5_years - a.roi_5_years).slice(0, 6);
     grid.innerHTML = top.map(c => {
         const shortName = c.course_name.includes(' - ') ? c.course_name.split(' - ').slice(0, -1).join(' - ') : c.course_name;
         const enc = c.course_name.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
-        return `<div class="qp-card" onclick="quickPickCourse('${enc}')" role="button" tabindex="0"
+        const colorCls = fieldColorClass(c.course_name);
+        return `<div class="qp-card ${colorCls}" onclick="quickPickCourse('${enc}')" role="button" tabindex="0"
                      onkeydown="if(event.key==='Enter')quickPickCourse('${enc}')">
             <div class="qp-name" title="${shortName}">${shortName}</div>
             <div class="qp-uni">${c.university}</div>
@@ -726,6 +741,24 @@ function showTop5(type) {
     document.getElementById('courseGrid').scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
+const FIELD_COLORS = [
+    { keywords: ['computer science','software','cybersecurity','artificial intelligence','data science','data analytics'], cls: 'field-tech' },
+    { keywords: ['nursing','medicine','pharmacy','physiotherapy','occupational therapy','speech','radiography','dentistry','biomedical','veterinary'], cls: 'field-health' },
+    { keywords: ['business','commerce','finance','business analytics','actuarial','economics'], cls: 'field-business' },
+    { keywords: ['law'], cls: 'field-law' },
+    { keywords: ['engineering'], cls: 'field-engineering' },
+    { keywords: ['education','teaching'], cls: 'field-education' },
+    { keywords: ['psychology','social work','communications','architecture'], cls: 'field-arts' },
+];
+
+function fieldColorClass(courseName) {
+    const lower = courseName.toLowerCase();
+    for (const { keywords, cls } of FIELD_COLORS) {
+        if (keywords.some(k => lower.includes(k))) return cls;
+    }
+    return 'field-default';
+}
+
 function renderCourseGrid(courses) {
     const grid     = document.getElementById('courseGrid');
     const noResult = document.getElementById('noResults');
@@ -745,9 +778,10 @@ function renderCourseGrid(courses) {
         const roiRating  = c.analysis ? c.analysis.roi_rating : (c.roi_5_years > 400 ? 'Excellent' : c.roi_5_years > 300 ? 'Good' : 'Fair');
         const enc        = c.course_name.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
         const shortName  = c.course_name.includes(' - ') ? c.course_name.split(' - ').slice(0, -1).join(' - ') : c.course_name;
+        const colorCls   = fieldColorClass(c.course_name);
 
         return `
-        <div class="course-card" role="listitem" onclick="selectCourseFromGrid('${enc}')" tabindex="0" aria-label="Select ${c.course_name}"
+        <div class="course-card ${colorCls}" role="listitem" onclick="selectCourseFromGrid('${enc}')" tabindex="0" aria-label="Select ${c.course_name}"
              onkeydown="if(event.key==='Enter')selectCourseFromGrid('${enc}')">
             <div class="cc-top">
                 <div>
@@ -758,7 +792,7 @@ function renderCourseGrid(courses) {
             </div>
             <div class="cc-stats">
                 <div class="cc-stat">
-                    <div class="cc-stat-label">ROI 5yr</div>
+                    <div class="cc-stat-label">5yr ROI</div>
                     <div class="cc-stat-val">${c.roi_5_years}%</div>
                 </div>
                 <div class="cc-stat">

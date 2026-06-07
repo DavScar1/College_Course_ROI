@@ -669,6 +669,7 @@ input, select, textarea { font-size: 16px !important; } /* prevent iOS zoom */
 .qp-card {
   background: var(--surface);
   border: 1px solid var(--border);
+  border-left: 4px solid var(--border);
   border-radius: var(--radius);
   padding: 16px 18px;
   cursor: pointer;
@@ -713,10 +714,20 @@ input, select, textarea { font-size: 16px !important; } /* prevent iOS zoom */
 .qp-stat-val {
   font-size: 18px;
   font-weight: 700;
-  color: var(--blue);
+  color: var(--blue); /* overridden per field by .field-* rules */
   letter-spacing: -0.03em;
   line-height: 1;
 }
+
+/* quick-pick cards inherit field accent on their stat values */
+.field-tech .qp-stat-val       { color: #2563eb; }
+.field-health .qp-stat-val     { color: #15803d; }
+.field-business .qp-stat-val   { color: #7c3aed; }
+.field-law .qp-stat-val        { color: #b45309; }
+.field-engineering .qp-stat-val{ color: #0891b2; }
+.field-education .qp-stat-val  { color: #db2777; }
+.field-arts .qp-stat-val       { color: #ea580c; }
+.field-default .qp-stat-val    { color: #64748b; }
 
 .qp-stat-label {
   font-size: 11px;
@@ -1105,21 +1116,55 @@ input, select, textarea { font-size: 16px !important; } /* prevent iOS zoom */
 .course-card {
   background: var(--surface);
   border: 1px solid var(--border);
+  border-left: 4px solid var(--border);
   border-radius: var(--radius);
-  padding: 16px 18px;
+  padding: 18px 20px;
   cursor: pointer;
   box-shadow: var(--shadow);
   transition: border-color 0.15s, box-shadow 0.15s, transform 0.1s;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 14px;
 }
 
-.course-card:hover { border-color: var(--blue); box-shadow: var(--shadow-md); transform: translateY(-1px); }
+.course-card:hover { box-shadow: var(--shadow-md); transform: translateY(-1px); }
 
-.cc-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; }
-.cc-name { font-size: 15px; font-weight: 600; color: var(--text); line-height: 1.3; letter-spacing: -0.02em; }
-.cc-uni  { font-size: 13px; color: var(--faint); margin-top: 3px; }
+/* Field colour accents */
+.field-tech       { border-left-color: #2563eb; }
+.field-tech:hover { border-color: #2563eb; }
+.field-tech .cc-stat-val { color: #2563eb; }
+
+.field-health       { border-left-color: #16a34a; }
+.field-health:hover { border-color: #16a34a; }
+.field-health .cc-stat-val { color: #15803d; }
+
+.field-business       { border-left-color: #7c3aed; }
+.field-business:hover { border-color: #7c3aed; }
+.field-business .cc-stat-val { color: #7c3aed; }
+
+.field-law       { border-left-color: #b45309; }
+.field-law:hover { border-color: #b45309; }
+.field-law .cc-stat-val { color: #b45309; }
+
+.field-engineering       { border-left-color: #0891b2; }
+.field-engineering:hover { border-color: #0891b2; }
+.field-engineering .cc-stat-val { color: #0891b2; }
+
+.field-education       { border-left-color: #db2777; }
+.field-education:hover { border-color: #db2777; }
+.field-education .cc-stat-val { color: #db2777; }
+
+.field-arts       { border-left-color: #ea580c; }
+.field-arts:hover { border-color: #ea580c; }
+.field-arts .cc-stat-val { color: #ea580c; }
+
+.field-default       { border-left-color: #64748b; }
+.field-default:hover { border-color: #64748b; }
+.field-default .cc-stat-val { color: #64748b; }
+
+.cc-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; }
+.cc-name { font-size: 15px; font-weight: 600; color: var(--text); line-height: 1.35; letter-spacing: -0.02em; }
+.cc-uni  { font-size: 13px; color: var(--faint); margin-top: 4px; }
 
 .cc-badge {
   padding: 4px 10px;
@@ -1133,14 +1178,21 @@ input, select, textarea { font-size: 16px !important; } /* prevent iOS zoom */
 .cc-stats {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 8px;
+  gap: 0;
   border-top: 1px solid var(--border);
-  padding-top: 10px;
+  padding-top: 12px;
 }
 
-.cc-stat { text-align: center; }
-.cc-stat-label { font-size: 11px; font-weight: 500; color: var(--faint); margin-bottom: 4px; }
-.cc-stat-val   { font-size: 15px; font-weight: 700; color: var(--text); letter-spacing: -0.02em; }
+.cc-stat { text-align: center; position: relative; }
+.cc-stat + .cc-stat::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 10%; height: 80%;
+  width: 1px;
+  background: var(--border);
+}
+.cc-stat-label { font-size: 11px; font-weight: 500; color: var(--faint); margin-bottom: 5px; }
+.cc-stat-val   { font-size: 16px; font-weight: 700; letter-spacing: -0.02em; }
 
 /* ── Compare ─────────────────────────────────────────────── */
 
