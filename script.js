@@ -513,37 +513,43 @@ function displaySingleResult(d) {
     const html = `
     <div class="rv2" style="--accent:${accentColor}">
 
-        <!-- ROI hero (includes course name) -->
-        <div class="rv2-roi-hero" style="border-left:4px solid ${accentColor};background:${accentColor}07">
-            <div class="rv2-hero-left">
+        <!-- Course identity -->
+        <div class="rv2-identity">
+            <div>
                 <div class="rv2-course-name">${shortName}</div>
                 <div class="rv2-university">${d.university}</div>
-                ${customPills ? `<div class="rv2-pills" style="margin-top:10px">${customPills}</div>` : ''}
-                <div class="rv2-roi-label" style="margin-top:20px">5-Year Return on Investment</div>
-                <div class="rv2-roi-num" id="roiCounter" style="color:${accentColor}">0<span class="rv2-roi-pct">%</span></div>
-                <div class="rv2-roi-tags">
-                    <span class="result-roi-badge ${roiBadgeClass}">${roiRating}</span>
-                    ${d.analysis ? `<span class="rv2-payback-tag">${d.analysis.payback_label}</span>` : ''}
-                </div>
             </div>
-            <div class="rv2-key-stats">
-                <div class="rv2-key-stat">
-                    <div class="rv2-ks-value">€${(d.total_cost/1000).toFixed(0)}k</div>
-                    <div class="rv2-ks-label">Total cost</div>
-                    <div class="rv2-ks-sub">€${(d.tuition_per_year/1000).toFixed(1)}k/yr × ${d.course_length} yrs</div>
-                </div>
-                <div class="rv2-ks-divider"></div>
-                <div class="rv2-key-stat">
-                    <div class="rv2-ks-value">€${(d.starting_salary/1000).toFixed(0)}k</div>
-                    <div class="rv2-ks-label">Starting salary</div>
-                    <div class="rv2-ks-sub">€${Math.round(d.starting_salary/12).toLocaleString()}/mo</div>
-                </div>
-                <div class="rv2-ks-divider"></div>
-                <div class="rv2-key-stat">
-                    <div class="rv2-ks-value" style="color:${accentColor}">${d.payback_years.toFixed(1)} yr</div>
-                    <div class="rv2-ks-label">Payback period</div>
-                    <div class="rv2-ks-sub">to recover cost</div>
-                </div>
+            ${customPills ? `<div class="rv2-pills">${customPills}</div>` : ''}
+        </div>
+
+        <!-- ROI number -->
+        <div class="rv2-roi-block">
+            <div class="rv2-roi-label">5-Year Return on Investment</div>
+            <div class="rv2-roi-num" id="roiCounter" style="color:${accentColor}">0<span class="rv2-roi-pct">%</span></div>
+            <div class="rv2-roi-tags">
+                <span class="result-roi-badge ${roiBadgeClass}">${roiRating}</span>
+                ${d.analysis ? `<span class="rv2-payback-tag">${d.analysis.payback_label}</span>` : ''}
+            </div>
+        </div>
+
+        <!-- Key stats row -->
+        <div class="rv2-key-stats">
+            <div class="rv2-key-stat">
+                <div class="rv2-ks-value">€${(d.total_cost/1000).toFixed(0)}k</div>
+                <div class="rv2-ks-label">Total cost</div>
+                <div class="rv2-ks-sub">€${(d.tuition_per_year/1000).toFixed(1)}k/yr × ${d.course_length} yrs</div>
+            </div>
+            <div class="rv2-ks-divider"></div>
+            <div class="rv2-key-stat">
+                <div class="rv2-ks-value">€${(d.starting_salary/1000).toFixed(0)}k</div>
+                <div class="rv2-ks-label">Starting salary</div>
+                <div class="rv2-ks-sub">€${Math.round(d.starting_salary/12).toLocaleString()}/mo</div>
+            </div>
+            <div class="rv2-ks-divider"></div>
+            <div class="rv2-key-stat">
+                <div class="rv2-ks-value" style="color:${accentColor}">${d.payback_years.toFixed(1)} yr</div>
+                <div class="rv2-ks-label">Payback period</div>
+                <div class="rv2-ks-sub">to recover cost</div>
             </div>
         </div>
 

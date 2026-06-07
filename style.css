@@ -1340,19 +1340,19 @@ input, select, textarea { font-size: 16px !important; } /* prevent iOS zoom */
   flex-shrink: 0;
 }
 
-/* ROI hero */
-.rv2-roi-hero {
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 28px 24px 24px;
+/* Course identity (no box) */
+.rv2-identity {
   display: flex;
-  flex-direction: column;
-  gap: 24px;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--border);
 }
 
-.rv2-hero-left {
-  flex: 1;
-  min-width: 0;
+/* ROI number block (no box) */
+.rv2-roi-block {
+  padding: 4px 0 8px;
 }
 
 .rv2-roi-label {
@@ -1696,9 +1696,8 @@ input, select, textarea { font-size: 16px !important; } /* prevent iOS zoom */
   /* chart 2-col */
   .chart-grid { grid-template-columns: repeat(2, 1fr); }
 
-  .rv2-roi-hero { flex-direction: row; justify-content: space-between; align-items: flex-start; }
-  .rv2-key-stats { flex-direction: column; width: 220px; flex-shrink: 0; }
-  .rv2-ks-divider { width: auto; height: 1px; }
+  .rv2-key-stats { flex-direction: row; }
+  .rv2-ks-divider { width: 1px; height: auto; }
   .rv2-roi-num { font-size: 80px; }
   .rv2-career-grid { grid-template-columns: repeat(3, 1fr); }
   .result-roi-num { font-size: 88px; }
