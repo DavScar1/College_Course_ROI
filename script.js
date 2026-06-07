@@ -428,6 +428,7 @@ function displaySingleResult(d) {
 
     const colorCls   = fieldColorClass(d.course_name);
     const accentColor = { 'field-tech':'#2563eb','field-health':'#16a34a','field-business':'#7c3aed','field-law':'#b45309','field-engineering':'#0891b2','field-education':'#db2777','field-arts':'#ea580c','field-default':'#64748b' }[colorCls] || '#2563eb';
+    const fieldLabel  = { 'field-tech':'Technology','field-health':'Healthcare','field-business':'Business','field-law':'Law','field-engineering':'Engineering','field-education':'Education','field-arts':'Arts & Humanities','field-default':'Academic' }[colorCls] || 'Academic';
 
     const roiRating   = d.analysis ? d.analysis.roi_rating : (roi > 400 ? 'Excellent' : roi > 250 ? 'Good' : 'Fair');
     const roiBadgeClass = roi > 400 ? 'badge-green' : roi > 250 ? 'badge-blue' : 'badge-amber';
@@ -513,40 +514,43 @@ function displaySingleResult(d) {
     const html = `
     <div class="rv2" style="--accent:${accentColor}">
 
-        <!-- Course identity -->
-        <div class="rv2-identity">
-            <div>
+        <!-- Gradient banner -->
+        <div class="rv2-banner" style="background:linear-gradient(135deg,${accentColor}d0 0%,${accentColor} 100%)">
+            <div class="rv2-banner-inner">
+                <span class="rv2-field-pill">${fieldLabel}</span>
                 <div class="rv2-course-name">${shortName}</div>
                 <div class="rv2-university">${d.university}</div>
+                ${customPills ? `<div class="rv2-pills rv2-pills-banner">${customPills}</div>` : ''}
             </div>
-            ${customPills ? `<div class="rv2-pills">${customPills}</div>` : ''}
-        </div>
-
-        <!-- ROI number -->
-        <div class="rv2-roi-block">
-            <div class="rv2-roi-label">5-Year Return on Investment</div>
-            <div class="rv2-roi-num" id="roiCounter" style="color:${accentColor}">0<span class="rv2-roi-pct">%</span></div>
-            <div class="rv2-roi-tags">
-                <span class="result-roi-badge ${roiBadgeClass}">${roiRating}</span>
-                ${d.analysis ? `<span class="rv2-payback-tag">${d.analysis.payback_label}</span>` : ''}
+            <div class="rv2-banner-roi">
+                <div class="rv2-roi-label">5-yr ROI</div>
+                <div class="rv2-roi-num" id="roiCounter">0<span class="rv2-roi-pct">%</span></div>
+                <span class="result-roi-badge badge-white">${roiRating}</span>
             </div>
         </div>
 
         <!-- Key stats row -->
         <div class="rv2-key-stats">
             <div class="rv2-key-stat">
+                <div class="rv2-ks-icon" style="background:${accentColor}14;color:${accentColor}">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
+                </div>
                 <div class="rv2-ks-value">€${(d.total_cost/1000).toFixed(0)}k</div>
                 <div class="rv2-ks-label">Total cost</div>
                 <div class="rv2-ks-sub">€${(d.tuition_per_year/1000).toFixed(1)}k/yr × ${d.course_length} yrs</div>
             </div>
-            <div class="rv2-ks-divider"></div>
             <div class="rv2-key-stat">
+                <div class="rv2-ks-icon" style="background:${accentColor}14;color:${accentColor}">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                </div>
                 <div class="rv2-ks-value">€${(d.starting_salary/1000).toFixed(0)}k</div>
                 <div class="rv2-ks-label">Starting salary</div>
                 <div class="rv2-ks-sub">€${Math.round(d.starting_salary/12).toLocaleString()}/mo</div>
             </div>
-            <div class="rv2-ks-divider"></div>
             <div class="rv2-key-stat">
+                <div class="rv2-ks-icon" style="background:${accentColor}14;color:${accentColor}">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                </div>
                 <div class="rv2-ks-value" style="color:${accentColor}">${d.payback_years.toFixed(1)} yr</div>
                 <div class="rv2-ks-label">Payback period</div>
                 <div class="rv2-ks-sub">to recover cost</div>

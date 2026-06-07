@@ -1340,19 +1340,102 @@ input, select, textarea { font-size: 16px !important; } /* prevent iOS zoom */
   flex-shrink: 0;
 }
 
-/* Course identity (no box) */
-.rv2-identity {
+/* Gradient banner */
+.rv2-banner {
+  border-radius: var(--radius);
+  padding: 24px 24px 22px;
+  position: relative;
+  overflow: hidden;
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: 12px;
-  padding-bottom: 20px;
-  border-bottom: 1px solid var(--border);
+  gap: 16px;
 }
 
-/* ROI number block (no box) */
-.rv2-roi-block {
-  padding: 4px 0 8px;
+.rv2-banner::before {
+  content: '';
+  position: absolute;
+  top: -40px; right: -40px;
+  width: 180px; height: 180px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.08);
+  pointer-events: none;
+}
+
+.rv2-banner::after {
+  content: '';
+  position: absolute;
+  bottom: -30px; right: 100px;
+  width: 100px; height: 100px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.05);
+  pointer-events: none;
+}
+
+.rv2-banner-inner {
+  flex: 1;
+  min-width: 0;
+  position: relative;
+}
+
+.rv2-field-pill {
+  display: inline-block;
+  background: rgba(255,255,255,0.2);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  padding: 3px 10px;
+  border-radius: 100px;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+}
+
+.rv2-banner .rv2-course-name {
+  color: #fff;
+  font-size: 22px;
+}
+
+.rv2-banner .rv2-university {
+  color: rgba(255,255,255,0.75);
+  margin-top: 2px;
+}
+
+.rv2-pills-banner .rv2-pill {
+  background: rgba(255,255,255,0.18);
+  border-color: rgba(255,255,255,0.3);
+  color: #fff;
+}
+
+/* ROI number inside banner */
+.rv2-banner-roi {
+  text-align: right;
+  flex-shrink: 0;
+  position: relative;
+}
+
+.rv2-banner-roi .rv2-roi-label {
+  color: rgba(255,255,255,0.75);
+  font-size: 11px;
+  margin-bottom: 2px;
+}
+
+.rv2-banner-roi .rv2-roi-num {
+  color: #fff;
+  font-size: 52px;
+  line-height: 1;
+  margin-bottom: 8px;
+}
+
+.rv2-banner-roi .rv2-roi-pct {
+  font-size: 0.45em;
+  vertical-align: middle;
+}
+
+.badge-white {
+  background: rgba(255,255,255,0.2);
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.35);
 }
 
 .rv2-roi-label {
@@ -1389,20 +1472,28 @@ input, select, textarea { font-size: 16px !important; } /* prevent iOS zoom */
   font-weight: 500;
 }
 
-/* 3 key stats inside hero */
+/* 3 key stats row */
 .rv2-key-stats {
-  display: flex;
-  align-items: stretch;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  overflow: hidden;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
 }
 
 .rv2-key-stat {
-  flex: 1;
-  padding: 14px 16px;
-  text-align: center;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+}
+
+.rv2-ks-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 10px;
 }
 
 .rv2-ks-value {
@@ -1410,12 +1501,12 @@ input, select, textarea { font-size: 16px !important; } /* prevent iOS zoom */
   font-weight: 700;
   color: var(--text);
   letter-spacing: -0.03em;
-  margin-bottom: 3px;
+  margin-bottom: 2px;
 }
 
 .rv2-ks-label {
   font-size: 11px;
-  font-weight: 500;
+  font-weight: 600;
   color: var(--muted);
   margin-bottom: 2px;
 }
@@ -1423,12 +1514,6 @@ input, select, textarea { font-size: 16px !important; } /* prevent iOS zoom */
 .rv2-ks-sub {
   font-size: 11px;
   color: var(--faint);
-}
-
-.rv2-ks-divider {
-  width: 1px;
-  background: var(--border);
-  flex-shrink: 0;
 }
 
 /* Insight */
@@ -1696,8 +1781,7 @@ input, select, textarea { font-size: 16px !important; } /* prevent iOS zoom */
   /* chart 2-col */
   .chart-grid { grid-template-columns: repeat(2, 1fr); }
 
-  .rv2-key-stats { flex-direction: row; }
-  .rv2-ks-divider { width: 1px; height: auto; }
+  .rv2-key-stats { grid-template-columns: repeat(3, 1fr); }
   .rv2-roi-num { font-size: 80px; }
   .rv2-career-grid { grid-template-columns: repeat(3, 1fr); }
   .result-roi-num { font-size: 88px; }
