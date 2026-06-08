@@ -1,5 +1,5 @@
 /* ============================================================
-   CollegeROI Ireland — Clean UI
+   CollegeROI Ireland - Clean UI
    Conventions: white surface, one blue accent, clear hierarchy,
    generous whitespace, no decorative gradients.
    ============================================================ */
@@ -193,7 +193,7 @@ input, select, textarea { font-size: 16px !important; } /* prevent iOS zoom */
   color: var(--text);
 }
 
-/* logo-mark removed — replaced by .logo-cap SVG */
+/* logo-mark removed, replaced by .logo-cap SVG */
 
 .logo-name {
   font-size: 15px;

@@ -1,5 +1,5 @@
 /* ============================================================
-   CollegeROI Ireland — Main Script
+   CollegeROI Ireland - Main Script
    ============================================================ */
 
 'use strict';
@@ -56,7 +56,7 @@ function showError(msg) {
 }
 
 /* ============================================================
-   Bootstrap — single bulk request
+   Bootstrap - single bulk request
    ============================================================ */
 
 window.onload = function () {
@@ -188,7 +188,7 @@ function clearPrefs() {
 }
 
 /* ============================================================
-   DOMContentLoaded — wire controls
+   DOMContentLoaded - wire controls
    ============================================================ */
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -703,7 +703,7 @@ function createInvestmentChart(data, accent) {
 }
 
 /* ============================================================
-   Browse — filters
+   Browse - filters
    ============================================================ */
 
 function toggleField(button) {
@@ -844,7 +844,7 @@ function selectCourseFromGrid(course) {
 }
 
 /* ============================================================
-   Compare — search + chip UI
+   Compare - search + chip UI
    ============================================================ */
 
 let compareSelectedCourses = [];
