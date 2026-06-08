@@ -74,6 +74,7 @@ window.onload = function () {
             coursesLoaded  = true;
             populateCourseDropdowns();
             renderQuickPicks();
+            renderCmpPopularGrid();
             loadSavedPreferences();
         })
         .catch(err => {
@@ -866,10 +867,18 @@ function initCompareSearch() {
         const escapedQ = q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
         const re = new RegExp(escapedQ, 'gi');
         drop.innerHTML = results.slice(0, 8).map(course => {
-            const safe = course.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-            const hl   = safe.replace(re, m => `<mark>${m}</mark>`);
+            const parts = course.includes(' - ') ? course.split(' - ') : [course, ''];
+            const uni   = parts[parts.length - 1];
+            const name  = parts.slice(0, -1).join(' - ') || course;
+            const safeName = name.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+            const safeUni  = uni.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+            const hlName   = safeName.replace(re, m => `<mark>${m}</mark>`);
+            const hlUni    = safeUni.replace(re, m => `<mark>${m}</mark>`);
             const enc  = course.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
-            return `<div class="search-item" onclick="addToCompare('${enc}')" role="option">${hl}</div>`;
+            return `<div class="search-item" onclick="addToCompare('${enc}')" role="option" style="display:flex;flex-direction:column;gap:2px;padding:9px 14px">
+                <span class="search-item-name">${hlName}</span>
+                <span class="search-item-uni">${hlUni}</span>
+            </div>`;
         }).join('');
         drop.style.display = 'block';
     });
@@ -886,11 +895,13 @@ function addToCompare(course) {
     document.getElementById('compareSearch').value = '';
     document.getElementById('compareSearchDrop').style.display = 'none';
     renderCompareChips();
+    renderCmpPopularGrid();
 }
 
 function removeFromCompare(course) {
     compareSelectedCourses = compareSelectedCourses.filter(c => c !== course);
     renderCompareChips();
+    renderCmpPopularGrid();
 }
 
 const FIELD_HEX_MAP = { 'field-tech':'#2563eb','field-health':'#16a34a','field-business':'#7c3aed','field-law':'#b45309','field-engineering':'#0891b2','field-education':'#db2877','field-arts':'#ea580c','field-default':'#64748b' };
@@ -908,13 +919,18 @@ function renderCompareChips() {
 
     // Chips for selected courses
     const chipsHTML = compareSelectedCourses.map(course => {
-        const shortName = course.includes(' - ') ? course.split(' - ').slice(0, -1).join(' - ') : course;
-        const enc       = course.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
-        const ac        = accentForCourse(course);
+        const parts    = course.includes(' - ') ? course.split(' - ') : [course, ''];
+        const uni      = parts[parts.length - 1];
+        const name     = parts.slice(0, -1).join(' - ') || course;
+        const enc      = course.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+        const ac       = accentForCourse(course);
         return `<div class="cmp-chip" style="border-color:${ac}50;background:${ac}0c;color:${ac}">
             <span class="cmp-chip-dot" style="background:${ac}"></span>
-            <span class="cmp-chip-name" title="${course}">${shortName}</span>
-            <button class="cmp-chip-remove" onclick="removeFromCompare('${enc}')" aria-label="Remove ${shortName}" style="color:${ac}80">
+            <div class="cmp-chip-body">
+                <span class="cmp-chip-name" title="${course}">${name}</span>
+                <span class="cmp-chip-uni">${uni}</span>
+            </div>
+            <button class="cmp-chip-remove" onclick="removeFromCompare('${enc}')" aria-label="Remove ${name}" style="color:${ac}80">
                 <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
             </button>
         </div>`;
@@ -945,17 +961,75 @@ function renderCompareChips() {
         if (popular.length > 0 && n < 5) {
             sugBox.innerHTML = '<span class="cmp-sug-label">Quick add:</span>' +
                 popular.slice(0, 4).map(c => {
-                    const shortC = c.includes(' - ') ? c.split(' - ').slice(0, -1).join(' - ') : c;
+                    const parts  = c.includes(' - ') ? c.split(' - ') : [c, ''];
+                    const uni    = parts[parts.length - 1];
+                    const name   = parts.slice(0, -1).join(' - ') || c;
                     const enc    = c.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
                     const ac     = accentForCourse(c);
-                    return `<button class="cmp-sug-chip" onclick="addToCompare('${enc}')" style="border-color:${ac}40;color:${ac}">
-                        <span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:${ac};flex-shrink:0"></span>${shortC}
+                    return `<button class="cmp-sug-chip" onclick="addToCompare('${enc}')" style="border-color:${ac}40;color:${ac}" title="${c}">
+                        <span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:${ac};flex-shrink:0"></span>${name} <span style="font-weight:400;opacity:0.65">· ${uni}</span>
                     </button>`;
                 }).join('');
         } else {
             sugBox.innerHTML = '';
         }
     }
+}
+
+const POPULAR_COMPARE_COURSES = [
+    'Computer Science - UCD',
+    'Business/Commerce - UCD',
+    'Nursing - UCC',
+    'Medicine - UCD',
+    'Law - UCD',
+    'Psychology - UCD',
+    'Engineering - UCD',
+    'Pharmacy - UCC',
+    'Architecture - UCD',
+    'Social Work - UCC',
+    'Education (Primary) - UCD',
+    'Arts - UCD',
+];
+
+function renderCmpPopularGrid() {
+    const grid = document.getElementById('cmpPopularGrid');
+    if (!grid || allCoursesData.length === 0) return;
+    const nameSet = new Set(allCoursesData.map(c => c.course_name));
+    // Use curated list, fill remainder with top ROI courses not already in list
+    let picks = POPULAR_COMPARE_COURSES.filter(n => nameSet.has(n));
+    if (picks.length < 8) {
+        const extra = [...allCoursesData]
+            .sort((a, b) => b.roi_5_years - a.roi_5_years)
+            .map(c => c.course_name)
+            .filter(n => !picks.includes(n));
+        picks = [...picks, ...extra].slice(0, 12);
+    }
+    function refreshGrid() {
+        grid.innerHTML = picks.map(fullName => {
+            const parts = fullName.includes(' - ') ? fullName.split(' - ') : [fullName, ''];
+            const uni   = parts[parts.length - 1];
+            const name  = parts.slice(0, -1).join(' - ') || fullName;
+            const ac    = accentForCourse(fullName);
+            const enc   = fullName.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+            const added = compareSelectedCourses.includes(fullName);
+            return `<button class="cmp-popular-card${added ? ' already-added' : ''}"
+                style="border-left-color:${ac};border-color:${ac}30;border-left-color:${ac}"
+                onclick="addToCompare('${enc}');renderCmpPopularGrid()"
+                ${added ? 'disabled' : ''}>
+                <div class="cmp-popular-card-body">
+                    <div class="cmp-popular-card-name">${name}</div>
+                    <div class="cmp-popular-card-uni">${uni}</div>
+                </div>
+                <div class="cmp-popular-card-add" style="color:${ac}">
+                    ${added
+                        ? `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>`
+                        : `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>`
+                    }
+                </div>
+            </button>`;
+        }).join('');
+    }
+    refreshGrid();
 }
 
 /* ============================================================
