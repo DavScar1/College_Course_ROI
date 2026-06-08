@@ -893,25 +893,69 @@ function removeFromCompare(course) {
     renderCompareChips();
 }
 
-function renderCompareChips() {
-    const container = document.getElementById('compareSelected');
-    const hint      = document.getElementById('compareHint');
-    const btn       = document.getElementById('compareBtn');
-    const n         = compareSelectedCourses.length;
+const FIELD_HEX_MAP = { 'field-tech':'#2563eb','field-health':'#16a34a','field-business':'#7c3aed','field-law':'#b45309','field-engineering':'#0891b2','field-education':'#db2877','field-arts':'#ea580c','field-default':'#64748b' };
+const FIELD_LABEL_MAP = { 'field-tech':'Technology','field-health':'Healthcare','field-business':'Business','field-law':'Law','field-engineering':'Engineering','field-education':'Education','field-arts':'Arts','field-default':'Academic' };
 
-    container.innerHTML = compareSelectedCourses.map(course => {
+function accentForCourse(name) { return FIELD_HEX_MAP[fieldColorClass(name)] || '#2563eb'; }
+
+function renderCompareChips() {
+    const container  = document.getElementById('compareSelected');
+    const hint       = document.getElementById('compareHint');
+    const btn        = document.getElementById('compareBtn');
+    const sugBox     = document.getElementById('cmpSuggestions');
+    const n          = compareSelectedCourses.length;
+    const remaining  = 5 - n;
+
+    // Chips for selected courses
+    const chipsHTML = compareSelectedCourses.map(course => {
         const shortName = course.includes(' - ') ? course.split(' - ').slice(0, -1).join(' - ') : course;
         const enc       = course.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
-        return `<div class="compare-chip">
-            <span class="compare-chip-name" title="${course}">${shortName}</span>
-            <button class="compare-chip-remove" onclick="removeFromCompare('${enc}')" aria-label="Remove ${shortName}">&times;</button>
+        const ac        = accentForCourse(course);
+        return `<div class="cmp-chip" style="border-color:${ac}50;background:${ac}0c;color:${ac}">
+            <span class="cmp-chip-dot" style="background:${ac}"></span>
+            <span class="cmp-chip-name" title="${course}">${shortName}</span>
+            <button class="cmp-chip-remove" onclick="removeFromCompare('${enc}')" aria-label="Remove ${shortName}" style="color:${ac}80">
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
         </div>`;
     }).join('');
 
-    hint.textContent = n === 0 ? 'Select at least 2 courses above.'
-                     : n === 1 ? 'Add 1 more course to compare.'
-                     : `${n} courses selected. Click Compare to see results.`;
+    // Empty slot indicators
+    const slotsHTML = remaining > 0 && n > 0 ? Array.from({length: Math.min(remaining, 3)}).map(() =>
+        `<div class="cmp-slot-empty">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Add course
+        </div>`
+    ).join('') : '';
+
+    container.innerHTML = chipsHTML + slotsHTML;
+
+    // Hint text
+    hint.textContent = n === 0 ? 'Add at least 2 courses to compare.'
+                     : n === 1 ? 'Add 1 more course to continue.'
+                     : n >= 2  ? `${n} courses selected — ready to compare.` : '';
+
+    // Compare button
     btn.disabled = n < 2;
+    btn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></svg> Compare ${n >= 2 ? n + ' courses' : ''}`;
+
+    // Suggestions: popular courses not yet selected
+    if (sugBox) {
+        const popular = POPULAR_COURSE_NAMES.filter(c => !compareSelectedCourses.includes(c));
+        if (popular.length > 0 && n < 5) {
+            sugBox.innerHTML = '<span class="cmp-sug-label">Quick add:</span>' +
+                popular.slice(0, 4).map(c => {
+                    const shortC = c.includes(' - ') ? c.split(' - ').slice(0, -1).join(' - ') : c;
+                    const enc    = c.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+                    const ac     = accentForCourse(c);
+                    return `<button class="cmp-sug-chip" onclick="addToCompare('${enc}')" style="border-color:${ac}40;color:${ac}">
+                        <span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:${ac};flex-shrink:0"></span>${shortC}
+                    </button>`;
+                }).join('');
+        } else {
+            sugBox.innerHTML = '';
+        }
+    }
 }
 
 /* ============================================================
@@ -944,71 +988,69 @@ function compareMultipleCourses() {
 function displayComparisonResults(data) {
     const { winners, courses } = data;
 
-    const winnerRows = [
-        winners.best_roi        ? `<div class="data-row"><span class="dr-label winner-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/></svg> Best ROI</span><span class="dr-value">${winners.best_roi.split(' - ')[0]}</span></div>` : '',
-        winners.fastest_payback ? `<div class="data-row"><span class="dr-label winner-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Fastest Payback</span><span class="dr-value">${winners.fastest_payback.split(' - ')[0]}</span></div>` : '',
-        winners.lowest_cost     ? `<div class="data-row"><span class="dr-label winner-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg> Lowest Cost</span><span class="dr-value">${winners.lowest_cost.split(' - ')[0]}</span></div>` : '',
-        winners.highest_salary  ? `<div class="data-row"><span class="dr-label winner-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H7"/></svg> Highest Salary</span><span class="dr-value">${winners.highest_salary.split(' - ')[0]}</span></div>` : '',
-    ].filter(Boolean).join('');
-
-    const cardsHTML = courses.map(c => {
-        const isWinner = Object.values(winners).includes(c.course_name);
-        return `
-        <div class="card" style="${isWinner ? 'border-color:var(--blue);border-width:2px;' : ''}">
-            <div class="card-body">
-                <div style="margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--border);">
-                    <div style="font-size:15px;font-weight:700;color:var(--text);">${c.course_name.split(' - ')[0]}
-                        ${isWinner ? '<span class="result-roi-badge badge-green" style="font-size:10px;margin-left:6px;">WINNER</span>' : ''}
-                    </div>
-                    <div style="font-size:12px;color:var(--faint);margin-top:2px;">${c.university}</div>
-                </div>
-                <div class="data-rows">
-                    <div class="data-row">
-                        <span class="dr-label">Total Cost</span>
-                        <span class="dr-value ${c.course_name === winners.lowest_cost ? 'good' : ''}">€${c.total_cost.toLocaleString()}</span>
-                    </div>
-                    <div class="data-row">
-                        <span class="dr-label">Starting Salary</span>
-                        <span class="dr-value ${c.course_name === winners.highest_salary ? 'good' : ''}">€${c.starting_salary.toLocaleString()}</span>
-                    </div>
-                    <div class="data-row">
-                        <span class="dr-label">After 5 Years</span>
-                        <span class="dr-value">€${c.salary_after_5_years.toLocaleString()}</span>
-                    </div>
-                    <div class="data-row">
-                        <span class="dr-label">Payback</span>
-                        <span class="dr-value ${c.course_name === winners.fastest_payback ? 'good' : ''}">${c.payback_years.toFixed(1)} yrs</span>
-                    </div>
-                    <div class="data-row">
-                        <span class="dr-label">5-Year ROI</span>
-                        <span class="dr-value ${c.course_name === winners.best_roi ? 'good' : ''}">${c.roi_5_years}%</span>
-                    </div>
-                </div>
+    // Column headers — one per course with coloured gradient banner
+    const colHeaders = courses.map(c => {
+        const ac    = accentForCourse(c.course_name);
+        const fl    = FIELD_LABEL_MAP[fieldColorClass(c.course_name)] || 'Academic';
+        const short = c.course_name.includes(' - ') ? c.course_name.split(' - ').slice(0,-1).join(' - ') : c.course_name;
+        const winCount = Object.values(winners).filter(w => w === c.course_name).length;
+        return `<th class="cmp-col-head">
+            <div class="cmp-col-banner" style="background:linear-gradient(135deg,${ac}cc,${ac})">
+                <div class="cmp-col-field-pill">${fl}</div>
+                <div class="cmp-col-name">${short}</div>
+                <div class="cmp-col-uni">${c.university}</div>
+                ${winCount > 0 ? `<div class="cmp-col-wins">${winCount} win${winCount>1?'s':''}</div>` : ''}
             </div>
-        </div>`;
+        </th>`;
     }).join('');
 
+    // Metric rows
+    const metrics = [
+        { label:'Total cost',       key:'total_cost',          fmt: v => '€'+(v/1000).toFixed(0)+'k',   winner: winners.lowest_cost,     badge:'Lowest cost',    section:'financial' },
+        { label:'Starting salary',  key:'starting_salary',     fmt: v => '€'+(v/1000).toFixed(0)+'k',   winner: winners.highest_salary,  badge:'Highest salary', section:'financial' },
+        { label:'Salary after 5yr', key:'salary_after_5_years',fmt: v => '€'+(v/1000).toFixed(0)+'k',   winner: null,                    badge:'',               section:'financial' },
+        { label:'Payback period',   key:'payback_years',       fmt: v => v.toFixed(1)+' yr',            winner: winners.fastest_payback, badge:'Fastest payback',section:'roi' },
+        { label:'5-year ROI',       key:'roi_5_years',         fmt: v => v+'%',                         winner: winners.best_roi,        badge:'Best ROI',       section:'roi' },
+        { label:'Tuition per year', key:'tuition_per_year',    fmt: v => '€'+(v/1000).toFixed(1)+'k',   winner: null,                    badge:'',               section:'details' },
+        { label:'Duration',         key:'course_length',       fmt: v => v+' yr'+( v>1?'s':''),         winner: null,                    badge:'',               section:'details' },
+    ];
+
+    let lastSection = '';
+    const metricRows = metrics.map(m => {
+        const sectionBreak = m.section !== lastSection;
+        lastSection = m.section;
+        const cells = courses.map(c => {
+            const ac       = accentForCourse(c.course_name);
+            const isWinner = m.winner && c.course_name === m.winner;
+            return `<td class="cmp-cell${isWinner?' cmp-cell-win':''}" style="${isWinner?`--win-ac:${ac}`:''}">
+                <span class="cmp-cell-val">${m.fmt(c[m.key])}</span>
+                ${isWinner ? `<span class="cmp-win-badge" style="background:${ac}18;color:${ac};border-color:${ac}35">${m.badge}</span>` : ''}
+            </td>`;
+        }).join('');
+        return `<tr${sectionBreak&&lastSection!=='financial'?' class="cmp-section-start"':''}><td class="cmp-row-label">${m.label}</td>${cells}</tr>`;
+    }).join('');
+
+    const tableHTML = `
+    <div class="cmp-table-wrap">
+        <table class="cmp-table">
+            <thead><tr><th class="cmp-label-col"></th>${colHeaders}</tr></thead>
+            <tbody>${metricRows}</tbody>
+        </table>
+    </div>`;
+
+    const chartsHTML = `
+    <div class="cmp-charts-section">
+        <div class="cmp-charts-title">Visual comparison</div>
+        <div class="chart-grid">
+            <div class="chart-box"><div class="chart-label">5-Year ROI (%)</div><div style="height:200px"><canvas id="compROI"></canvas></div></div>
+            <div class="chart-box"><div class="chart-label">Starting Salary (€)</div><div style="height:200px"><canvas id="compSalary"></canvas></div></div>
+            <div class="chart-box"><div class="chart-label">Payback Period (yrs)</div><div style="height:200px"><canvas id="compPayback"></canvas></div></div>
+            <div class="chart-box"><div class="chart-label">Cost vs 5-yr Earnings</div><div style="height:200px"><canvas id="compCostEarnings"></canvas></div></div>
+        </div>
+    </div>`;
+
     const el = document.getElementById('comparisonResults');
-    el.innerHTML = `
-        <div class="card" style="border-left:3px solid var(--blue);">
-            <div class="card-head"><span class="card-title">Winners by Category</span></div>
-            <div class="card-body"><div class="data-rows">${winnerRows}</div></div>
-        </div>
-
-        <div class="card" style="margin-top:16px;">
-            <div class="card-head"><span class="card-title">Visual Comparison</span></div>
-            <div class="card-body">
-                <div class="chart-grid">
-                    <div class="chart-box"><div class="chart-label">ROI (5 Years %)</div><div style="height:220px;"><canvas id="compROI"></canvas></div></div>
-                    <div class="chart-box"><div class="chart-label">Payback Period (Years)</div><div style="height:220px;"><canvas id="compPayback"></canvas></div></div>
-                    <div class="chart-box"><div class="chart-label">Starting Salary (€)</div><div style="height:220px;"><canvas id="compSalary"></canvas></div></div>
-                    <div class="chart-box"><div class="chart-label">Cost vs 5-yr Earnings</div><div style="height:220px;"><canvas id="compCostEarnings"></canvas></div></div>
-                </div>
-            </div>
-        </div>
-
-        <div class="compare-grid" style="margin-top:16px;">${cardsHTML}</div>
-    `;
+    el.innerHTML = tableHTML + chartsHTML;
 
     el.style.display = 'block';
     requestAnimationFrame(() => buildComparisonCharts(courses));

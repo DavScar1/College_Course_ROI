@@ -282,31 +282,36 @@
 <div id="compareView" class="view">
   <div class="wrap">
     <div class="page-title">Compare Courses</div>
-    <p class="page-desc">Search and pick 2–5 courses to compare side by side.</p>
+    <p class="page-desc">Add 2 to 5 courses and see their ROI, salary and payback side by side.</p>
 
-    <div class="card">
-      <div class="card-body">
+    <!-- Selector panel -->
+    <div class="cmp-panel">
 
-        <!-- Search to add courses -->
-        <div class="field" style="position:relative;">
-          <label class="label" for="compareSearch">Add a course</label>
-          <div class="search-wrap">
-            <svg class="search-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
-            <input type="text" id="compareSearch" class="input search-input" placeholder="Type to search courses…" autocomplete="off" aria-label="Search courses to compare">
-          </div>
+      <!-- Search row -->
+      <div class="cmp-search-row">
+        <div class="cmp-search-field" style="position:relative;">
+          <svg class="search-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+          <input type="text" id="compareSearch" class="cmp-search-input" placeholder="Search and add a course…" autocomplete="off" aria-label="Search courses to compare">
           <div id="compareSearchDrop" class="search-dropdown" style="display:none;" role="listbox"></div>
         </div>
-
-        <!-- Selected courses chips -->
-        <div id="compareSelected" class="compare-selected" aria-live="polite"></div>
-
-        <div id="compareHint" class="hint" style="margin-bottom:12px;">Select at least 2 courses above.</div>
-
-        <button class="btn-primary" onclick="compareMultipleCourses()" id="compareBtn" disabled>Compare Selected</button>
+        <button class="btn-primary cmp-compare-btn" onclick="compareMultipleCourses()" id="compareBtn" disabled>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></svg>
+          Compare
+        </button>
       </div>
-    </div>
 
-    <div id="comparisonResults" style="display:none; margin-top:20px;" aria-live="polite"></div>
+      <!-- Selected chips + slot indicators -->
+      <div class="cmp-chips-area" id="compareSelected" aria-live="polite"></div>
+
+      <!-- Hint + quick-add -->
+      <div class="cmp-footer-row">
+        <span id="compareHint" class="cmp-hint">Add at least 2 courses to compare.</span>
+        <div class="cmp-suggestions" id="cmpSuggestions"></div>
+      </div>
+
+    </div><!-- /cmp-panel -->
+
+    <div id="comparisonResults" style="display:none; margin-top:24px;" aria-live="polite"></div>
   </div>
 </div>
 
