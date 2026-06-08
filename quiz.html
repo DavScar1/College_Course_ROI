@@ -3,1101 +3,1041 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Course Matcher Quiz - Find Your Perfect Course</title>
+    <title>Course Finder Quiz</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
         :root {
+            --bg: #f5f7fa;
+            --surface: #fff;
+            --text: #0f172a;
+            --muted: #64748b;
+            --faint: #94a3b8;
+            --border: #e2e8f0;
+            --radius: 10px;
+            --radius-sm: 6px;
+            --shadow: 0 1px 3px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.04);
+            --shadow-md: 0 4px 16px rgba(0,0,0,.08);
             --primary: #2563eb;
             --primary-dark: #1e40af;
-            --gray-50: #f9fafb;
-            --gray-100: #f3f4f6;
-            --gray-200: #e5e7eb;
-            --gray-600: #4b5563;
-            --gray-700: #374151;
-            --gray-800: #1f2937;
-            --gray-900: #111827;
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-            background: var(--gray-50);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg);
             min-height: 100vh;
-            padding: 0;
-            margin: 0;
+            padding: 24px 16px 40px;
+            color: var(--text);
         }
 
-        .quiz-container {
-            background: white;
-            border-radius: 12px;
-            border: 1px solid var(--gray-200);
-            max-width: 800px;
-            width: 100%;
+        .quiz-wrap {
+            max-width: 680px;
             margin: 0 auto;
+        }
+
+        /* ── Header ── */
+        .quiz-top {
+            text-align: center;
+            margin-bottom: 28px;
+        }
+        .quiz-top h1 {
+            font-size: 26px;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            margin-bottom: 6px;
+        }
+        .quiz-top p {
+            font-size: 14px;
+            color: var(--muted);
+        }
+
+        /* ── Step dots ── */
+        .step-dots {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 28px;
+        }
+        .step-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--border);
+            transition: all 0.3s ease;
+        }
+        .step-dot.done { background: var(--primary); }
+        .step-dot.active { background: var(--primary); width: 24px; border-radius: 4px; }
+
+        /* ── Card ── */
+        .quiz-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-md);
             overflow: hidden;
         }
 
-        .quiz-header {
-            background: white;
-            border-bottom: 1px solid var(--gray-200);
-            padding: 32px 40px;
-            text-align: center;
-        }
+        .progress-bar { height: 3px; background: var(--border); }
+        .progress-fill { height: 100%; background: var(--primary); transition: width 0.4s ease; width: 0%; }
 
-        .quiz-header h1 {
-            font-size: 28px;
-            font-weight: 700;
-            color: var(--gray-900);
-            margin-bottom: 8px;
-            letter-spacing: -0.02em;
-        }
+        .quiz-body { padding: 32px 28px 28px; }
 
-        .quiz-header p {
-            color: var(--gray-600);
-            font-size: 15px;
-        }
-
-        .icon {
-            display: inline-block;
-            width: 22px;
-            height: 22px;
-            vertical-align: middle;
-            margin-right: 6px;
-            stroke-width: 2.5;
-            color: var(--primary);
-        }
-        
-        .option-title .icon {
-            color: var(--gray-700);
-            transition: color 0.15s ease;
-        }
-        
-        .option:hover .icon,
-        .option.selected .icon {
-            color: var(--primary);
-        }
-
-        .progress-bar {
-            height: 4px;
-            background: var(--gray-200);
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: var(--primary);
-            transition: width 0.3s ease;
-            width: 0%;
-        }
-
-        .quiz-body {
-            padding: 40px;
-        }
-
-        .question {
-            display: none;
-            animation: fadeIn 0.4s ease;
-        }
-
+        /* ── Question ── */
+        .question { display: none; }
         .question.active {
             display: block;
+            animation: slideIn 0.35s ease;
+        }
+        .question.exit {
+            animation: slideOut 0.25s ease forwards;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(24px); }
+            to   { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes slideOut {
+            from { opacity: 1; transform: translateX(0); }
+            to   { opacity: 0; transform: translateX(-24px); }
         }
 
-        .question-number {
+        .q-meta {
+            font-size: 11px;
+            font-weight: 600;
             color: var(--primary);
-            font-weight: 600;
-            font-size: 12px;
+            letter-spacing: 0.06em;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
+        }
+        .q-text {
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            line-height: 1.35;
+            margin-bottom: 22px;
         }
 
-        .question-text {
-            font-size: 22px;
-            font-weight: 600;
-            color: var(--gray-900);
-            margin-bottom: 24px;
-            line-height: 1.4;
-        }
-
-        .options {
-            display: grid;
-            gap: 12px;
-        }
+        /* ── Options ── */
+        .options { display: flex; flex-direction: column; gap: 10px; }
 
         .option {
-            background: var(--gray-50);
-            border: 1px solid var(--gray-200);
-            border-radius: 8px;
-            padding: 16px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 14px 16px;
+            background: var(--bg);
+            border: 1.5px solid var(--border);
+            border-radius: var(--radius-sm);
             cursor: pointer;
             transition: all 0.15s ease;
-            position: relative;
+            user-select: none;
         }
-
         .option:hover {
             border-color: var(--primary);
-            background: white;
-            box-shadow: 0 2px 8px rgba(37, 99, 235, 0.1);
+            background: #eff6ff;
         }
-
         .option.selected {
             border-color: var(--primary);
+            background: #eff6ff;
+            box-shadow: 0 0 0 3px rgba(37,99,235,0.1);
+        }
+
+        .opt-dot {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            border: 2px solid var(--border);
+            flex-shrink: 0;
+            transition: all 0.15s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .option.selected .opt-dot {
+            border-color: var(--primary);
+            background: var(--primary);
+        }
+        .option.selected .opt-dot::after {
+            content: '';
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
             background: white;
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
         }
+        .option:hover .opt-dot { border-color: var(--primary); }
 
-        .option-title {
-            font-weight: 600;
-            color: var(--gray-900);
-            margin-bottom: 4px;
-            font-size: 15px;
-        }
-
-        .option-desc {
-            color: var(--gray-600);
-            font-size: 13px;
-        }
-
-        .slider-container {
-            margin: 24px 0;
-        }
-
-        .slider-label {
+        .opt-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            background: var(--surface);
+            border: 1px solid var(--border);
             display: flex;
-            justify-content: space-between;
-            margin-bottom: 12px;
-            font-size: 13px;
-            color: var(--gray-600);
-        }
-
-        .slider {
-            width: 100%;
-            height: 4px;
-            border-radius: 2px;
-            background: var(--gray-200);
-            outline: none;
-            -webkit-appearance: none;
-            cursor: pointer;
-        }
-
-        .slider::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            appearance: none;
-            width: 16px;
-            height: 16px;
-            border-radius: 50%;
-            background: var(--primary);
-            cursor: pointer;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
-            transition: all 0.15s;
-        }
-
-        .slider::-webkit-slider-thumb:hover {
-            background: var(--primary-dark);
-            transform: scale(1.2);
-        }
-
-        .slider::-moz-range-thumb {
-            width: 16px;
-            height: 16px;
-            border-radius: 50%;
-            background: var(--primary);
-            cursor: pointer;
-            border: none;
-        }
-
-        .slider-value {
-            text-align: center;
-            margin-top: 8px;
-            font-weight: 600;
-            font-size: 16px;
-            color: var(--primary);
-        }
-
-        .nav-buttons {
-            display: flex;
-            gap: 15px;
-            margin-top: 30px;
-        }
-
-        .btn {
-            flex: 1;
-            padding: 12px 20px;
-            border: none;
-            border-radius: 6px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            color: var(--muted);
             transition: all 0.15s ease;
         }
-
-        .btn-primary {
+        .option:hover .opt-icon, .option.selected .opt-icon {
             background: var(--primary);
+            border-color: var(--primary);
             color: white;
         }
 
-        .btn-primary:hover {
-            background: var(--primary-dark);
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
-        }
+        .opt-text { flex: 1; min-width: 0; }
+        .opt-title { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 2px; }
+        .opt-desc  { font-size: 12px; color: var(--muted); line-height: 1.4; }
 
-        .btn-secondary {
-            background: white;
-            color: var(--gray-700);
-            border: 1px solid var(--gray-300);
+        /* ── 2-col grid for field question ── */
+        .options.grid-2 {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
         }
+        .options.grid-2 .option { flex-direction: column; align-items: flex-start; gap: 8px; }
+        .options.grid-2 .opt-dot { display: none; }
 
-        .btn-secondary:hover {
-            background: var(--gray-50);
+        /* ── Budget choices ── */
+        .options.budget .opt-title { font-size: 16px; font-weight: 700; }
+
+        /* ── Nav ── */
+        .quiz-nav {
+            display: flex;
+            gap: 10px;
+            padding: 0 28px 24px;
         }
-
-        .btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
+        .btn {
+            padding: 11px 20px;
+            border-radius: var(--radius-sm);
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: all 0.15s ease;
+            font-family: inherit;
         }
-
-        .results {
-            display: none;
+        .btn-back {
+            background: var(--bg);
+            color: var(--muted);
+            border: 1.5px solid var(--border);
         }
+        .btn-back:hover { border-color: var(--primary); color: var(--primary); }
+        .btn-next {
+            flex: 1;
+            background: var(--primary);
+            color: white;
+        }
+        .btn-next:hover:not(:disabled) { background: var(--primary-dark); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(37,99,235,.3); }
+        .btn-next:disabled { opacity: 0.4; cursor: not-allowed; }
 
-        .results.active {
+        /* ── Results ── */
+        #results { display: none; }
+        #results.active {
             display: block;
-            animation: fadeIn 0.5s ease;
+            animation: slideIn 0.4s ease;
         }
 
         .results-header {
             text-align: center;
-            margin-bottom: 40px;
+            padding: 28px 28px 0;
+            margin-bottom: 20px;
         }
-
         .results-header h2 {
-            font-size: 28px;
-            font-weight: 700;
-            color: var(--gray-900);
-            margin-bottom: 8px;
-            letter-spacing: -0.02em;
+            font-size: 22px;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            margin-bottom: 6px;
         }
+        .results-header p { font-size: 13px; color: var(--muted); }
 
-        .results-header p {
-            color: var(--gray-600);
-            font-size: 15px;
-        }
-
+        /* ── Match cards (styled like rv2-banner) ── */
         .match-card {
-            background: white;
-            border: 1px solid var(--gray-200);
-            border-radius: 12px;
-            padding: 24px;
-            margin-bottom: 16px;
-            transition: all 0.2s ease;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            margin: 0 28px 14px;
+            overflow: hidden;
+            transition: box-shadow 0.2s ease, transform 0.2s ease;
         }
+        .match-card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
 
-        .match-card:hover {
-            border-color: var(--primary);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-            transform: translateY(-2px);
-        }
-
-        .match-header {
+        .match-banner {
+            padding: 18px 20px 16px;
+            position: relative;
+            overflow: hidden;
             display: flex;
+            align-items: flex-start;
             justify-content: space-between;
-            align-items: start;
-            margin-bottom: 15px;
+            gap: 12px;
         }
-
-        .match-rank {
-            background: var(--primary);
-            color: white;
-            width: 44px;
-            height: 44px;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
+        .match-banner::before {
+            content: '';
+            position: absolute;
+            top: -30px; right: -30px;
+            width: 120px; height: 120px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.1);
+            pointer-events: none;
+        }
+        .match-banner-left { position: relative; }
+        .match-rank-pill {
+            display: inline-block;
+            background: rgba(255,255,255,0.22);
+            color: #fff;
+            font-size: 10px;
             font-weight: 700;
-            flex-shrink: 0;
-        }
-
-        .match-info {
-            flex: 1;
-            margin-left: 16px;
-        }
-
-        .match-title {
-            font-size: 17px;
-            font-weight: 600;
-            color: var(--gray-900);
-            margin-bottom: 4px;
-        }
-
-        .match-university {
-            color: var(--gray-600);
-            font-size: 13px;
-        }
-
-        .match-score {
-            text-align: right;
-            flex-shrink: 0;
-        }
-
-        .score-label {
-            font-size: 11px;
-            color: var(--gray-600);
+            letter-spacing: 0.07em;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            padding: 3px 9px;
+            border-radius: 100px;
+            margin-bottom: 8px;
         }
-
-        .score-value {
-            font-size: 24px;
+        .match-course-name {
+            font-size: 17px;
             font-weight: 700;
-            color: var(--primary);
+            color: #fff;
+            letter-spacing: -0.02em;
+            line-height: 1.25;
+            margin-bottom: 3px;
         }
+        .match-university { font-size: 12px; color: rgba(255,255,255,0.75); }
 
-        .match-details {
+        .match-score-block { text-align: right; flex-shrink: 0; position: relative; }
+        .match-score-label { font-size: 10px; color: rgba(255,255,255,0.75); font-weight: 500; margin-bottom: 2px; }
+        .match-score-num {
+            font-size: 40px;
+            font-weight: 800;
+            color: #fff;
+            letter-spacing: -0.04em;
+            line-height: 1;
+        }
+        .match-score-pct { font-size: 0.5em; vertical-align: middle; font-weight: 700; }
+
+        .match-body { padding: 16px 20px; }
+
+        .match-stats {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
-            margin-top: 20px;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-bottom: 14px;
         }
-
-        .detail-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 10px;
-            background: var(--gray-50);
-            border-radius: 6px;
+        .match-stat {
+            background: var(--bg);
+            border-radius: var(--radius-sm);
+            padding: 10px 12px;
+            text-align: center;
         }
-
-        .detail-label {
-            color: var(--gray-600);
-            font-size: 13px;
+        .match-stat-val {
+            font-size: 16px;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            color: var(--text);
+            margin-bottom: 2px;
         }
-
-        .detail-value {
-            font-weight: 600;
-            color: var(--gray-900);
-            font-size: 13px;
-        }
+        .match-stat-label { font-size: 10px; color: var(--muted); font-weight: 500; }
 
         .match-reasons {
-            margin-top: 16px;
-            padding-top: 16px;
-            border-top: 1px solid var(--gray-200);
-        }
-
-        .reason-title {
-            font-weight: 600;
-            color: var(--primary);
-            margin-bottom: 10px;
-            font-size: 13px;
-        }
-
-        .reason-list {
             display: flex;
             flex-wrap: wrap;
-            gap: 8px;
+            gap: 6px;
+            margin-bottom: 14px;
         }
-
-        .reason-tag {
-            background: #dbeafe;
-            color: #1e40af;
+        .reason-chip {
+            display: flex;
+            align-items: center;
+            gap: 5px;
             padding: 4px 10px;
             border-radius: 100px;
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 500;
+            border: 1px solid;
         }
 
-        .view-course-btn {
+        .view-btn {
+            display: block;
             width: 100%;
-            margin-top: 16px;
-            padding: 12px 20px;
-            background: white;
-            border: 1px solid var(--primary);
-            color: var(--primary);
-            border-radius: 6px;
+            padding: 11px;
+            border-radius: var(--radius-sm);
+            font-size: 13px;
             font-weight: 600;
-            font-size: 14px;
             cursor: pointer;
+            border: 1.5px solid;
+            background: transparent;
             transition: all 0.15s ease;
+            font-family: inherit;
+            text-align: center;
         }
 
-        .view-course-btn:hover {
-            background: var(--primary);
-            color: white;
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+        .quiz-restart {
+            text-align: center;
+            padding: 4px 28px 28px;
         }
-
-        .restart-btn {
-            width: 100%;
-            margin-top: 30px;
+        .btn-ghost {
+            background: none;
+            border: none;
+            color: var(--muted);
+            font-size: 13px;
+            cursor: pointer;
+            font-family: inherit;
+            padding: 8px 12px;
+            border-radius: var(--radius-sm);
+            transition: color 0.15s ease;
         }
+        .btn-ghost:hover { color: var(--text); }
 
-        @media (max-width: 768px) {
-            .quiz-header {
-                padding: 30px 20px;
-            }
+        /* Field colours */
+        .fc-tech        { --fc: #2563eb; }
+        .fc-health      { --fc: #16a34a; }
+        .fc-business    { --fc: #7c3aed; }
+        .fc-law         { --fc: #b45309; }
+        .fc-engineering { --fc: #0891b2; }
+        .fc-arts        { --fc: #ea580c; }
+        .fc-default     { --fc: #64748b; }
 
-            .quiz-header h1 {
-                font-size: 24px;
-            }
+        .match-banner { background: linear-gradient(135deg, color-mix(in srgb, var(--fc) 80%, black) 0%, var(--fc) 100%); }
+        .reason-chip  { background: color-mix(in srgb, var(--fc) 10%, white); border-color: color-mix(in srgb, var(--fc) 25%, white); color: var(--fc); }
+        .match-stat-val.accent { color: var(--fc); }
+        .view-btn { border-color: var(--fc); color: var(--fc); }
+        .view-btn:hover { background: var(--fc); color: white; }
 
-            .quiz-body {
-                padding: 30px 20px;
-            }
-
-            .question-text {
-                font-size: 20px;
-            }
-
-            .match-details {
-                grid-template-columns: 1fr;
-            }
-
-            .match-header {
-                flex-direction: column;
-                align-items: center;
-                text-align: center;
-            }
-
-            .match-info {
-                margin-left: 0;
-                margin-top: 15px;
-            }
-
-            .match-score {
-                margin-top: 15px;
-            }
+        @media (max-width: 560px) {
+            .quiz-body { padding: 24px 18px 20px; }
+            .quiz-nav  { padding: 0 18px 18px; }
+            .match-card { margin: 0 0 12px; }
+            .results-header { padding: 20px 0 0; }
+            .quiz-restart { padding: 4px 0 20px; }
+            .options.grid-2 { grid-template-columns: 1fr; }
+            .q-text { font-size: 18px; }
         }
     </style>
 </head>
 <body>
-    <div class="quiz-container">
-        <div class="quiz-header">
-            <h1><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg> Find Your Perfect Course</h1>
-            <p>Answer 8 questions to get personalized recommendations</p>
-        </div>
+<div class="quiz-wrap">
 
-        <div class="progress-bar">
-            <div class="progress-fill" id="progressBar"></div>
-        </div>
-
-        <div class="quiz-body">
-            <!-- Question 1: Career Goals -->
-            <div class="question active" data-question="1">
-                <div class="question-number">Question 1 of 8</div>
-                <div class="question-text">What's your primary career goal?</div>
-                <div class="options">
-                    <div class="option" data-value="high-salary">
-                        <div class="option-title"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v12M9 9h6M9 15h6"/></svg> Maximize my earning potential</div>
-                        <div class="option-desc">I want the highest possible salary and strong financial returns</div>
-                    </div>
-                    <div class="option" data-value="job-security">
-                        <div class="option-title"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> Long-term job security</div>
-                        <div class="option-desc">I want stability and guaranteed employment</div>
-                    </div>
-                    <div class="option" data-value="passion">
-                        <div class="option-title"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg> Follow my passion</div>
-                        <div class="option-desc">I want to do what I love, salary is secondary</div>
-                    </div>
-                    <div class="option" data-value="balance">
-                        <div class="option-title"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 1v6m0 6v6m5.2-11.8l-4.2 4.2m0 0l-4.2 4.2m8.4 0l-4.2-4.2m0 0L8.8 6.8"/></svg> Work-life balance</div>
-                        <div class="option-desc">I want good pay with reasonable hours and flexibility</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Question 2: Field of Interest -->
-            <div class="question" data-question="2">
-                <div class="question-number">Question 2 of 8</div>
-                <div class="question-text">Which field interests you most?</div>
-                <div class="options">
-                    <div class="option" data-value="technology">
-                        <div class="option-title"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg> Technology & Computing</div>
-                        <div class="option-desc">Software, data, AI, cybersecurity</div>
-                    </div>
-                    <div class="option" data-value="healthcare">
-                        <div class="option-title"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7v10c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-10-5z"/><path d="M12 8v8m-4-4h8"/></svg> Healthcare & Medicine</div>
-                        <div class="option-desc">Medicine, nursing, therapy, allied health</div>
-                    </div>
-                    <div class="option" data-value="business">
-                        <div class="option-title"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M8 7h8M8 11h8M8 15h5"/></svg> Business & Finance</div>
-                        <div class="option-desc">Commerce, accounting, management</div>
-                    </div>
-                    <div class="option" data-value="engineering">
-                        <div class="option-title"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 1v6m0 6v6m5.2-11.8l-4.2 4.2m0 0l-4.2 4.2m8.4 0l-4.2-4.2m0 0L8.8 6.8"/></svg> Engineering</div>
-                        <div class="option-desc">Civil, mechanical, biomedical, electrical</div>
-                    </div>
-                    <div class="option" data-value="other">
-                        <div class="option-title"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg> Other Fields</div>
-                        <div class="option-desc">Law, education, communications, psychology</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Question 3: Budget -->
-            <div class="question" data-question="3">
-                <div class="question-number">Question 3 of 8</div>
-                <div class="question-text">What's your budget for annual tuition?</div>
-                <div class="slider-container">
-                    <div class="slider-label">
-                        <span>€5,000</span>
-                        <span>€35,000+</span>
-                    </div>
-                    <input type="range" class="slider" id="budgetSlider" min="5000" max="35000" step="1000" value="10000">
-                    <div class="slider-value" id="budgetValue">€10,000 per year</div>
-                </div>
-            </div>
-
-            <!-- Question 4: Course Length -->
-            <div class="question" data-question="4">
-                <div class="question-number">Question 4 of 8</div>
-                <div class="question-text">How long are you willing to study?</div>
-                <div class="options">
-                    <div class="option" data-value="4">
-                        <div class="option-title"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> 4 years or less</div>
-                        <div class="option-desc">I want to start earning quickly</div>
-                    </div>
-                    <div class="option" data-value="5">
-                        <div class="option-title"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg> 5 years</div>
-                        <div class="option-desc">Happy with a standard longer program</div>
-                    </div>
-                    <div class="option" data-value="6">
-                        <div class="option-title"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg> 6+ years</div>
-                        <div class="option-desc">Committed to extensive education (e.g., Medicine)</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Question 5: Location -->
-            <div class="question" data-question="5">
-                <div class="question-number">Question 5 of 8</div>
-                <div class="question-text">Where would you prefer to study?</div>
-                <div class="options">
-                    <div class="option" data-value="dublin">
-                        <div class="option-title"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg> Dublin</div>
-                        <div class="option-desc">Capital city, most opportunities</div>
-                    </div>
-                    <div class="option" data-value="cork-galway">
-                        <div class="option-title"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg> Cork or Galway</div>
-                        <div class="option-desc">Vibrant cities, lower cost of living</div>
-                    </div>
-                    <div class="option" data-value="other">
-                        <div class="option-title"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg> Other locations</div>
-                        <div class="option-desc">Limerick, Maynooth, anywhere really</div>
-                    </div>
-                    <div class="option" data-value="no-preference">
-                        <div class="option-title"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/><line x1="2" y1="12" x2="22" y2="12"/></svg> No preference</div>
-                        <div class="option-desc">I'll go wherever has the best course</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Question 6: Work Style -->
-            <div class="question" data-question="6">
-                <div class="question-number">Question 6 of 8</div>
-                <div class="question-text">What work environment appeals to you?</div>
-                <div class="options">
-                    <div class="option" data-value="remote">
-                        <div class="option-title"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg> Remote/flexible work</div>
-                        <div class="option-desc">Work from anywhere, digital nomad lifestyle</div>
-                    </div>
-                    <div class="option" data-value="hands-on">
-                        <div class="option-title"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> Hands-on, in-person work</div>
-                        <div class="option-desc">Direct interaction with people/equipment</div>
-                    </div>
-                    <div class="option" data-value="hybrid">
-                        <div class="option-title"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg> Mix of both</div>
-                        <div class="option-desc">Some remote work, some in-office</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Question 7: Skills Demand -->
-            <div class="question" data-question="7">
-                <div class="question-number">Question 7 of 8</div>
-                <div class="question-text">How important is high demand for your skills?</div>
-                <div class="slider-container">
-                    <div class="slider-label">
-                        <span>Not important</span>
-                        <span>Critical</span>
-                    </div>
-                    <input type="range" class="slider" id="demandSlider" min="1" max="10" step="1" value="7">
-                    <div class="slider-value" id="demandValue">7/10</div>
-                </div>
-            </div>
-
-            <!-- Question 8: International Opportunities -->
-            <div class="question" data-question="8">
-                <div class="question-number">Question 8 of 8</div>
-                <div class="question-text">Do you want international career opportunities?</div>
-                <div class="options">
-                    <div class="option" data-value="yes">
-                        <div class="option-title"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg> Yes, definitely</div>
-                        <div class="option-desc">I want to work abroad or have that option</div>
-                    </div>
-                    <div class="option" data-value="maybe">
-                        <div class="option-title"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> Maybe someday</div>
-                        <div class="option-desc">It's nice to have but not essential</div>
-                    </div>
-                    <div class="option" data-value="no">
-                        <div class="option-title"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/></svg> Prefer to stay in Ireland</div>
-                        <div class="option-desc">I want to build my career in Ireland</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Results -->
-            <div class="results" id="results">
-                <div class="results-header">
-                    <h2>Your Perfect Matches</h2>
-                    <p>Based on your preferences, here are your top recommended courses</p>
-                </div>
-                <div id="matchesContainer"></div>
-                <button class="btn btn-primary restart-btn" onclick="restartQuiz()">Take Quiz Again</button>
-            </div>
-
-            <!-- Navigation -->
-            <div class="nav-buttons">
-                <button class="btn btn-secondary" id="prevBtn" onclick="previousQuestion()" style="display: none;">Previous</button>
-                <button class="btn btn-primary" id="nextBtn" onclick="nextQuestion()" disabled>Next</button>
-            </div>
-        </div>
+    <div class="quiz-top">
+        <h1>Find Your Course Match</h1>
+        <p>7 quick questions — personalised course recommendations</p>
     </div>
 
-    <script>
-        const API_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-        ? 'http://127.0.0.1:5000'
-     : window.location.origin;
-        let currentQuestion = 1;
-        let totalQuestions = 8;
-        let answers = {};
-        let allCourses = [];
+    <div class="step-dots" id="stepDots"></div>
 
-        // Load courses on page load
-        window.addEventListener('load', async () => {
-            try {
-                const response = await fetch(`${API_URL}/courses`);
-                const data = await response.json();
-                if (data.success) {
-                    // Load full course data for each course
-                    const coursePromises = data.courses.map(async (courseName) => {
-                        const res = await fetch(`${API_URL}/calculate?course=${encodeURIComponent(courseName)}`);
-                        const courseData = await res.json();
-                        return courseData.success ? courseData.data : null;
-                    });
-                    allCourses = (await Promise.all(coursePromises)).filter(c => c !== null);
-                    console.log('Loaded courses:', allCourses.length);
-                }
-            } catch (error) {
-                console.error('Error loading courses:', error);
-            }
-        });
+    <div class="quiz-card">
+        <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
 
-        // Handle option selection
-        document.querySelectorAll('.option').forEach(option => {
-            option.addEventListener('click', function() {
-                const question = this.closest('.question');
-                const questionNum = question.dataset.question;
-                
-                // Remove selected from siblings
-                question.querySelectorAll('.option').forEach(opt => opt.classList.remove('selected'));
-                
-                // Add selected to clicked
-                this.classList.add('selected');
-                
-                // Store answer
-                answers[questionNum] = this.dataset.value;
-                
-                // Enable next button
-                document.getElementById('nextBtn').disabled = false;
-            });
-        });
+        <div class="quiz-body" id="quizBody">
 
-        // Handle slider input
-        document.getElementById('budgetSlider').addEventListener('input', function() {
-            const value = parseInt(this.value);
-            document.getElementById('budgetValue').textContent = `€${value.toLocaleString()} per year`;
-            answers['3'] = value;
-            document.getElementById('nextBtn').disabled = false;
-        });
-
-        document.getElementById('demandSlider').addEventListener('input', function() {
-            const value = parseInt(this.value);
-            document.getElementById('demandValue').textContent = `${value}/10`;
-            answers['7'] = value;
-            document.getElementById('nextBtn').disabled = false;
-        });
-
-        function nextQuestion() {
-            if (currentQuestion < totalQuestions) {
-                // Hide current question
-                document.querySelector(`.question[data-question="${currentQuestion}"]`).classList.remove('active');
-                
-                // Show next question
-                currentQuestion++;
-                document.querySelector(`.question[data-question="${currentQuestion}"]`).classList.add('active');
-                
-                // Update progress
-                updateProgress();
-                
-                // Update buttons
-                document.getElementById('prevBtn').style.display = 'block';
-                document.getElementById('nextBtn').disabled = !answers[currentQuestion];
-                
-                if (currentQuestion === totalQuestions) {
-                    document.getElementById('nextBtn').textContent = 'See My Matches';
-                }
-            } else {
-                // Show results
-                calculateMatches();
-            }
-        }
-
-        function previousQuestion() {
-            if (currentQuestion > 1) {
-                document.querySelector(`.question[data-question="${currentQuestion}"]`).classList.remove('active');
-                currentQuestion--;
-                document.querySelector(`.question[data-question="${currentQuestion}"]`).classList.add('active');
-                
-                updateProgress();
-                
-                if (currentQuestion === 1) {
-                    document.getElementById('prevBtn').style.display = 'none';
-                }
-                
-                document.getElementById('nextBtn').textContent = 'Next';
-                document.getElementById('nextBtn').disabled = !answers[currentQuestion];
-            }
-        }
-
-        function updateProgress() {
-            const progress = (currentQuestion / totalQuestions) * 100;
-            document.getElementById('progressBar').style.width = progress + '%';
-        }
-
-         function calculateMatches() {
-            if (allCourses.length === 0) {
-                alert('Courses are still loading. Please wait a moment and try again.');
-                return;
-            }
-
-            console.log('=== QUIZ MATCHING DEBUG ===');
-            console.log('User Answers:', answers);
-            console.log('Total courses loaded:', allCourses.length);
-            console.log('');
-            console.log('SCORING BREAKDOWN:');
-            console.log('- Field Match: +50 points | No Match: -200 points ⚠️');
-            console.log('- Location Match: +50 points | No Match: -100 points ⚠️');
-            console.log('- All other questions: ~11 points total (just for tie-breaking)');
-            console.log('');
-
-            // Score each course based on user answers
-            const scoredCourses = allCourses.map(course => {
-                let score = 0;
-                let reasons = [];
-                const courseData = course.course_data || {};
-                const courseName = course.course_name.toLowerCase();
-
-                // ==================== PRIORITY 1: FIELD OF INTEREST ====================
-                // Q2: Field of Interest (50 points - MOST IMPORTANT!)
-                let fieldMatched = false;
-                
-                if (answers['2'] === 'technology') {
-                    if (courseName.includes('computer') || courseName.includes('data') || 
-                        courseName.includes('software') || courseName.includes('cyber') || 
-                        courseName.includes('artificial intelligence') || courseName.includes('ai')) {
-                        score += 50;
-                        reasons.push('Matches tech interest');
-                        fieldMatched = true;
-                    }
-                } else if (answers['2'] === 'healthcare') {
-                    if (courseName.includes('medicine') || courseName.includes('nursing') || 
-                        courseName.includes('therapy') || courseName.includes('pharma') ||
-                        courseName.includes('physiotherapy') || courseName.includes('occupational') ||
-                        courseName.includes('speech') || courseName.includes('radiography') ||
-                        courseName.includes('dentistry')) {
-                        score += 50;
-                        reasons.push('Matches healthcare interest');
-                        fieldMatched = true;
-                    }
-                } else if (answers['2'] === 'business') {
-                    if (courseName.includes('business') || courseName.includes('commerce') || 
-                        courseName.includes('account') || courseName.includes('finance') ||
-                        courseName.includes('actuarial')) {
-                        score += 50;
-                        reasons.push('Matches business interest');
-                        fieldMatched = true;
-                    }
-                } else if (answers['2'] === 'engineering') {
-                    if (courseName.includes('engineering')) {
-                        score += 50;
-                        reasons.push('Matches engineering interest');
-                        fieldMatched = true;
-                    }
-                } else if (answers['2'] === 'other') {
-                    // Law, education, psychology, communications, social work, architecture
-                    if (courseName.includes('law') || courseName.includes('education') || 
-                        courseName.includes('psychology') || courseName.includes('communication') ||
-                        courseName.includes('social work') || courseName.includes('architecture') ||
-                        courseName.includes('veterinary')) {
-                        score += 50;
-                        reasons.push('Matches your field interest');
-                        fieldMatched = true;
-                    }
-                }
-                
-                // CRITICAL: If field doesn't match, give massive penalty
-                if (!fieldMatched) {
-                    score -= 200; // Wrong field = completely disqualified
-                }
-
-                // ==================== PRIORITY 2: LOCATION ====================
-                // Q5: Location (50 points - SECOND MOST IMPORTANT!)
-                let locationMatched = false;
-                
-                if (answers['5'] === 'dublin') {
-                    if (course.university.includes('Dublin') || course.university.includes('UCD') || 
-                        course.university.includes('Trinity') || course.university.includes('DCU') ||
-                        course.university.includes('TU Dublin') || course.university.includes('RCSI')) {
-                        score += 50;
-                        reasons.push('Dublin location');
-                        locationMatched = true;
-                    } else {
-                        score -= 100; // Heavy penalty for wrong location
-                    }
-                } else if (answers['5'] === 'cork-galway') {
-                    if (course.university.includes('Cork') || course.university.includes('Galway')) {
-                        score += 50;
-                        reasons.push('Preferred location');
-                        locationMatched = true;
-                    } else {
-                        score -= 100; // Heavy penalty for wrong location
-                    }
-                } else if (answers['5'] === 'other') {
-                    if (course.university.includes('Limerick') || course.university.includes('Maynooth')) {
-                        score += 50;
-                        reasons.push('Preferred location');
-                        locationMatched = true;
-                    } else {
-                        score -= 100; // Heavy penalty for wrong location
-                    }
-                } else if (answers['5'] === 'no-preference') {
-                    score += 25; // Give good points for flexibility
-                    locationMatched = true; // They don't care about location
-                }
-
-                // ==================== EVERYTHING ELSE (Minimal Impact - Just Tie-Breaking) ====================
-                
-                // Q1: Career Goals (3 points - just for tie-breaking)
-                if (answers['1'] === 'high-salary' && course.roi_5_years > 350) {
-                    score += 3;
-                    reasons.push('Excellent ROI');
-                } else if (answers['1'] === 'job-security' && courseData.job_security >= 4.5) {
-                    score += 3;
-                    reasons.push('High job security');
-                } else if (answers['1'] === 'balance' && courseData.work_life_balance >= 3.7) {
-                    score += 3;
-                    reasons.push('Good work-life balance');
-                } else if (answers['1'] === 'passion') {
-                    if (courseData.graduate_satisfaction >= 4.2) {
-                        score += 3;
-                        reasons.push('High student satisfaction');
-                    } else {
-                        score += 1;
-                    }
-                }
-
-                // Q3: Budget (2 points - minor)
-                const budget = parseInt(answers['3']);
-                if (course.tuition_per_year <= budget) {
-                    score += 2;
-                    reasons.push('Within budget');
-                } else if (course.tuition_per_year <= budget * 1.2) {
-                    score += 1;
-                }
-
-                // Q4: Course Length (2 points - minor)
-                const maxLength = parseInt(answers['4']);
-                if (course.course_length <= maxLength) {
-                    score += 2;
-                    reasons.push('Right duration');
-                } else if (course.course_length === maxLength + 1) {
-                    score += 1;
-                }
-
-                // Q6: Work Style (2 points - minor)
-                if (answers['6'] === 'remote' && courseData.remote_work_availability === 'High') {
-                    score += 2;
-                    reasons.push('Remote work options');
-                } else if (answers['6'] === 'hands-on' && courseData.remote_work_availability === 'Low') {
-                    score += 2;
-                    reasons.push('Hands-on career');
-                } else if (answers['6'] === 'hybrid') {
-                    score += 1;
-                }
-
-                // Q7: Skills Demand (1 point - minimal)
-                const demandImportance = parseInt(answers['7']);
-                if (demandImportance >= 7 && courseData.skills_demand === 'Very High') {
-                    score += 1;
-                    reasons.push('High demand field');
-                }
-
-                // Q8: International Opportunities (1 point - minimal)
-                if (answers['8'] === 'yes' && courseData.international_opportunities === 'Excellent') {
-                    score += 1;
-                    reasons.push('International opportunities');
-                }
-
-                // Ensure score is between 0 and 100
-                const finalScore = Math.max(0, Math.min(100, score));
-
-                return {
-                    ...course,
-                    matchScore: finalScore,
-                    reasons: reasons.length > 0 ? reasons : ['General match'],
-                    debugInfo: { rawScore: score, fieldMatched, locationMatched, courseName } // For debugging
-                };
-            });
-
-            // Sort by score and get top 5
-            const topMatches = scoredCourses
-                .sort((a, b) => b.matchScore - a.matchScore)
-                .slice(0, 5);
-
-            // Debug: Show what was matched
-            console.log('=== RESULTS ===');
-            console.log('Top 5 matches:');
-            topMatches.forEach((match, i) => {
-                const fieldStatus = match.debugInfo.fieldMatched ? '✅ FIELD MATCH' : '❌ WRONG FIELD';
-                const locationStatus = match.debugInfo.locationMatched ? '✅ LOCATION MATCH' : '❌ WRONG LOCATION';
-                console.log(`${i+1}. ${match.course_name}`);
-                console.log(`   Score: ${match.matchScore}/100 (Raw: ${match.debugInfo.rawScore})`);
-                console.log(`   ${fieldStatus} | ${locationStatus}`);
-                console.log('');
-            });
-
-            displayResults(topMatches);
-        }
-        
-
-        function displayResults(matches) {
-            const container = document.getElementById('matchesContainer');
-            container.innerHTML = '';
-
-            matches.forEach((match, index) => {
-                const courseData = match.course_data || {};
-                
-                const card = document.createElement('div');
-                card.className = 'match-card';
-                card.innerHTML = `
-                    <div class="match-header">
-                        <div class="match-rank">${index + 1}</div>
-                        <div class="match-info">
-                            <div class="match-title">${match.course_name}</div>
-                            <div class="match-university">${match.university}</div>
+            <!-- Q1: Priority -->
+            <div class="question active" data-q="1">
+                <div class="q-meta">Question 1 of 7</div>
+                <div class="q-text">What matters most to you after graduating?</div>
+                <div class="options">
+                    <div class="option" data-v="high-salary">
+                        <div class="opt-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
+                        <div class="opt-text">
+                            <div class="opt-title">Earning potential</div>
+                            <div class="opt-desc">Strong starting salary and high 5-year ROI</div>
                         </div>
-                        <div class="match-score">
-                            <div class="score-label">Match</div>
-                            <div class="score-value">${match.matchScore}%</div>
+                        <div class="opt-dot"></div>
+                    </div>
+                    <div class="option" data-v="job-security">
+                        <div class="opt-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+                        <div class="opt-text">
+                            <div class="opt-title">Job security</div>
+                            <div class="opt-desc">Always in demand — low risk of unemployment</div>
+                        </div>
+                        <div class="opt-dot"></div>
+                    </div>
+                    <div class="option" data-v="helping">
+                        <div class="opt-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div>
+                        <div class="opt-text">
+                            <div class="opt-title">Making an impact</div>
+                            <div class="opt-desc">Work that helps people or makes a difference</div>
+                        </div>
+                        <div class="opt-dot"></div>
+                    </div>
+                    <div class="option" data-v="balance">
+                        <div class="opt-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+                        <div class="opt-text">
+                            <div class="opt-title">Work-life balance</div>
+                            <div class="opt-desc">Reasonable hours, flexibility, manageable stress</div>
+                        </div>
+                        <div class="opt-dot"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Q2: Field -->
+            <div class="question" data-q="2">
+                <div class="q-meta">Question 2 of 7</div>
+                <div class="q-text">Which subjects genuinely interest you?</div>
+                <div class="options grid-2">
+                    <div class="option" data-v="technology">
+                        <div class="opt-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div>
+                        <div class="opt-text">
+                            <div class="opt-title">Technology & AI</div>
+                            <div class="opt-desc">Software, data, cybersecurity</div>
                         </div>
                     </div>
-                    
-                    <div class="match-details">
-                        <div class="detail-item">
-                            <span class="detail-label">Starting Salary</span>
-                            <span class="detail-value">€${match.starting_salary.toLocaleString()}</span>
-                        </div>
-                        <div class="detail-item">
-                            <span class="detail-label">5-Year ROI</span>
-                            <span class="detail-value">${match.roi_5_years}%</span>
-                        </div>
-                        <div class="detail-item">
-                            <span class="detail-label">Payback Period</span>
-                            <span class="detail-value">${match.payback_years.toFixed(1)} years</span>
-                        </div>
-                        <div class="detail-item">
-                            <span class="detail-label">Employment Rate</span>
-                            <span class="detail-value">${courseData.employment_rate || 'N/A'}%</span>
+                    <div class="option" data-v="healthcare">
+                        <div class="opt-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></div>
+                        <div class="opt-text">
+                            <div class="opt-title">Health & Medicine</div>
+                            <div class="opt-desc">Nursing, medicine, therapy</div>
                         </div>
                     </div>
-                    
-                    <div class="match-reasons">
-                        <div class="reason-title">Why this matches you:</div>
-                        <div class="reason-list">
-                            ${match.reasons.map(reason => `<span class="reason-tag">✓ ${reason}</span>`).join('')}
+                    <div class="option" data-v="business">
+                        <div class="opt-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg></div>
+                        <div class="opt-text">
+                            <div class="opt-title">Business & Finance</div>
+                            <div class="opt-desc">Commerce, accounting, management</div>
                         </div>
                     </div>
-                    
-                    <button class="view-course-btn" onclick="viewCourse('${match.course_name.replace(/'/g, "\\'")}')">
-                        View Full Analysis
-                    </button>
-                `;
-                
-                container.appendChild(card);
-            });
+                    <div class="option" data-v="engineering">
+                        <div class="opt-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93l-1.41 1.41M4.93 4.93l1.41 1.41M12 2v2m0 16v2m7.07-5.07l-1.41-1.41M4.93 19.07l1.41-1.41M2 12h2m16 0h2"/></svg></div>
+                        <div class="opt-text">
+                            <div class="opt-title">Engineering & Science</div>
+                            <div class="opt-desc">Civil, mechanical, biomedical</div>
+                        </div>
+                    </div>
+                    <div class="option" data-v="law">
+                        <div class="opt-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
+                        <div class="opt-text">
+                            <div class="opt-title">Law & Society</div>
+                            <div class="opt-desc">Law, social work, psychology</div>
+                        </div>
+                    </div>
+                    <div class="option" data-v="arts">
+                        <div class="opt-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div>
+                        <div class="opt-text">
+                            <div class="opt-title">Arts & Education</div>
+                            <div class="opt-desc">Teaching, communications, humanities</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-            // Hide questions, show results
-            document.querySelector('.question.active').classList.remove('active');
-            document.querySelector('.nav-buttons').style.display = 'none';
-            document.getElementById('results').classList.add('active');
-        }
+            <!-- Q3: Duration -->
+            <div class="question" data-q="3">
+                <div class="q-meta">Question 3 of 7</div>
+                <div class="q-text">How long are you willing to study?</div>
+                <div class="options">
+                    <div class="option" data-v="4">
+                        <div class="opt-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div>
+                        <div class="opt-text">
+                            <div class="opt-title">3–4 years</div>
+                            <div class="opt-desc">Standard honours degree — start earning fast</div>
+                        </div>
+                        <div class="opt-dot"></div>
+                    </div>
+                    <div class="option" data-v="5">
+                        <div class="opt-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+                        <div class="opt-text">
+                            <div class="opt-title">5 years</div>
+                            <div class="opt-desc">Integrated or professional master's degree</div>
+                        </div>
+                        <div class="opt-dot"></div>
+                    </div>
+                    <div class="option" data-v="6">
+                        <div class="opt-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg></div>
+                        <div class="opt-text">
+                            <div class="opt-title">6+ years</div>
+                            <div class="opt-desc">Specialist career like Medicine or Dentistry</div>
+                        </div>
+                        <div class="opt-dot"></div>
+                    </div>
+                </div>
+            </div>
 
-        function viewCourse(courseName) {
-            console.log('viewCourse called with:', courseName);
-            
-            // Send message to parent window to switch to calculator and select course
-            if (window.parent !== window) {
-                // We're in an iframe, send message to parent
-                console.log('Sending message to parent:', { action: 'selectCourse', course: courseName });
-                window.parent.postMessage({
-                    action: 'selectCourse',
-                    course: courseName
-                }, '*');
-            } else {
-                // We're standalone, redirect to calculator
-                console.log('Standalone mode - redirecting');
-                window.location.href = `${API_URL}/calculator#course=${encodeURIComponent(courseName)}`;
-            }
-        }
+            <!-- Q4: Work style -->
+            <div class="question" data-q="4">
+                <div class="q-meta">Question 4 of 7</div>
+                <div class="q-text">What type of work suits you best?</div>
+                <div class="options">
+                    <div class="option" data-v="remote">
+                        <div class="opt-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div>
+                        <div class="opt-text">
+                            <div class="opt-title">Remote / desk work</div>
+                            <div class="opt-desc">Computers, analysis, digital tools — flexible location</div>
+                        </div>
+                        <div class="opt-dot"></div>
+                    </div>
+                    <div class="option" data-v="hands-on">
+                        <div class="opt-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+                        <div class="opt-text">
+                            <div class="opt-title">Hands-on with people</div>
+                            <div class="opt-desc">Patients, clients, students — direct human interaction</div>
+                        </div>
+                        <div class="opt-dot"></div>
+                    </div>
+                    <div class="option" data-v="site">
+                        <div class="opt-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
+                        <div class="opt-text">
+                            <div class="opt-title">Site / field work</div>
+                            <div class="opt-desc">Construction, outdoors, labs or physical environments</div>
+                        </div>
+                        <div class="opt-dot"></div>
+                    </div>
+                    <div class="option" data-v="hybrid">
+                        <div class="opt-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
+                        <div class="opt-text">
+                            <div class="opt-title">Mix of both</div>
+                            <div class="opt-desc">Some office, some out-and-about</div>
+                        </div>
+                        <div class="opt-dot"></div>
+                    </div>
+                </div>
+            </div>
 
-        function restartQuiz() {
-            currentQuestion = 1;
-            answers = {};
-            
-            // Reset UI
-            document.querySelectorAll('.question').forEach(q => q.classList.remove('active'));
-            document.querySelector('.question[data-question="1"]').classList.add('active');
-            document.querySelectorAll('.option').forEach(opt => opt.classList.remove('selected'));
-            document.getElementById('budgetSlider').value = 10000;
-            document.getElementById('budgetValue').textContent = '€10,000 per year';
-            document.getElementById('demandSlider').value = 7;
-            document.getElementById('demandValue').textContent = '7/10';
-            
-            // Reset buttons
-            document.getElementById('prevBtn').style.display = 'none';
-            document.getElementById('nextBtn').textContent = 'Next';
-            document.getElementById('nextBtn').disabled = true;
-            document.querySelector('.nav-buttons').style.display = 'flex';
-            
-            // Hide results
-            document.getElementById('results').classList.remove('active');
-            
-            // Reset progress
-            document.getElementById('progressBar').style.width = '0%';
+            <!-- Q5: Location -->
+            <div class="question" data-q="5">
+                <div class="q-meta">Question 5 of 7</div>
+                <div class="q-text">Where would you prefer to study?</div>
+                <div class="options">
+                    <div class="option" data-v="dublin">
+                        <div class="opt-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></div>
+                        <div class="opt-text">
+                            <div class="opt-title">Dublin</div>
+                            <div class="opt-desc">UCD, Trinity, DCU, TU Dublin, RCSI</div>
+                        </div>
+                        <div class="opt-dot"></div>
+                    </div>
+                    <div class="option" data-v="cork-galway">
+                        <div class="opt-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="10" r="3"/><path d="M12 21.7C17.3 17 20 13 20 10a8 8 0 1 0-16 0c0 3 2.7 6.9 8 11.7z"/></svg></div>
+                        <div class="opt-text">
+                            <div class="opt-title">Cork or Galway</div>
+                            <div class="opt-desc">UCC, UG — vibrant cities, lower cost of living</div>
+                        </div>
+                        <div class="opt-dot"></div>
+                    </div>
+                    <div class="option" data-v="other">
+                        <div class="opt-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+                        <div class="opt-text">
+                            <div class="opt-title">Elsewhere</div>
+                            <div class="opt-desc">Limerick, Maynooth, Waterford or other</div>
+                        </div>
+                        <div class="opt-dot"></div>
+                    </div>
+                    <div class="option" data-v="no-preference">
+                        <div class="opt-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/><line x1="2" y1="12" x2="22" y2="12"/></svg></div>
+                        <div class="opt-text">
+                            <div class="opt-title">No preference</div>
+                            <div class="opt-desc">Best course wins, wherever it is</div>
+                        </div>
+                        <div class="opt-dot"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Q6: Budget -->
+            <div class="question" data-q="6">
+                <div class="q-meta">Question 6 of 7</div>
+                <div class="q-text">What's your annual tuition budget?</div>
+                <div class="options budget">
+                    <div class="option" data-v="7000">
+                        <div class="opt-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg></div>
+                        <div class="opt-text">
+                            <div class="opt-title">Under €8,000</div>
+                            <div class="opt-desc">Standard student contribution rate</div>
+                        </div>
+                        <div class="opt-dot"></div>
+                    </div>
+                    <div class="option" data-v="15000">
+                        <div class="opt-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
+                        <div class="opt-text">
+                            <div class="opt-title">€8,000 – €15,000</div>
+                            <div class="opt-desc">Mid-range private or specialist courses</div>
+                        </div>
+                        <div class="opt-dot"></div>
+                    </div>
+                    <div class="option" data-v="25000">
+                        <div class="opt-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
+                        <div class="opt-text">
+                            <div class="opt-title">€15,000 – €25,000</div>
+                            <div class="opt-desc">Premium or professional programmes</div>
+                        </div>
+                        <div class="opt-dot"></div>
+                    </div>
+                    <div class="option" data-v="99000">
+                        <div class="opt-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 12l2 2 4-4"/></svg></div>
+                        <div class="opt-text">
+                            <div class="opt-title">Not a major concern</div>
+                            <div class="opt-desc">ROI matters more than upfront cost</div>
+                        </div>
+                        <div class="opt-dot"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Q7: Future preference -->
+            <div class="question" data-q="7">
+                <div class="q-meta">Question 7 of 7</div>
+                <div class="q-text">Which future appeals to you most?</div>
+                <div class="options">
+                    <div class="option" data-v="international">
+                        <div class="opt-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/><line x1="2" y1="12" x2="22" y2="12"/></svg></div>
+                        <div class="opt-text">
+                            <div class="opt-title">Global career</div>
+                            <div class="opt-desc">Skills recognised and in demand worldwide</div>
+                        </div>
+                        <div class="opt-dot"></div>
+                    </div>
+                    <div class="option" data-v="demand">
+                        <div class="opt-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></div>
+                        <div class="opt-text">
+                            <div class="opt-title">Future-proof skills</div>
+                            <div class="opt-desc">High demand, hard to automate, always needed</div>
+                        </div>
+                        <div class="opt-dot"></div>
+                    </div>
+                    <div class="option" data-v="community">
+                        <div class="opt-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+                        <div class="opt-text">
+                            <div class="opt-title">Community & public service</div>
+                            <div class="opt-desc">Serving Irish society — healthcare, education, law</div>
+                        </div>
+                        <div class="opt-dot"></div>
+                    </div>
+                    <div class="option" data-v="entrepreneur">
+                        <div class="opt-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 1 1 7.072 0l-.548.547A3.374 3.374 0 0 0 14 18.469V19a2 2 0 1 1-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg></div>
+                        <div class="opt-text">
+                            <div class="opt-title">Build my own path</div>
+                            <div class="opt-desc">Entrepreneurship, startups, creative independence</div>
+                        </div>
+                        <div class="opt-dot"></div>
+                    </div>
+                </div>
+            </div>
+
+        </div><!-- /quiz-body -->
+
+        <div class="quiz-nav" id="quizNav">
+            <button class="btn btn-back" id="btnBack" onclick="goBack()" style="display:none">← Back</button>
+            <button class="btn btn-next" id="btnNext" onclick="goNext()" disabled>Next</button>
+        </div>
+
+        <!-- Results -->
+        <div id="results">
+            <div class="results-header">
+                <h2>Your Top Course Matches</h2>
+                <p>Based on your answers — click any course to see the full ROI analysis</p>
+            </div>
+            <div id="matchCards"></div>
+            <div class="quiz-restart">
+                <button class="btn-ghost" onclick="restartQuiz()">↺ Retake quiz</button>
+            </div>
+        </div>
+
+    </div><!-- /quiz-card -->
+</div><!-- /quiz-wrap -->
+
+<script>
+const API_URL = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+    ? 'http://127.0.0.1:5000' : window.location.origin;
+
+const TOTAL_Q  = 7;
+let currentQ   = 1;
+let answers    = {};
+let allCourses = [];
+
+/* ─── Field colour mapping ─── */
+const FIELD_CLASS = name => {
+    const n = name.toLowerCase();
+    if (n.includes('computer') || n.includes('data') || n.includes('software') ||
+        n.includes('cyber') || n.includes('artificial') || n.includes('computing')) return 'fc-tech';
+    if (n.includes('medicine') || n.includes('nursing') || n.includes('therapy') ||
+        n.includes('pharma') || n.includes('physiotherapy') || n.includes('occupational') ||
+        n.includes('speech') || n.includes('radiography') || n.includes('dentistry') ||
+        n.includes('midwifery') || n.includes('paramedi')) return 'fc-health';
+    if (n.includes('business') || n.includes('commerce') || n.includes('account') ||
+        n.includes('finance') || n.includes('actuarial') || n.includes('marketing')) return 'fc-business';
+    if (n.includes('engineering')) return 'fc-engineering';
+    if (n.includes('law') || n.includes('legal')) return 'fc-law';
+    if (n.includes('education') || n.includes('psychology') || n.includes('communi') ||
+        n.includes('social') || n.includes('architecture') || n.includes('arts') ||
+        n.includes('veterinary')) return 'fc-arts';
+    return 'fc-default';
+};
+
+/* ─── Load courses ─── */
+window.addEventListener('load', async () => {
+    try {
+        const res  = await fetch(`${API_URL}/courses`);
+        const data = await res.json();
+        if (data.success) {
+            const loaded = await Promise.all(
+                data.courses.map(name =>
+                    fetch(`${API_URL}/calculate?course=${encodeURIComponent(name)}`)
+                        .then(r => r.json())
+                        .then(d => d.success ? d.data : null)
+                )
+            );
+            allCourses = loaded.filter(Boolean);
         }
-    </script>
+    } catch(e) { console.error(e); }
+});
+
+/* ─── Step dots ─── */
+function renderDots() {
+    const el = document.getElementById('stepDots');
+    el.innerHTML = '';
+    for (let i = 1; i <= TOTAL_Q; i++) {
+        const d = document.createElement('div');
+        d.className = 'step-dot' + (i < currentQ ? ' done' : i === currentQ ? ' active' : '');
+        el.appendChild(d);
+    }
+}
+
+/* ─── Progress bar ─── */
+function updateProgress() {
+    document.getElementById('progressFill').style.width = ((currentQ - 1) / TOTAL_Q * 100) + '%';
+    renderDots();
+}
+
+/* ─── Option clicks — auto-advance after short delay ─── */
+document.querySelectorAll('.option').forEach(opt => {
+    opt.addEventListener('click', function () {
+        const q = this.closest('.question');
+        q.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
+        this.classList.add('selected');
+        answers[currentQ] = this.dataset.v;
+        document.getElementById('btnNext').disabled = false;
+
+        // Auto-advance after 420ms for a snappy feel
+        if (currentQ < TOTAL_Q) {
+            setTimeout(goNext, 420);
+        } else {
+            document.getElementById('btnNext').textContent = 'See My Matches →';
+        }
+    });
+});
+
+function goNext() {
+    if (currentQ < TOTAL_Q) {
+        document.querySelector(`.question[data-q="${currentQ}"]`).classList.remove('active');
+        currentQ++;
+        document.querySelector(`.question[data-q="${currentQ}"]`).classList.add('active');
+        updateProgress();
+        document.getElementById('btnBack').style.display = 'block';
+        document.getElementById('btnNext').disabled = !answers[currentQ];
+        document.getElementById('btnNext').textContent = currentQ === TOTAL_Q ? 'See My Matches →' : 'Next';
+    } else {
+        showResults();
+    }
+}
+
+function goBack() {
+    if (currentQ > 1) {
+        document.querySelector(`.question[data-q="${currentQ}"]`).classList.remove('active');
+        currentQ--;
+        document.querySelector(`.question[data-q="${currentQ}"]`).classList.add('active');
+        updateProgress();
+        if (currentQ === 1) document.getElementById('btnBack').style.display = 'none';
+        document.getElementById('btnNext').disabled = !answers[currentQ];
+        document.getElementById('btnNext').textContent = 'Next';
+    }
+}
+
+/* ─── Matching algorithm ─── */
+function scoreField(courseName) {
+    const n = courseName.toLowerCase();
+    const field = answers[2];
+    if (field === 'technology')  return (n.includes('computer') || n.includes('data') || n.includes('software') || n.includes('cyber') || n.includes('artificial') || n.includes('computing')) ? 38 : 0;
+    if (field === 'healthcare')  return (n.includes('medicine') || n.includes('nursing') || n.includes('therapy') || n.includes('pharma') || n.includes('physiotherapy') || n.includes('occupational') || n.includes('speech') || n.includes('radiography') || n.includes('dentistry') || n.includes('midwifery')) ? 38 : 0;
+    if (field === 'business')    return (n.includes('business') || n.includes('commerce') || n.includes('account') || n.includes('finance') || n.includes('actuarial') || n.includes('marketing')) ? 38 : 0;
+    if (field === 'engineering') return n.includes('engineering') ? 38 : 0;
+    if (field === 'law')         return (n.includes('law') || n.includes('legal') || n.includes('psychology') || n.includes('social work')) ? 38 : 0;
+    if (field === 'arts')        return (n.includes('education') || n.includes('psychology') || n.includes('communi') || n.includes('social') || n.includes('architecture') || n.includes('veterinary')) ? 38 : 0;
+    return 10;
+}
+
+function scoreLocation(course) {
+    const uni = course.university || '';
+    const pref = answers[5];
+    if (pref === 'no-preference') return 12;
+    if (pref === 'dublin')      return (uni.includes('Dublin') || uni.includes('UCD') || uni.includes('Trinity') || uni.includes('DCU') || uni.includes('TU Dublin') || uni.includes('RCSI')) ? 18 : 0;
+    if (pref === 'cork-galway') return (uni.includes('Cork') || uni.includes('Galway')) ? 18 : 0;
+    if (pref === 'other')       return (uni.includes('Limerick') || uni.includes('Maynooth') || uni.includes('Waterford')) ? 18 : 0;
+    return 0;
+}
+
+function scoreDuration(course) {
+    const max = parseInt(answers[3]);
+    if (!max) return 5;
+    if (course.course_length <= max) return 14;
+    if (course.course_length === max + 1) return 7;
+    return 0;
+}
+
+function scoreBudget(course) {
+    const budget = parseInt(answers[6]);
+    if (!budget || budget >= 90000) return 8;
+    if (course.tuition_per_year <= budget) return 12;
+    if (course.tuition_per_year <= budget * 1.15) return 6;
+    return 0;
+}
+
+function scoreCareerGoal(course) {
+    const cd = course.course_data || {};
+    const goal = answers[1];
+    if (goal === 'high-salary')   return course.roi_5_years > 350 ? 10 : course.roi_5_years > 200 ? 5 : 0;
+    if (goal === 'job-security')  return (cd.job_security || 0) >= 4.5 ? 10 : (cd.job_security || 0) >= 4 ? 5 : 0;
+    if (goal === 'helping')       return (cd.graduate_satisfaction || 0) >= 4.2 ? 10 : (cd.graduate_satisfaction || 0) >= 4 ? 5 : 0;
+    if (goal === 'balance')       return (cd.work_life_balance || 0) >= 3.7 ? 10 : (cd.work_life_balance || 0) >= 3.5 ? 5 : 0;
+    return 5;
+}
+
+function scoreWorkStyle(course) {
+    const cd = course.course_data || {};
+    const style = answers[4];
+    const remote = (cd.remote_work_availability || '').toLowerCase();
+    if (style === 'remote')   return remote === 'high' ? 8 : remote === 'medium' ? 4 : 0;
+    if (style === 'hands-on') return remote === 'low' ? 8 : remote === 'medium' ? 4 : 0;
+    if (style === 'site')     return remote === 'low' ? 8 : 4;
+    if (style === 'hybrid')   return remote === 'medium' ? 8 : 4;
+    return 4;
+}
+
+function scoreFuture(course) {
+    const cd = course.course_data || {};
+    const future = answers[7];
+    if (future === 'international') return (cd.international_opportunities || '') === 'Excellent' ? 8 : (cd.international_opportunities || '') === 'Good' ? 4 : 0;
+    if (future === 'demand')        return (cd.skills_demand || '') === 'Very High' ? 8 : (cd.skills_demand || '') === 'High' ? 4 : 0;
+    if (future === 'community')     return (course.course_name.toLowerCase().includes('nursing') || course.course_name.toLowerCase().includes('education') || course.course_name.toLowerCase().includes('social') || course.course_name.toLowerCase().includes('medicine')) ? 8 : 2;
+    if (future === 'entrepreneur')  return (course.course_name.toLowerCase().includes('business') || course.course_name.toLowerCase().includes('computer') || course.course_name.toLowerCase().includes('engineering')) ? 8 : 2;
+    return 4;
+}
+
+function buildReasons(course, scores) {
+    const reasons = [];
+    const cd = course.course_data || {};
+    if (scores.field  >= 38) reasons.push('Matches your field');
+    if (scores.loc    >= 18) reasons.push('Your preferred location');
+    if (scores.dur    >= 14) reasons.push('Right study length');
+    if (scores.budget >= 12) reasons.push('Within budget');
+    if (scores.career >= 10) reasons.push(answers[1] === 'high-salary' ? 'Excellent ROI' : answers[1] === 'job-security' ? 'High job security' : answers[1] === 'helping' ? 'High graduate satisfaction' : 'Good work-life balance');
+    if (scores.work   >= 8)  reasons.push(answers[4] === 'remote' ? 'Strong remote options' : answers[4] === 'hands-on' ? 'Hands-on career' : 'Flexible work style');
+    if (scores.future >= 8)  reasons.push(answers[7] === 'international' ? 'Global opportunities' : answers[7] === 'demand' ? 'Future-proof field' : answers[7] === 'community' ? 'Community impact' : 'Entrepreneurial fit');
+    return reasons.slice(0, 4);
+}
+
+function showResults() {
+    if (allCourses.length === 0) {
+        alert('Courses are still loading. Please wait a moment.');
+        return;
+    }
+
+    const scored = allCourses.map(course => {
+        const s = {
+            field:  scoreField(course.course_name),
+            loc:    scoreLocation(course),
+            dur:    scoreDuration(course),
+            budget: scoreBudget(course),
+            career: scoreCareerGoal(course),
+            work:   scoreWorkStyle(course),
+            future: scoreFuture(course),
+        };
+        const raw   = Object.values(s).reduce((a, b) => a + b, 0); // max ≈ 108
+        const pct   = Math.round(Math.min(99, Math.max(10, (raw / 108) * 100)));
+        return { ...course, matchScore: pct, matchScores: s };
+    });
+
+    // Only show field-matching courses in top results
+    const fieldMatch    = scored.filter(c => c.matchScores.field > 0).sort((a, b) => b.matchScore - a.matchScore);
+    const topMatches    = fieldMatch.length >= 3 ? fieldMatch.slice(0, 5) : scored.sort((a, b) => b.matchScore - a.matchScore).slice(0, 5);
+
+    renderResults(topMatches);
+}
+
+function renderResults(matches) {
+    const container = document.getElementById('matchCards');
+    container.innerHTML = '';
+
+    const rankLabel = ['#1 Best Match', '#2 Great Match', '#3 Good Match', '#4 Worth Considering', '#5 Also Consider'];
+
+    matches.forEach((m, i) => {
+        const cd        = m.course_data || {};
+        const shortName = m.course_name.includes(' - ') ? m.course_name.split(' - ').slice(0, -1).join(' - ') : m.course_name;
+        const fc        = FIELD_CLASS(m.course_name);
+        const reasons   = buildReasons(m, m.matchScores);
+
+        const card = document.createElement('div');
+        card.className = `match-card ${fc}`;
+        card.innerHTML = `
+            <div class="match-banner">
+                <div class="match-banner-left">
+                    <div class="match-rank-pill">${rankLabel[i]}</div>
+                    <div class="match-course-name">${shortName}</div>
+                    <div class="match-university">${m.university}</div>
+                </div>
+                <div class="match-score-block">
+                    <div class="match-score-label">Match</div>
+                    <div class="match-score-num">${m.matchScore}<span class="match-score-pct">%</span></div>
+                </div>
+            </div>
+            <div class="match-body">
+                <div class="match-stats">
+                    <div class="match-stat">
+                        <div class="match-stat-val">€${(m.starting_salary/1000).toFixed(0)}k</div>
+                        <div class="match-stat-label">Starting salary</div>
+                    </div>
+                    <div class="match-stat">
+                        <div class="match-stat-val accent">${m.roi_5_years}%</div>
+                        <div class="match-stat-label">5-yr ROI</div>
+                    </div>
+                    <div class="match-stat">
+                        <div class="match-stat-val">${m.payback_years.toFixed(1)} yr</div>
+                        <div class="match-stat-label">Payback</div>
+                    </div>
+                </div>
+                ${reasons.length ? `
+                <div class="match-reasons">
+                    ${reasons.map(r => `<span class="reason-chip"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>${r}</span>`).join('')}
+                </div>` : ''}
+                <button class="view-btn" onclick="viewCourse('${m.course_name.replace(/'/g, "\\'")}')">
+                    View full ROI analysis →
+                </button>
+            </div>
+        `;
+        container.appendChild(card);
+    });
+
+    // Hide questions + nav
+    document.querySelectorAll('.question').forEach(q => q.classList.remove('active'));
+    document.getElementById('quizNav').style.display = 'none';
+    document.getElementById('quizBody').style.paddingBottom = '0';
+    document.getElementById('results').style.display = 'block';
+    document.getElementById('progressFill').style.width = '100%';
+    renderDots();
+}
+
+function viewCourse(name) {
+    if (window.parent !== window) {
+        window.parent.postMessage({ action: 'selectCourse', course: name }, '*');
+    } else {
+        window.location.href = `${API_URL}/?course=${encodeURIComponent(name)}`;
+    }
+}
+
+function restartQuiz() {
+    currentQ = 1;
+    answers  = {};
+    document.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
+    document.querySelectorAll('.question').forEach(q => q.classList.remove('active'));
+    document.querySelector('.question[data-q="1"]').classList.add('active');
+    document.getElementById('btnBack').style.display = 'none';
+    document.getElementById('btnNext').disabled = true;
+    document.getElementById('btnNext').textContent = 'Next';
+    document.getElementById('quizNav').style.display = 'flex';
+    document.getElementById('quizBody').style.paddingBottom = '';
+    document.getElementById('results').style.display = 'none';
+    updateProgress();
+}
+
+// Init
+updateProgress();
+</script>
 </body>
 </html>
