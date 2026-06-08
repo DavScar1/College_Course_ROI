@@ -3,216 +3,302 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Is Computer Science Worth It in Ireland in 2025? | ROI College</title>
+    <title>Is Computer Science Worth It in Ireland in 2025? | CollegeROI</title>
     <meta name="description" content="Is a Computer Science degree worth it in Ireland with AI taking over jobs? We break down the salaries, employment rates and ROI for Irish CS graduates.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/style.css">
     <style>
-        .blog-page {
-            max-width: 740px;
-            margin: 0 auto;
-            padding: 24px 16px 100px;
+        /* Header nav links */
+        .blog-header-link {
+            display: inline-flex;
+            align-items: center;
+            padding: 6px 12px;
+            border-radius: var(--radius-sm);
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--muted);
+            text-decoration: none;
+            transition: color 0.15s, background 0.15s;
+        }
+        .blog-header-link:hover { color: var(--text); background: var(--bg); }
+        .blog-header-link.active { color: var(--blue); font-weight: 600; background: var(--blue-bg); }
+
+        /* Reading progress bar */
+        .read-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            background: var(--blue);
+            width: 0%;
+            z-index: 200;
+            transition: width 0.1s linear;
+            border-radius: 0 2px 2px 0;
         }
 
-        .blog-back {
+        /* Layout */
+        .post-wrap {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 32px 16px 80px;
+        }
+
+        /* Back nav */
+        .post-back {
             display: inline-flex;
             align-items: center;
             gap: 6px;
-            color: var(--primary);
+            color: var(--muted);
             text-decoration: none;
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 500;
-            margin-bottom: 24px;
+            margin-bottom: 28px;
+            transition: color 0.15s;
         }
+        .post-back:hover { color: var(--blue); }
 
-        .blog-back:hover {
-            color: var(--primary-dark);
+        /* Hero */
+        .post-hero {
+            margin-bottom: 32px;
         }
 
         .post-tag {
-            display: inline-block;
-            background: #eff6ff;
-            color: var(--primary);
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            background: var(--blue-bg);
+            color: var(--blue);
             font-size: 11px;
             font-weight: 600;
-            padding: 3px 8px;
+            padding: 4px 10px;
             border-radius: 100px;
             text-transform: uppercase;
-            letter-spacing: 0.4px;
+            letter-spacing: 0.05em;
             margin-bottom: 14px;
+            border: 1px solid var(--blue-border);
         }
 
         .post-title {
-            font-size: 26px;
+            font-size: 28px;
             font-weight: 700;
-            color: var(--gray-900);
-            letter-spacing: -0.02em;
+            color: var(--text);
+            letter-spacing: -0.025em;
             line-height: 1.3;
-            margin-bottom: 12px;
+            margin-bottom: 16px;
         }
 
-        .post-meta {
-            font-size: 13px;
-            color: var(--gray-400);
+        .post-meta-bar {
             display: flex;
             align-items: center;
-            gap: 8px;
-            margin-bottom: 28px;
-            padding-bottom: 28px;
-            border-bottom: 1px solid var(--gray-200);
+            gap: 10px;
+            font-size: 13px;
+            color: var(--muted);
+            padding-bottom: 24px;
+            border-bottom: 1px solid var(--border);
         }
 
         .post-meta-dot {
             width: 3px;
             height: 3px;
-            background: var(--gray-300);
+            background: var(--border-dark);
             border-radius: 50%;
         }
 
+        /* Body */
         .post-body {
             font-size: 16px;
-            color: var(--gray-700);
+            color: var(--text);
             line-height: 1.8;
         }
 
         .post-body p {
-            margin-bottom: 20px;
+            margin-bottom: 22px;
+            color: #334155;
         }
 
         .post-body h2 {
-            font-size: 19px;
+            font-size: 20px;
             font-weight: 700;
-            color: var(--gray-900);
-            letter-spacing: -0.01em;
-            margin: 36px 0 14px;
+            color: var(--text);
+            letter-spacing: -0.015em;
+            margin: 40px 0 14px;
+            padding-top: 8px;
         }
 
         .post-body strong {
-            color: var(--gray-900);
+            color: var(--text);
             font-weight: 600;
         }
 
+        /* Key stats row */
         .stat-row {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 12px;
-            margin: 24px 0;
+            margin: 28px 0;
         }
 
         .stat-box {
-            background: var(--gray-50);
-            border: 1px solid var(--gray-200);
-            border-radius: 10px;
-            padding: 16px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 18px 16px;
             text-align: center;
+            box-shadow: var(--shadow);
         }
 
         .stat-box-value {
-            font-size: 22px;
+            font-size: 24px;
             font-weight: 700;
-            color: var(--primary);
-            letter-spacing: -0.02em;
+            color: var(--blue);
+            letter-spacing: -0.03em;
             display: block;
+            line-height: 1;
+            margin-bottom: 6px;
         }
 
         .stat-box-label {
             font-size: 12px;
-            color: var(--gray-500);
-            margin-top: 4px;
+            color: var(--muted);
             display: block;
         }
 
-        .cta-box {
+        /* Callout box */
+        .post-callout {
+            background: var(--blue-bg);
+            border: 1px solid var(--blue-border);
+            border-left: 3px solid var(--blue);
+            border-radius: var(--radius);
+            padding: 16px 20px;
+            margin: 28px 0;
+            font-size: 15px;
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        /* CTA */
+        .post-cta {
             background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
-            border: 1px solid #bfdbfe;
-            border-radius: 12px;
-            padding: 24px;
-            margin: 36px 0;
+            border: 1px solid var(--blue-border);
+            border-radius: var(--radius);
+            padding: 28px 24px;
+            margin: 40px 0 32px;
         }
 
-        .cta-box strong {
-            font-size: 16px;
-            color: var(--gray-900);
-            display: block;
+        .post-cta-title {
+            font-size: 17px;
+            font-weight: 700;
+            color: var(--text);
             margin-bottom: 8px;
         }
 
-        .cta-box p {
+        .post-cta p {
             font-size: 14px;
-            color: var(--gray-600);
-            margin-bottom: 16px !important;
+            color: var(--muted);
+            margin-bottom: 18px !important;
         }
 
-        .cta-btn {
+        .post-cta-btn {
             display: inline-flex;
             align-items: center;
-            gap: 6px;
-            background: var(--primary);
+            gap: 7px;
+            background: var(--blue);
             color: white;
-            padding: 10px 18px;
-            border-radius: 8px;
+            padding: 11px 20px;
+            border-radius: var(--radius-sm);
             text-decoration: none;
             font-size: 14px;
             font-weight: 600;
             transition: background 0.15s;
         }
 
-        .cta-btn:hover {
-            background: var(--primary-dark);
+        .post-cta-btn:hover { background: var(--blue-hover); }
+
+        /* Bottom nav */
+        .post-footer-nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            padding-top: 24px;
+            border-top: 1px solid var(--border);
+            flex-wrap: wrap;
+        }
+
+        @media (max-width: 520px) {
+            .post-title { font-size: 22px; }
+            .stat-row { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+            .stat-box { padding: 14px 10px; }
+            .stat-box-value { font-size: 20px; }
         }
     </style>
 </head>
 <body>
+    <div class="read-progress" id="readProgress"></div>
+
     <header class="header">
-    <div class="header-content" style="padding-left: 20px;">
-        <a href="/" style="text-decoration:none;">
-            <div class="logo">
-                <div class="logo-icon-wrapper">
-                    <svg class="logo-svg" width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M20 8L4 16L20 24L36 16L20 8Z" fill="#334155" stroke="#1e293b" stroke-width="1.5" stroke-linejoin="round"/>
-                        <path d="M8 18V26C8 26 12 30 20 30C28 30 32 26 32 26V18" stroke="#334155" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M36 16V24" stroke="#1e293b" stroke-width="2" stroke-linecap="round"/>
-                        <path d="M24 14L28 10L32 14M28 10V18" stroke="#10b981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
+        <div class="header-inner">
+            <a href="/" style="text-decoration:none;">
+                <div class="logo">
+                    <div class="logo-icon-wrapper">
+                        <svg class="logo-svg" width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M20 8L4 16L20 24L36 16L20 8Z" fill="#334155" stroke="#1e293b" stroke-width="1.5" stroke-linejoin="round"/>
+                            <path d="M8 18V26C8 26 12 30 20 30C28 30 32 26 32 26V18" stroke="#334155" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M36 16V24" stroke="#1e293b" stroke-width="2" stroke-linecap="round"/>
+                            <path d="M24 14L28 10L32 14M28 10V18" stroke="#10b981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <div class="logo-text">
+                        <span class="logo-title">CollegeROI</span>
+                    </div>
                 </div>
-                <div class="logo-text">
-                    <span class="logo-title">CollegeROI</span>
-                </div>
+            </a>
+            <div style="display:flex;align-items:center;gap:4px;">
+                <a href="/" class="blog-header-link">Calculator</a>
+                <a href="/blog" class="blog-header-link active">Blog</a>
             </div>
-        </a>
-    </div>
+        </div>
     </header>
 
-    <div class="blog-page">
-        <a href="/blog" class="blog-back">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+    <div class="post-wrap">
+        <a href="/blog" class="post-back">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
             All posts
         </a>
 
-        <span class="post-tag">Computer Science</span>
-        <h1 class="post-title">Is Computer Science Worth It in Ireland in 2025?</h1>
-
-        <div class="post-meta">
-            <span>March 2025</span>
-            <span class="post-meta-dot"></span>
-            <span>4 min read</span>
+        <div class="post-hero">
+            <div class="post-tag">
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+                Computer Science
+            </div>
+            <h1 class="post-title">Is Computer Science Worth It in Ireland in 2025?</h1>
+            <div class="post-meta-bar">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                <span>March 2025</span>
+                <span class="post-meta-dot"></span>
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                <span>4 min read</span>
+            </div>
         </div>
 
         <div class="post-body">
             <p>With AI tools like ChatGPT writing code, a lot of Irish students are asking the same question before filling in their CAO: is a Computer Science degree still worth it, or is the whole field about to be automated away?</p>
 
-            <p>The short answer is yes (but the reasons have changed). Here's what the data actually says.</p>
+            <p>The short answer is yes (but the reasons have changed). Here is what the data actually says.</p>
 
             <h2>What do CS graduates earn in Ireland?</h2>
 
-            <p>Computer Science graduates from UCD start on around <strong>€35,000</strong> and are earning close to <strong>€49,000</strong> within five years. That's one of the stronger salary trajectories of any Irish degree.</p>
+            <p>Computer Science graduates from UCD start on around <strong>35,000</strong> and are earning close to <strong>49,000</strong> within five years. That is one of the stronger salary trajectories of any Irish degree.</p>
 
             <div class="stat-row">
                 <div class="stat-box">
-                    <span class="stat-box-value">€35k</span>
+                    <span class="stat-box-value">35k</span>
                     <span class="stat-box-label">Starting salary</span>
                 </div>
                 <div class="stat-box">
-                    <span class="stat-box-value">€49k</span>
+                    <span class="stat-box-value">49k</span>
                     <span class="stat-box-label">After 5 years</span>
                 </div>
                 <div class="stat-box">
@@ -221,43 +307,58 @@
                 </div>
             </div>
 
-            <p>Ireland's tech sector, home to the European headquarters of Google, Meta, Apple and Microsoft, means demand for CS graduates remains consistently high. These companies aren't leaving Dublin anytime soon.</p>
+            <p>Ireland's tech sector, home to the European headquarters of Google, Meta, Apple and Microsoft, means demand for CS graduates remains consistently high. These companies are not leaving Dublin anytime soon.</p>
 
             <h2>What about AI taking CS jobs?</h2>
 
-            <p>This is the real question. AI is genuinely changing what software engineers do day to day. Tools like GitHub Copilot can write boilerplate code in seconds. But this hasn't reduced demand for developers. If anything, it's increased it.</p>
+            <p>This is the real question. AI is genuinely changing what software engineers do day to day. Tools like GitHub Copilot can write boilerplate code in seconds. But this has not reduced demand for developers. If anything, it has increased it.</p>
 
-            <p>The reason is simple: AI makes individual developers more productive, which means companies can build more, but they still need developers who understand what they're building and why. The junior developer who can use AI tools effectively is more valuable, not less.</p>
+            <div class="post-callout">
+                AI makes individual developers more productive, which means companies can build more. But they still need developers who understand what they are building and why.
+            </div>
 
-            <p>What AI is replacing is the most repetitive, low-skill coding work. A CS degree teaches you how to think about systems, architecture and problem solving (none of which AI can replace yet).</p>
+            <p>What AI is replacing is the most repetitive, low-skill coding work. A CS degree teaches you how to think about systems, architecture and problem solving, none of which AI can replace yet.</p>
 
             <h2>The ROI numbers</h2>
 
             <p>For UCD Computer Science, the 5-year ROI is <strong>462%</strong> with a payback period of just <strong>1.1 years</strong>. That means you recover the full cost of your degree in just over a year of working.</p>
 
-            <p>That's one of the fastest payback periods of any Irish degree. Faster than Medicine, Law, and most Engineering courses.</p>
+            <p>That is one of the fastest payback periods of any Irish degree, faster than Medicine, Law and most Engineering courses.</p>
 
             <h2>Is it worth it for you?</h2>
 
-            <p>CS is worth it if you're genuinely interested in building things. It's a bad choice if you're only doing it for the salary: the workload is heavy and AI is making the easy parts disappear, which means you need to be good at the hard parts.</p>
+            <p>CS is worth it if you are genuinely interested in building things. It is a bad choice if you are only doing it for the salary: the workload is heavy and AI is making the easy parts disappear, which means you need to be good at the hard parts.</p>
 
             <p>If you enjoy problem solving and can see yourself working with technology every day, the Irish job market for CS graduates is about as strong as it gets.</p>
 
-            <div class="cta-box">
-                <strong>Want the full numbers?</strong>
-                <p>Check the ROI, salary data and employment stats for Computer Science and 58 other Irish college courses.</p>
-                <a href="/" class="cta-btn">
-                    See Computer Science ROI
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            <div class="post-cta">
+                <div class="post-cta-title">Want the full numbers?</div>
+                <p>Check the ROI, salary data and payback period for Computer Science and 58 other Irish college courses.</p>
+                <a href="/" class="post-cta-btn">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+                    Open the ROI Calculator
                 </a>
             </div>
 
+            <div class="post-footer-nav">
+                <a href="/blog" class="post-back" style="margin-bottom:0;">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                    All posts
+                </a>
+                <span style="font-size:13px;color:var(--faint);">More articles coming soon</span>
+            </div>
         </div>
-
-        <a href="/blog" class="blog-back">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-            All posts
-        </a>
     </div>
+
+    <script>
+        // Reading progress bar
+        const bar = document.getElementById('readProgress');
+        window.addEventListener('scroll', () => {
+            const doc  = document.documentElement;
+            const top  = doc.scrollTop || document.body.scrollTop;
+            const h    = doc.scrollHeight - doc.clientHeight;
+            bar.style.width = h > 0 ? (top / h * 100) + '%' : '0%';
+        });
+    </script>
 </body>
 </html>

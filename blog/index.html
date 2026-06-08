@@ -3,98 +3,151 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blog | ROI College Ireland</title>
+    <title>Blog | CollegeROI Ireland</title>
     <meta name="description" content="Guides and data on Irish college courses: salaries, ROI, employment rates and whether your degree is worth it.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/style.css">
     <style>
-        .blog-page {
-            max-width: 740px;
+        /* Header nav links */
+        .blog-header-link {
+            display: inline-flex;
+            align-items: center;
+            padding: 6px 12px;
+            border-radius: var(--radius-sm);
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--muted);
+            text-decoration: none;
+            transition: color 0.15s, background 0.15s;
+        }
+        .blog-header-link:hover { color: var(--text); background: var(--bg); }
+        .blog-header-link.active { color: var(--blue); font-weight: 600; background: var(--blue-bg); }
+
+        .blog-wrap {
+            max-width: 760px;
             margin: 0 auto;
-            padding: 24px 16px 100px;
+            padding: 32px 16px 80px;
         }
 
-        .blog-back {
+        /* Page hero */
+        .blog-hero {
+            margin-bottom: 32px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .blog-hero-eyebrow {
             display: inline-flex;
             align-items: center;
             gap: 6px;
-            color: var(--primary);
-            text-decoration: none;
-            font-size: 14px;
-            font-weight: 500;
-            margin-bottom: 24px;
-        }
-
-        .blog-back:hover {
-            color: var(--primary-dark);
-        }
-
-        .blog-hero {
-            margin-bottom: 32px;
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--blue);
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            margin-bottom: 10px;
         }
 
         .blog-hero h1 {
-            font-size: 26px;
+            font-size: 28px;
             font-weight: 700;
-            color: var(--gray-900);
+            color: var(--text);
             letter-spacing: -0.02em;
             margin-bottom: 8px;
+            line-height: 1.2;
         }
 
         .blog-hero p {
             font-size: 15px;
-            color: var(--gray-500);
+            color: var(--muted);
+            line-height: 1.6;
+        }
+
+        /* Back link */
+        .blog-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--muted);
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 500;
+            margin-bottom: 24px;
+            transition: color 0.15s;
+        }
+        .blog-back:hover { color: var(--blue); }
+
+        /* Post cards */
+        .posts-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
         }
 
         .post-card {
-            background: var(--white);
-            border: 1px solid var(--gray-200);
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 16px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            overflow: hidden;
             text-decoration: none;
-            display: block;
+            display: flex;
             color: inherit;
             transition: border-color 0.15s, box-shadow 0.15s, transform 0.15s;
+            box-shadow: var(--shadow);
         }
 
         .post-card:hover {
-            border-color: var(--primary);
-            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.08);
+            border-color: var(--blue);
+            box-shadow: 0 4px 16px rgba(37,99,235,0.1);
             transform: translateY(-2px);
+        }
+
+        /* Coloured accent bar on left */
+        .post-card-accent {
+            width: 4px;
+            flex-shrink: 0;
+            background: var(--blue);
+        }
+
+        .post-card-body {
+            flex: 1;
+            padding: 20px 22px;
         }
 
         .post-tag {
             display: inline-block;
-            background: #eff6ff;
-            color: var(--primary);
-            font-size: 11px;
+            background: var(--blue-bg);
+            color: var(--blue);
+            font-size: 10px;
             font-weight: 600;
             padding: 3px 8px;
             border-radius: 100px;
             text-transform: uppercase;
-            letter-spacing: 0.4px;
+            letter-spacing: 0.05em;
             margin-bottom: 10px;
         }
 
         .post-card h2 {
             font-size: 16px;
             font-weight: 700;
-            color: var(--gray-900);
+            color: var(--text);
             margin-bottom: 8px;
-            line-height: 1.4;
+            line-height: 1.45;
             letter-spacing: -0.01em;
         }
 
         .post-card p {
             font-size: 14px;
-            color: var(--gray-500);
-            line-height: 1.5;
-            margin-bottom: 12px;
+            color: var(--muted);
+            line-height: 1.55;
+            margin-bottom: 14px;
         }
 
         .post-meta {
             font-size: 12px;
-            color: var(--gray-400);
+            color: var(--faint);
             display: flex;
             align-items: center;
             gap: 8px;
@@ -103,54 +156,139 @@
         .post-meta-dot {
             width: 3px;
             height: 3px;
-            background: var(--gray-300);
+            background: var(--faint);
             border-radius: 50%;
+        }
+
+        .post-read-more {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--blue);
+        }
+
+        /* Coming soon placeholder */
+        .blog-coming-soon {
+            background: var(--bg);
+            border: 1.5px dashed var(--border);
+            border-radius: var(--radius);
+            padding: 28px 24px;
+            text-align: center;
+            margin-top: 8px;
+        }
+
+        .blog-coming-soon p {
+            font-size: 14px;
+            color: var(--muted);
+            margin: 0;
+        }
+
+        /* Topics bar */
+        .blog-topics {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 24px;
+        }
+
+        .blog-topic-label {
+            font-size: 12px;
+            color: var(--faint);
+            font-weight: 500;
+            margin-right: 2px;
+        }
+
+        .topic-pill {
+            padding: 4px 12px;
+            border-radius: 100px;
+            border: 1px solid var(--border);
+            background: var(--surface);
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--muted);
+            cursor: default;
         }
     </style>
 </head>
 <body>
     <header class="header">
-    <div class="header-content" style="padding-left: 20px;">
-        <a href="/" style="text-decoration:none;">
-            <div class="logo">
-                <div class="logo-icon-wrapper">
-                    <svg class="logo-svg" width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M20 8L4 16L20 24L36 16L20 8Z" fill="#334155" stroke="#1e293b" stroke-width="1.5" stroke-linejoin="round"/>
-                        <path d="M8 18V26C8 26 12 30 20 30C28 30 32 26 32 26V18" stroke="#334155" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M36 16V24" stroke="#1e293b" stroke-width="2" stroke-linecap="round"/>
-                        <path d="M24 14L28 10L32 14M28 10V18" stroke="#10b981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
+        <div class="header-inner">
+            <a href="/" style="text-decoration:none;">
+                <div class="logo">
+                    <div class="logo-icon-wrapper">
+                        <svg class="logo-svg" width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M20 8L4 16L20 24L36 16L20 8Z" fill="#334155" stroke="#1e293b" stroke-width="1.5" stroke-linejoin="round"/>
+                            <path d="M8 18V26C8 26 12 30 20 30C28 30 32 26 32 26V18" stroke="#334155" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M36 16V24" stroke="#1e293b" stroke-width="2" stroke-linecap="round"/>
+                            <path d="M24 14L28 10L32 14M28 10V18" stroke="#10b981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <div class="logo-text">
+                        <span class="logo-title">CollegeROI</span>
+                    </div>
                 </div>
-                <div class="logo-text">
-                    <span class="logo-title">CollegeROI</span>
-                </div>
+            </a>
+            <div style="display:flex;align-items:center;gap:4px;">
+                <a href="/" class="blog-header-link">Calculator</a>
+                <a href="/blog" class="blog-header-link active">Blog</a>
             </div>
-        </a>
-    </div>
+        </div>
     </header>
 
-    <div class="blog-page">
+    <div class="blog-wrap">
         <a href="/" class="blog-back">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
             Back to Calculator
         </a>
 
         <div class="blog-hero">
-            <h1>Blog</h1>
-            <p>Data-driven guides on Irish college courses, salaries and ROI.</p>
+            <div class="blog-hero-eyebrow">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+                CollegeROI Blog
+            </div>
+            <h1>Guides on Irish College Courses</h1>
+            <p>Data-driven articles on salaries, ROI and employment rates. Cut through the noise and figure out which degrees are worth it.</p>
         </div>
 
-        <a href="/blog/is-computer-science-worth-it-ireland" class="post-card">
-            <span class="post-tag">Computer Science</span>
-            <h2>Is Computer Science Worth It in Ireland in 2025?</h2>
-            <p>With AI tools writing code, is a CS degree still a smart investment? We look at the salaries, ROI and employment data for Irish CS graduates.</p>
-            <div class="post-meta">
-                <span>March 2025</span>
-                <span class="post-meta-dot"></span>
-                <span>4 min read</span>
-            </div>
-        </a>
+        <div class="blog-topics">
+            <span class="blog-topic-label">Topics:</span>
+            <span class="topic-pill">Technology</span>
+            <span class="topic-pill">Medicine</span>
+            <span class="topic-pill">Business</span>
+            <span class="topic-pill">Law</span>
+            <span class="topic-pill">Engineering</span>
+        </div>
 
+        <div class="posts-grid">
+
+            <a href="/blog/is-computer-science-worth-it-ireland" class="post-card">
+                <div class="post-card-accent" style="background:#2563eb;"></div>
+                <div class="post-card-body">
+                    <span class="post-tag">Computer Science</span>
+                    <h2>Is Computer Science Worth It in Ireland in 2025?</h2>
+                    <p>With AI tools writing code, is a CS degree still a smart investment? We look at the salaries, ROI and employment data for Irish CS graduates.</p>
+                    <div style="display:flex;align-items:center;justify-content:space-between;">
+                        <div class="post-meta">
+                            <span>March 2025</span>
+                            <span class="post-meta-dot"></span>
+                            <span>4 min read</span>
+                        </div>
+                        <span class="post-read-more">
+                            Read
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                        </span>
+                    </div>
+                </div>
+            </a>
+
+        </div>
+
+        <div class="blog-coming-soon">
+            <p>More articles coming soon. Topics: Medicine, Law, Engineering, Psychology and more.</p>
+        </div>
     </div>
 </body>
 </html>
