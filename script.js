@@ -36,6 +36,7 @@ function switchView(viewName) {
     if (viewName === 'explore' && allCoursesData.length > 0) {
         renderCourseGrid(sortCourses(allCoursesData, activeFilters.sortBy));
     }
+    window.scrollTo({ top: 0, behavior: 'instant' });
 }
 
 function toggleFaq(btn) {

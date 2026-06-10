@@ -219,7 +219,7 @@ input, select, textarea { font-size: 16px !important; } /* prevent iOS zoom */
   background: var(--surface);
   border-top: 1px solid var(--border);
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   z-index: 200;
   padding-bottom: env(safe-area-inset-bottom, 0);
 }
