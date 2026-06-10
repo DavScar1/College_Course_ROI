@@ -661,9 +661,13 @@ input, select, textarea { font-size: 16px !important; } /* prevent iOS zoom */
 
 .quickpick-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr;
   gap: 8px;
   margin-bottom: 20px;
+}
+
+@media (min-width: 480px) {
+  .quickpick-grid { grid-template-columns: 1fr 1fr; }
 }
 
 .qp-card {
