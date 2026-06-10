@@ -181,73 +181,6 @@
 
         <p class="disclaimer">Can't find your course? Use <strong>Browse</strong> to see all 70+ programs.</p>
 
-        <!-- Advanced options -->
-        <div class="card">
-          <div class="card-head toggle" onclick="toggleCard('advBody','advHead')" id="advHead">
-            <span class="card-title">Advanced Options</span>
-            <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
-          </div>
-          <div class="collapsible" id="advBody">
-            <div class="card-body">
-
-              <div class="field">
-                <label class="toggle-row">
-                  <input type="checkbox" id="useCustomTuition">
-                  <label for="useCustomTuition">Use custom tuition amount</label>
-                </label>
-                <div id="tuitionReveal" class="reveal" style="display:none;">
-                  <div class="input-row">
-                    <span class="input-pre">€</span>
-                    <input type="number" id="customTuition" class="input" placeholder="7,000" min="0" step="100" aria-label="Custom tuition per year">
-                    <span class="input-suf">/ year</span>
-                  </div>
-                  <p class="hint">Enter your cost after scholarships or grants.</p>
-                </div>
-              </div>
-
-              <div class="field">
-                <label class="toggle-row">
-                  <input type="checkbox" id="enablePartTime">
-                  <label for="enablePartTime">Include part-time work income</label>
-                </label>
-                <div id="partTimeReveal" class="reveal" style="display:none;">
-
-                  <div class="slider-wrap">
-                    <div class="slider-row">
-                      <span class="slider-label">Hours per week</span>
-                      <span class="slider-val" id="hoursDisplay">10</span>
-                    </div>
-                    <input type="range" id="partTimeHours" class="slider" min="5" max="25" value="10" step="5">
-                    <div class="slider-ends"><span>5h</span><span>25h</span></div>
-                  </div>
-
-                  <div class="slider-wrap">
-                    <div class="slider-row">
-                      <span class="slider-label">Hourly rate</span>
-                      <span class="slider-val">€<span id="rateDisplay">12.70</span></span>
-                    </div>
-                    <input type="range" id="hourlyRate" class="slider" min="12.70" max="25" value="12.70" step="0.5">
-                    <div class="slider-ends"><span>€12.70</span><span>€25</span></div>
-                  </div>
-
-                  <table class="info-table">
-                    <tr><td>Weekly income</td><td id="weeklyIncome">€0</td></tr>
-                    <tr><td>Annual income</td><td id="partTimeIncome">€0</td></tr>
-                    <tr><td>Total over course</td><td id="partTimeTotal">€0</td></tr>
-                    <tr><td><strong>Cost reduction</strong></td><td id="costReduction">€0</td></tr>
-                  </table>
-                </div>
-              </div>
-
-            </div>
-          </div>
-        </div>
-
-        <div id="prefNotice" class="notice" style="display:none;">
-          <span>Previous session restored</span>
-          <button class="btn-link" onclick="clearPrefs()">Clear</button>
-        </div>
-
       </aside>
 
       <!-- Right: results -->
@@ -345,13 +278,6 @@
             <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
           </button>
           <div class="faq-a"><div class="faq-a-inner">Yes. CollegeROI is completely free, with no sign-up required. Calculate, compare and explore as many courses as you like.</div></div>
-        </div>
-        <div class="faq-item">
-          <button class="faq-q" onclick="toggleFaq(this)">
-            Can I use my own tuition cost?
-            <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
-          </button>
-          <div class="faq-a"><div class="faq-a-inner">Yes. Open Advanced Options on the calculator and enter a custom tuition figure, for example after grants or scholarships, to get a more accurate result.</div></div>
         </div>
       </div>
     </div>

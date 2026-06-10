@@ -16,14 +16,6 @@ const API_BASE_URL = (window.location.hostname === 'localhost' || window.locatio
     ? 'http://127.0.0.1:5000'
     : '';
 
-const STORAGE_KEYS = {
-    LAST_COURSE:        'roi_calc_last_course',
-    USE_CUSTOM_TUITION: 'roi_calc_use_custom_tuition',
-    CUSTOM_TUITION:     'roi_calc_custom_tuition',
-    ENABLE_PART_TIME:   'roi_calc_enable_part_time',
-    PART_TIME_HOURS:    'roi_calc_part_time_hours',
-};
-
 /* ============================================================
    Navigation
    ============================================================ */
@@ -44,13 +36,6 @@ function toggleFaq(btn) {
     const wasOpen = item.classList.contains('open');
     item.parentElement.querySelectorAll('.faq-item.open').forEach(el => el.classList.remove('open'));
     if (!wasOpen) item.classList.add('open');
-}
-
-function toggleCard(bodyId, headId) {
-    const body = document.getElementById(bodyId);
-    const head = document.getElementById(headId);
-    body.classList.toggle('open');
-    head.classList.toggle('open');
 }
 
 function showError(msg) {
@@ -83,7 +68,6 @@ window.onload = function () {
             populateCourseDropdowns();
             renderQuickPicks();
             renderCmpPopularGrid();
-            loadSavedPreferences();
         })
         .catch(err => {
             console.error('Bootstrap error:', err);
@@ -139,92 +123,12 @@ function populateCourseDropdowns() {
 }
 
 /* ============================================================
-   Preferences (localStorage)
-   ============================================================ */
-
-function savePreferences() {
-    const course = document.getElementById('course').value;
-    if (course) localStorage.setItem(STORAGE_KEYS.LAST_COURSE, course);
-    localStorage.setItem(STORAGE_KEYS.USE_CUSTOM_TUITION, document.getElementById('useCustomTuition').checked);
-    localStorage.setItem(STORAGE_KEYS.CUSTOM_TUITION,     document.getElementById('customTuition').value);
-    localStorage.setItem(STORAGE_KEYS.ENABLE_PART_TIME,   document.getElementById('enablePartTime').checked);
-    localStorage.setItem(STORAGE_KEYS.PART_TIME_HOURS,    document.getElementById('partTimeHours').value);
-}
-
-function loadSavedPreferences() {
-    const lastCourse    = localStorage.getItem(STORAGE_KEYS.LAST_COURSE);
-    const useCustom     = localStorage.getItem(STORAGE_KEYS.USE_CUSTOM_TUITION) === 'true';
-    const customTuition = localStorage.getItem(STORAGE_KEYS.CUSTOM_TUITION);
-    const enablePT      = localStorage.getItem(STORAGE_KEYS.ENABLE_PART_TIME) === 'true';
-    const ptHours       = localStorage.getItem(STORAGE_KEYS.PART_TIME_HOURS);
-
-    if (lastCourse) {
-        document.getElementById('course').value = lastCourse;
-        const notice = document.getElementById('prefNotice');
-        if (notice) notice.style.display = 'flex';
-    }
-    if (useCustom) {
-        document.getElementById('useCustomTuition').checked = true;
-        document.getElementById('tuitionReveal').style.display = 'block';
-        if (customTuition) document.getElementById('customTuition').value = customTuition;
-    }
-    if (enablePT) {
-        document.getElementById('enablePartTime').checked = true;
-        document.getElementById('partTimeReveal').style.display = 'block';
-        if (ptHours) {
-            document.getElementById('partTimeHours').value = ptHours;
-            document.getElementById('hoursDisplay').textContent = ptHours;
-            updatePartTimeCalculations();
-        }
-    }
-}
-
-function clearPrefs() {
-    Object.values(STORAGE_KEYS).forEach(k => localStorage.removeItem(k));
-    document.getElementById('course').value                = '';
-    document.getElementById('useCustomTuition').checked   = false;
-    document.getElementById('tuitionReveal').style.display = 'none';
-    document.getElementById('customTuition').value         = '';
-    document.getElementById('enablePartTime').checked      = false;
-    document.getElementById('partTimeReveal').style.display = 'none';
-    document.getElementById('partTimeHours').value         = 10;
-    document.getElementById('hoursDisplay').textContent    = '10';
-    const notice = document.getElementById('prefNotice');
-    if (notice) notice.style.display = 'none';
-    // Reset results
-    document.getElementById('results').innerHTML = '';
-    document.getElementById('resultsPlaceholder').style.display = 'block';
-}
-
-/* ============================================================
    DOMContentLoaded - wire controls
    ============================================================ */
 
 document.addEventListener('DOMContentLoaded', function () {
 
     initCompareSearch();
-
-    // Custom tuition toggle
-    document.getElementById('useCustomTuition').addEventListener('change', function () {
-        document.getElementById('tuitionReveal').style.display = this.checked ? 'block' : 'none';
-    });
-
-    // Part-time toggle
-    document.getElementById('enablePartTime').addEventListener('change', function () {
-        document.getElementById('partTimeReveal').style.display = this.checked ? 'block' : 'none';
-        if (this.checked) updatePartTimeCalculations();
-    });
-
-    // Sliders
-    document.getElementById('partTimeHours').addEventListener('input', function () {
-        document.getElementById('hoursDisplay').textContent = this.value;
-        updatePartTimeCalculations();
-    });
-
-    document.getElementById('hourlyRate').addEventListener('input', function () {
-        document.getElementById('rateDisplay').textContent = parseFloat(this.value).toFixed(2);
-        updatePartTimeCalculations();
-    });
 
     // Search
     const searchInput = document.getElementById('courseSearch');
@@ -338,13 +242,7 @@ function calculateROI() {
     const course = document.getElementById('course').value;
     if (!course) { showError('Please select a course first.'); return; }
 
-    let url = `${API_BASE_URL}/calculate?course=${encodeURIComponent(course)}`;
-
-    const useCustom = document.getElementById('useCustomTuition').checked;
-    if (useCustom) {
-        const val = document.getElementById('customTuition').value;
-        if (val) url += `&tuition=${encodeURIComponent(val)}`;
-    }
+    const url = `${API_BASE_URL}/calculate?course=${encodeURIComponent(course)}`;
 
     const btn = document.getElementById('calcBtn');
     if (btn) { btn.textContent = 'Calculating…'; btn.disabled = true; }
@@ -358,21 +256,7 @@ function calculateROI() {
             if (!data.success) throw new Error(data.error || 'Calculation failed');
 
             currentCourseData = data.data;
-
-            // Apply part-time adjustment client-side
-            if (document.getElementById('enablePartTime').checked) {
-                const hours      = parseInt(document.getElementById('partTimeHours').value);
-                const rate       = parseFloat(document.getElementById('hourlyRate').value);
-                const totalEarned = hours * rate * 30 * currentCourseData.course_length;
-                const origCost   = currentCourseData.total_cost;
-                currentCourseData.total_cost         = Math.max(0, origCost - totalEarned);
-                currentCourseData.original_cost      = origCost;
-                currentCourseData.part_time_earnings = totalEarned;
-                currentCourseData.payback_years      = currentCourseData.total_cost / currentCourseData.annual_net_income;
-            }
-
             displaySingleResult(currentCourseData);
-            savePreferences();
         })
         .catch(err => {
             console.error(err);
@@ -381,24 +265,6 @@ function calculateROI() {
         .finally(() => {
             if (btn) { btn.textContent = 'Calculate ROI'; btn.disabled = false; }
         });
-}
-
-/* ============================================================
-   Part-time calculations
-   ============================================================ */
-
-function updatePartTimeCalculations() {
-    const hours = parseInt(document.getElementById('partTimeHours').value);
-    const rate  = parseFloat(document.getElementById('hourlyRate').value);
-    const weekly  = hours * rate;
-    const annual  = weekly * 30;
-    const courseLen = currentCourseData ? currentCourseData.course_length : 4;
-    const total   = annual * courseLen;
-
-    document.getElementById('weeklyIncome').textContent   = '€' + Math.round(weekly).toLocaleString();
-    document.getElementById('partTimeIncome').textContent = '€' + Math.round(annual).toLocaleString();
-    document.getElementById('partTimeTotal').textContent  = '€' + Math.round(total).toLocaleString();
-    document.getElementById('costReduction').textContent  = '€' + Math.round(total).toLocaleString();
 }
 
 /* ============================================================
@@ -444,18 +310,6 @@ function displaySingleResult(d) {
 
     const roiRating   = d.analysis ? d.analysis.roi_rating : (roi > 400 ? 'Excellent' : roi > 250 ? 'Good' : 'Fair');
     const roiBadgeClass = roi > 400 ? 'badge-green' : roi > 250 ? 'badge-blue' : 'badge-amber';
-
-    // Custom tuition / part-time pills
-    let customPills = '';
-    if (document.getElementById('useCustomTuition').checked) {
-        const v = document.getElementById('customTuition').value;
-        if (v) customPills += `<span class="rv2-pill">Custom tuition: €${parseFloat(v).toLocaleString()}/yr</span>`;
-    }
-    if (document.getElementById('enablePartTime').checked && d.part_time_earnings) {
-        const h = document.getElementById('partTimeHours').value;
-        const r = document.getElementById('hourlyRate').value;
-        customPills += `<span class="rv2-pill">Part-time: ${h}h/wk @ €${parseFloat(r).toFixed(2)}/hr</span>`;
-    }
 
     // Career section
     let careerHTML = '';
@@ -532,7 +386,6 @@ function displaySingleResult(d) {
                 <span class="rv2-field-pill">${fieldLabel}</span>
                 <div class="rv2-course-name">${shortName}</div>
                 <div class="rv2-university">${d.university}</div>
-                ${customPills ? `<div class="rv2-pills rv2-pills-banner">${customPills}</div>` : ''}
             </div>
             <div class="rv2-banner-roi">
                 <div class="rv2-roi-label">5-yr ROI</div>
