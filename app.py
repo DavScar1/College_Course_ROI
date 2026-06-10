@@ -264,6 +264,24 @@ def robots():
         {'Content-Type': 'text/plain'},
     )
 
+
+@app.route('/sitemap.xml')
+def sitemap():
+    base = 'https://roicollege.ie'
+    static_pages = ['/', '/quiz', '/blog', '/blog/is-computer-science-worth-it-ireland', '/all-courses']
+
+    urls = ''.join(f'  <url><loc>{base}{path}</loc></url>\n' for path in static_pages)
+
+    for name in COURSE_DATA.keys():
+        slug = name.lower().replace(' - ', '-').replace(' ', '-')
+        urls += f'  <url><loc>{base}/course/{slug}</loc></url>\n'
+
+    xml = f"""<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+{urls}</urlset>"""
+
+    return xml, 200, {'Content-Type': 'application/xml'}
+
 @app.route('/blog')
 def blog_index():
     try:

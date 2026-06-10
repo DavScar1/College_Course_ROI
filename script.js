@@ -38,6 +38,13 @@ function switchView(viewName) {
     }
 }
 
+function toggleFaq(btn) {
+    const item = btn.closest('.faq-item');
+    const wasOpen = item.classList.contains('open');
+    item.parentElement.querySelectorAll('.faq-item.open').forEach(el => el.classList.remove('open'));
+    if (!wasOpen) item.classList.add('open');
+}
+
 function toggleCard(bodyId, headId) {
     const body = document.getElementById(bodyId);
     const head = document.getElementById(headId);
@@ -423,6 +430,9 @@ function displaySingleResult(d) {
     const el = document.getElementById('results');
     if (ph) ph.style.display = 'none';
     el.style.display = 'block';
+    el.classList.remove('fade-in-up');
+    void el.offsetWidth; // restart animation
+    el.classList.add('fade-in-up');
 
     const salaryIncrease = Math.round(((d.salary_after_5_years - d.starting_salary) / d.starting_salary) * 100);
     const roi            = d.roi_5_years;
@@ -713,6 +723,8 @@ function toggleField(button) {
 }
 
 function applyFilters() {
+    document.querySelectorAll('.qs-chip').forEach(b => b.classList.remove('on'));
+
     activeFilters.universities = Array.from(document.querySelectorAll('.chip-check input:checked')).map(cb => cb.value);
     activeFilters.fields       = Array.from(document.querySelectorAll('.chip[data-field].on')).map(b => b.dataset.field);
     activeFilters.sortBy       = document.getElementById('sortBy')?.value || 'roi-desc';
@@ -750,6 +762,7 @@ function sortCourses(courses, sortBy) {
 function resetFilters() {
     document.querySelectorAll('.chip-check input').forEach(cb => { cb.checked = false; });
     document.querySelectorAll('.chip[data-field]').forEach(b => b.classList.remove('on'));
+    document.querySelectorAll('.qs-chip').forEach(b => b.classList.remove('on'));
     const sortEl = document.getElementById('sortBy');
     if (sortEl) sortEl.value = 'roi-desc';
     activeFilters = { universities: [], fields: [], sortBy: 'roi-desc' };
@@ -757,6 +770,11 @@ function resetFilters() {
 }
 
 function showTop5(type) {
+    document.querySelectorAll('.chip-check input').forEach(cb => { cb.checked = false; });
+    document.querySelectorAll('.chip[data-field]').forEach(b => b.classList.remove('on'));
+    document.querySelectorAll('.qs-chip').forEach(b => b.classList.remove('on'));
+    event.currentTarget.classList.add('on');
+
     const sortKey = type === 'roi' ? 'roi-desc' : type === 'payback' ? 'payback-asc' : 'cost-asc';
     renderCourseGrid(sortCourses(allCoursesData, sortKey).slice(0, 5));
     document.getElementById('courseGrid').scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -783,7 +801,15 @@ function fieldColorClass(courseName) {
 function renderCourseGrid(courses) {
     const grid     = document.getElementById('courseGrid');
     const noResult = document.getElementById('noResults');
+    const countEl  = document.getElementById('resultsCount');
     if (!grid) return;
+
+    if (countEl) {
+        const total = allCoursesData.length;
+        countEl.textContent = courses.length === total
+            ? `Showing all ${total} courses`
+            : `Showing ${courses.length} of ${total} courses`;
+    }
 
     if (courses.length === 0) {
         grid.style.display = 'none';
@@ -794,15 +820,16 @@ function renderCourseGrid(courses) {
     grid.style.display = '';
     if (noResult) noResult.style.display = 'none';
 
-    grid.innerHTML = courses.map(c => {
+    grid.innerHTML = courses.map((c, i) => {
         const badgeClass = c.roi_5_years > 400 ? 'badge-green' : c.roi_5_years > 300 ? 'badge-blue' : 'badge-amber';
         const roiRating  = c.analysis ? c.analysis.roi_rating : (c.roi_5_years > 400 ? 'Excellent' : c.roi_5_years > 300 ? 'Good' : 'Fair');
         const enc        = c.course_name.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
         const shortName  = c.course_name.includes(' - ') ? c.course_name.split(' - ').slice(0, -1).join(' - ') : c.course_name;
         const colorCls   = fieldColorClass(c.course_name);
+        const delay      = Math.min(i, 12) * 30;
 
         return `
-        <div class="course-card ${colorCls}" role="listitem" onclick="selectCourseFromGrid('${enc}')" tabindex="0" aria-label="Select ${c.course_name}"
+        <div class="course-card ${colorCls} fade-in-up" style="animation-delay:${delay}ms" role="listitem" onclick="selectCourseFromGrid('${enc}')" tabindex="0" aria-label="Select ${c.course_name}"
              onkeydown="if(event.key==='Enter')selectCourseFromGrid('${enc}')">
             <div class="cc-top">
                 <div>
