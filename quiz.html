@@ -171,9 +171,9 @@
         .option:hover .opt-dot { border-color: var(--primary); }
 
         .opt-icon {
-            width: 36px;
-            height: 36px;
-            border-radius: 8px;
+            width: 52px;
+            height: 52px;
+            border-radius: 14px;
             background: var(--surface);
             border: 1px solid var(--border);
             display: flex;
@@ -183,11 +183,37 @@
             color: var(--muted);
             transition: all 0.15s ease;
         }
+        .opt-icon svg { width: 26px; height: 26px; }
         .option:hover .opt-icon, .option.selected .opt-icon {
             background: var(--primary);
             border-color: var(--primary);
             color: white;
         }
+        .option.selected .opt-icon {
+            animation: optIconPop 0.35s ease;
+        }
+        @keyframes optIconPop {
+            0%   { transform: scale(1); }
+            45%  { transform: scale(1.2) rotate(-4deg); }
+            100% { transform: scale(1); }
+        }
+
+        /* ── Per-option accent colours for a more playful, illustrated feel ── */
+        .option[data-color="1"] .opt-icon { background: #2563eb14; color: #2563eb; border-color: #2563eb33; }
+        .option[data-color="2"] .opt-icon { background: #16a34a14; color: #16a34a; border-color: #16a34a33; }
+        .option[data-color="3"] .opt-icon { background: #7c3aed14; color: #7c3aed; border-color: #7c3aed33; }
+        .option[data-color="4"] .opt-icon { background: #0891b214; color: #0891b2; border-color: #0891b233; }
+        .option[data-color="5"] .opt-icon { background: #b4530914; color: #b45309; border-color: #b4530933; }
+        .option[data-color="6"] .opt-icon { background: #ea580c14; color: #ea580c; border-color: #ea580c33; }
+        .option[data-color="7"] .opt-icon { background: #db277714; color: #db2777; border-color: #db277733; }
+
+        .option[data-color="1"]:hover .opt-icon, .option[data-color="1"].selected .opt-icon { background: #2563eb; border-color: #2563eb; color: #fff; }
+        .option[data-color="2"]:hover .opt-icon, .option[data-color="2"].selected .opt-icon { background: #16a34a; border-color: #16a34a; color: #fff; }
+        .option[data-color="3"]:hover .opt-icon, .option[data-color="3"].selected .opt-icon { background: #7c3aed; border-color: #7c3aed; color: #fff; }
+        .option[data-color="4"]:hover .opt-icon, .option[data-color="4"].selected .opt-icon { background: #0891b2; border-color: #0891b2; color: #fff; }
+        .option[data-color="5"]:hover .opt-icon, .option[data-color="5"].selected .opt-icon { background: #b45309; border-color: #b45309; color: #fff; }
+        .option[data-color="6"]:hover .opt-icon, .option[data-color="6"].selected .opt-icon { background: #ea580c; border-color: #ea580c; color: #fff; }
+        .option[data-color="7"]:hover .opt-icon, .option[data-color="7"].selected .opt-icon { background: #db2777; border-color: #db2777; color: #fff; }
 
         .opt-text { flex: 1; min-width: 0; }
         .opt-title { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 2px; }
@@ -436,7 +462,7 @@
                 <div class="q-meta">Question 1 of 7</div>
                 <div class="q-text">What matters most to you after graduating?</div>
                 <div class="options">
-                    <div class="option" data-v="high-salary">
+                    <div class="option" data-v="high-salary" data-color="1">
                         <div class="opt-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
                         <div class="opt-text">
                             <div class="opt-title">Earning potential</div>
@@ -444,7 +470,7 @@
                         </div>
                         <div class="opt-dot"></div>
                     </div>
-                    <div class="option" data-v="job-security">
+                    <div class="option" data-v="job-security" data-color="4">
                         <div class="opt-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
                         <div class="opt-text">
                             <div class="opt-title">Job security</div>
@@ -452,7 +478,7 @@
                         </div>
                         <div class="opt-dot"></div>
                     </div>
-                    <div class="option" data-v="helping">
+                    <div class="option" data-v="helping" data-color="2">
                         <div class="opt-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div>
                         <div class="opt-text">
                             <div class="opt-title">Making an impact</div>
@@ -460,7 +486,7 @@
                         </div>
                         <div class="opt-dot"></div>
                     </div>
-                    <div class="option" data-v="balance">
+                    <div class="option" data-v="balance" data-color="6">
                         <div class="opt-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
                         <div class="opt-text">
                             <div class="opt-title">Work-life balance</div>
@@ -476,42 +502,42 @@
                 <div class="q-meta">Question 2 of 7</div>
                 <div class="q-text">Which subjects genuinely interest you?</div>
                 <div class="options grid-2">
-                    <div class="option" data-v="technology">
+                    <div class="option" data-v="technology" data-color="1">
                         <div class="opt-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div>
                         <div class="opt-text">
                             <div class="opt-title">Technology & AI</div>
                             <div class="opt-desc">Software, data, cybersecurity</div>
                         </div>
                     </div>
-                    <div class="option" data-v="healthcare">
+                    <div class="option" data-v="healthcare" data-color="2">
                         <div class="opt-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></div>
                         <div class="opt-text">
                             <div class="opt-title">Health & Medicine</div>
                             <div class="opt-desc">Nursing, medicine, therapy</div>
                         </div>
                     </div>
-                    <div class="option" data-v="business">
+                    <div class="option" data-v="business" data-color="3">
                         <div class="opt-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg></div>
                         <div class="opt-text">
                             <div class="opt-title">Business & Finance</div>
                             <div class="opt-desc">Commerce, accounting, management</div>
                         </div>
                     </div>
-                    <div class="option" data-v="engineering">
+                    <div class="option" data-v="engineering" data-color="4">
                         <div class="opt-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93l-1.41 1.41M4.93 4.93l1.41 1.41M12 2v2m0 16v2m7.07-5.07l-1.41-1.41M4.93 19.07l1.41-1.41M2 12h2m16 0h2"/></svg></div>
                         <div class="opt-text">
                             <div class="opt-title">Engineering & Science</div>
                             <div class="opt-desc">Civil, mechanical, biomedical</div>
                         </div>
                     </div>
-                    <div class="option" data-v="law">
+                    <div class="option" data-v="law" data-color="5">
                         <div class="opt-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
                         <div class="opt-text">
                             <div class="opt-title">Law & Society</div>
                             <div class="opt-desc">Law, social work, psychology</div>
                         </div>
                     </div>
-                    <div class="option" data-v="arts">
+                    <div class="option" data-v="arts" data-color="6">
                         <div class="opt-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div>
                         <div class="opt-text">
                             <div class="opt-title">Arts & Education</div>
@@ -526,7 +552,7 @@
                 <div class="q-meta">Question 3 of 7</div>
                 <div class="q-text">How long are you willing to study?</div>
                 <div class="options">
-                    <div class="option" data-v="4">
+                    <div class="option" data-v="4" data-color="1">
                         <div class="opt-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div>
                         <div class="opt-text">
                             <div class="opt-title">3–4 years</div>
@@ -534,7 +560,7 @@
                         </div>
                         <div class="opt-dot"></div>
                     </div>
-                    <div class="option" data-v="5">
+                    <div class="option" data-v="5" data-color="2">
                         <div class="opt-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
                         <div class="opt-text">
                             <div class="opt-title">5 years</div>
@@ -542,7 +568,7 @@
                         </div>
                         <div class="opt-dot"></div>
                     </div>
-                    <div class="option" data-v="6">
+                    <div class="option" data-v="6" data-color="3">
                         <div class="opt-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg></div>
                         <div class="opt-text">
                             <div class="opt-title">6+ years</div>
@@ -558,7 +584,7 @@
                 <div class="q-meta">Question 4 of 7</div>
                 <div class="q-text">What type of work suits you best?</div>
                 <div class="options">
-                    <div class="option" data-v="remote">
+                    <div class="option" data-v="remote" data-color="1">
                         <div class="opt-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div>
                         <div class="opt-text">
                             <div class="opt-title">Remote / desk work</div>
@@ -566,7 +592,7 @@
                         </div>
                         <div class="opt-dot"></div>
                     </div>
-                    <div class="option" data-v="hands-on">
+                    <div class="option" data-v="hands-on" data-color="2">
                         <div class="opt-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
                         <div class="opt-text">
                             <div class="opt-title">Hands-on with people</div>
@@ -574,7 +600,7 @@
                         </div>
                         <div class="opt-dot"></div>
                     </div>
-                    <div class="option" data-v="site">
+                    <div class="option" data-v="site" data-color="6">
                         <div class="opt-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
                         <div class="opt-text">
                             <div class="opt-title">Site / field work</div>
@@ -582,7 +608,7 @@
                         </div>
                         <div class="opt-dot"></div>
                     </div>
-                    <div class="option" data-v="hybrid">
+                    <div class="option" data-v="hybrid" data-color="3">
                         <div class="opt-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
                         <div class="opt-text">
                             <div class="opt-title">Mix of both</div>
@@ -598,7 +624,7 @@
                 <div class="q-meta">Question 5 of 7</div>
                 <div class="q-text">Where would you prefer to study?</div>
                 <div class="options">
-                    <div class="option" data-v="dublin">
+                    <div class="option" data-v="dublin" data-color="1">
                         <div class="opt-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></div>
                         <div class="opt-text">
                             <div class="opt-title">Dublin</div>
@@ -606,7 +632,7 @@
                         </div>
                         <div class="opt-dot"></div>
                     </div>
-                    <div class="option" data-v="cork-galway">
+                    <div class="option" data-v="cork-galway" data-color="2">
                         <div class="opt-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="10" r="3"/><path d="M12 21.7C17.3 17 20 13 20 10a8 8 0 1 0-16 0c0 3 2.7 6.9 8 11.7z"/></svg></div>
                         <div class="opt-text">
                             <div class="opt-title">Cork or Galway</div>
@@ -614,7 +640,7 @@
                         </div>
                         <div class="opt-dot"></div>
                     </div>
-                    <div class="option" data-v="other">
+                    <div class="option" data-v="other" data-color="6">
                         <div class="opt-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
                         <div class="opt-text">
                             <div class="opt-title">Elsewhere</div>
@@ -622,7 +648,7 @@
                         </div>
                         <div class="opt-dot"></div>
                     </div>
-                    <div class="option" data-v="no-preference">
+                    <div class="option" data-v="no-preference" data-color="7">
                         <div class="opt-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/><line x1="2" y1="12" x2="22" y2="12"/></svg></div>
                         <div class="opt-text">
                             <div class="opt-title">No preference</div>
@@ -638,7 +664,7 @@
                 <div class="q-meta">Question 6 of 7</div>
                 <div class="q-text">What's your annual tuition budget?</div>
                 <div class="options budget">
-                    <div class="option" data-v="7000">
+                    <div class="option" data-v="7000" data-color="2">
                         <div class="opt-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg></div>
                         <div class="opt-text">
                             <div class="opt-title">Under €8,000</div>
@@ -646,7 +672,7 @@
                         </div>
                         <div class="opt-dot"></div>
                     </div>
-                    <div class="option" data-v="15000">
+                    <div class="option" data-v="15000" data-color="1">
                         <div class="opt-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
                         <div class="opt-text">
                             <div class="opt-title">€8,000 – €15,000</div>
@@ -654,7 +680,7 @@
                         </div>
                         <div class="opt-dot"></div>
                     </div>
-                    <div class="option" data-v="25000">
+                    <div class="option" data-v="25000" data-color="5">
                         <div class="opt-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
                         <div class="opt-text">
                             <div class="opt-title">€15,000 – €25,000</div>
@@ -662,7 +688,7 @@
                         </div>
                         <div class="opt-dot"></div>
                     </div>
-                    <div class="option" data-v="99000">
+                    <div class="option" data-v="99000" data-color="3">
                         <div class="opt-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 12l2 2 4-4"/></svg></div>
                         <div class="opt-text">
                             <div class="opt-title">Not a major concern</div>
@@ -678,7 +704,7 @@
                 <div class="q-meta">Question 7 of 7</div>
                 <div class="q-text">Which future appeals to you most?</div>
                 <div class="options">
-                    <div class="option" data-v="international">
+                    <div class="option" data-v="international" data-color="1">
                         <div class="opt-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/><line x1="2" y1="12" x2="22" y2="12"/></svg></div>
                         <div class="opt-text">
                             <div class="opt-title">Global career</div>
@@ -686,7 +712,7 @@
                         </div>
                         <div class="opt-dot"></div>
                     </div>
-                    <div class="option" data-v="demand">
+                    <div class="option" data-v="demand" data-color="4">
                         <div class="opt-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></div>
                         <div class="opt-text">
                             <div class="opt-title">Future-proof skills</div>
@@ -694,7 +720,7 @@
                         </div>
                         <div class="opt-dot"></div>
                     </div>
-                    <div class="option" data-v="community">
+                    <div class="option" data-v="community" data-color="2">
                         <div class="opt-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
                         <div class="opt-text">
                             <div class="opt-title">Community & public service</div>
@@ -702,7 +728,7 @@
                         </div>
                         <div class="opt-dot"></div>
                     </div>
-                    <div class="option" data-v="entrepreneur">
+                    <div class="option" data-v="entrepreneur" data-color="6">
                         <div class="opt-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 1 1 7.072 0l-.548.547A3.374 3.374 0 0 0 14 18.469V19a2 2 0 1 1-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg></div>
                         <div class="opt-text">
                             <div class="opt-title">Build my own path</div>
@@ -798,21 +824,17 @@ function updateProgress() {
     renderDots();
 }
 
-/* ─── Option clicks: auto-advance after short delay ─── */
+/* ─── Option clicks: select only, user clicks Next to advance ─── */
 document.querySelectorAll('.option').forEach(opt => {
     opt.addEventListener('click', function () {
         const q = this.closest('.question');
         q.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
         this.classList.add('selected');
         answers[currentQ] = this.dataset.v;
-        document.getElementById('btnNext').disabled = false;
 
-        // Auto-advance after 420ms for a snappy feel
-        if (currentQ < TOTAL_Q) {
-            setTimeout(goNext, 420);
-        } else {
-            document.getElementById('btnNext').textContent = 'See My Matches →';
-        }
+        const btnNext = document.getElementById('btnNext');
+        btnNext.disabled = false;
+        btnNext.textContent = currentQ === TOTAL_Q ? 'See My Matches →' : 'Next →';
     });
 });
 
@@ -824,7 +846,7 @@ function goNext() {
         updateProgress();
         document.getElementById('btnBack').style.display = 'block';
         document.getElementById('btnNext').disabled = !answers[currentQ];
-        document.getElementById('btnNext').textContent = currentQ === TOTAL_Q ? 'See My Matches →' : 'Next';
+        document.getElementById('btnNext').textContent = currentQ === TOTAL_Q ? 'See My Matches →' : 'Next →';
     } else {
         showResults();
     }
@@ -838,7 +860,7 @@ function goBack() {
         updateProgress();
         if (currentQ === 1) document.getElementById('btnBack').style.display = 'none';
         document.getElementById('btnNext').disabled = !answers[currentQ];
-        document.getElementById('btnNext').textContent = 'Next';
+        document.getElementById('btnNext').textContent = 'Next →';
     }
 }
 
@@ -867,27 +889,59 @@ function scoreLocation(course) {
 
 function scoreDuration(course) {
     const max = parseInt(answers[3]);
-    if (!max) return 5;
-    if (course.course_length <= max) return 14;
-    if (course.course_length === max + 1) return 7;
+    if (!max) return 7;
+    const diff = course.course_length - max;
+    if (diff <= 0) return 14;
+    if (diff === 1) return 8;
+    if (diff === 2) return 3;
     return 0;
 }
 
 function scoreBudget(course) {
     const budget = parseInt(answers[6]);
     if (!budget || budget >= 90000) return 8;
-    if (course.tuition_per_year <= budget) return 12;
-    if (course.tuition_per_year <= budget * 1.15) return 6;
+    const t = course.tuition_per_year;
+    if (t <= budget * 0.6) return 12;
+    if (t <= budget) return 10;
+    if (t <= budget * 1.15) return 5;
     return 0;
 }
 
 function scoreCareerGoal(course) {
     const cd = course.course_data || {};
     const goal = answers[1];
-    if (goal === 'high-salary')   return course.roi_5_years > 350 ? 10 : course.roi_5_years > 200 ? 5 : 0;
-    if (goal === 'job-security')  return (cd.job_security || 0) >= 4.5 ? 10 : (cd.job_security || 0) >= 4 ? 5 : 0;
-    if (goal === 'helping')       return (cd.graduate_satisfaction || 0) >= 4.2 ? 10 : (cd.graduate_satisfaction || 0) >= 4 ? 5 : 0;
-    if (goal === 'balance')       return (cd.work_life_balance || 0) >= 3.7 ? 10 : (cd.work_life_balance || 0) >= 3.5 ? 5 : 0;
+    if (goal === 'high-salary') {
+        const r = course.roi_5_years;
+        if (r >= 500) return 10;
+        if (r >= 350) return 8;
+        if (r >= 250) return 6;
+        if (r >= 150) return 3;
+        return 0;
+    }
+    if (goal === 'job-security') {
+        const v = cd.job_security || 0;
+        if (v >= 4.6) return 10;
+        if (v >= 4.3) return 8;
+        if (v >= 4)   return 6;
+        if (v >= 3.7) return 3;
+        return 0;
+    }
+    if (goal === 'helping') {
+        const v = cd.graduate_satisfaction || 0;
+        if (v >= 4.4) return 10;
+        if (v >= 4.2) return 8;
+        if (v >= 4)   return 6;
+        if (v >= 3.7) return 3;
+        return 0;
+    }
+    if (goal === 'balance') {
+        const v = cd.work_life_balance || 0;
+        if (v >= 3.9) return 10;
+        if (v >= 3.7) return 8;
+        if (v >= 3.5) return 6;
+        if (v >= 3.2) return 3;
+        return 0;
+    }
     return 5;
 }
 
@@ -895,20 +949,21 @@ function scoreWorkStyle(course) {
     const cd = course.course_data || {};
     const style = answers[4];
     const remote = (cd.remote_work_availability || '').toLowerCase();
-    if (style === 'remote')   return remote === 'high' ? 8 : remote === 'medium' ? 4 : 0;
-    if (style === 'hands-on') return remote === 'low' ? 8 : remote === 'medium' ? 4 : 0;
-    if (style === 'site')     return remote === 'low' ? 8 : 4;
-    if (style === 'hybrid')   return remote === 'medium' ? 8 : 4;
+    if (style === 'remote')   return remote === 'high' ? 8 : remote === 'medium' ? 4 : 1;
+    if (style === 'hands-on') return remote === 'low' ? 8 : remote === 'medium' ? 4 : 1;
+    if (style === 'site')     return remote === 'low' ? 8 : remote === 'medium' ? 3 : 1;
+    if (style === 'hybrid')   return remote === 'medium' ? 8 : remote === 'low' || remote === 'high' ? 4 : 2;
     return 4;
 }
 
 function scoreFuture(course) {
     const cd = course.course_data || {};
     const future = answers[7];
-    if (future === 'international') return (cd.international_opportunities || '') === 'Excellent' ? 8 : (cd.international_opportunities || '') === 'Good' ? 4 : 0;
-    if (future === 'demand')        return (cd.skills_demand || '') === 'Very High' ? 8 : (cd.skills_demand || '') === 'High' ? 4 : 0;
-    if (future === 'community')     return (course.course_name.toLowerCase().includes('nursing') || course.course_name.toLowerCase().includes('education') || course.course_name.toLowerCase().includes('social') || course.course_name.toLowerCase().includes('medicine')) ? 8 : 2;
-    if (future === 'entrepreneur')  return (course.course_name.toLowerCase().includes('business') || course.course_name.toLowerCase().includes('computer') || course.course_name.toLowerCase().includes('engineering')) ? 8 : 2;
+    const n = course.course_name.toLowerCase();
+    if (future === 'international') return (cd.international_opportunities || '') === 'Excellent' ? 8 : (cd.international_opportunities || '') === 'Good' ? 5 : 2;
+    if (future === 'demand')        return (cd.skills_demand || '') === 'Very High' ? 8 : (cd.skills_demand || '') === 'High' ? 5 : 2;
+    if (future === 'community')     return (n.includes('nursing') || n.includes('education') || n.includes('social') || n.includes('medicine')) ? 8 : 2;
+    if (future === 'entrepreneur')  return (n.includes('business') || n.includes('computer') || n.includes('engineering')) ? 8 : 2;
     return 4;
 }
 
@@ -941,14 +996,23 @@ function showResults() {
             work:   scoreWorkStyle(course),
             future: scoreFuture(course),
         };
-        const raw   = Object.values(s).reduce((a, b) => a + b, 0); // max ≈ 108
-        const pct   = Math.round(Math.min(99, Math.max(10, (raw / 108) * 100)));
-        return { ...course, matchScore: pct, matchScores: s };
+        const raw = Object.values(s).reduce((a, b) => a + b, 0); // max ≈ 108
+        return { ...course, matchRaw: raw, matchScores: s };
     });
 
     // Only show field-matching courses in top results
-    const fieldMatch    = scored.filter(c => c.matchScores.field > 0).sort((a, b) => b.matchScore - a.matchScore);
-    const topMatches    = fieldMatch.length >= 3 ? fieldMatch.slice(0, 5) : scored.sort((a, b) => b.matchScore - a.matchScore).slice(0, 5);
+    const fieldMatch = scored.filter(c => c.matchScores.field > 0).sort((a, b) => b.matchRaw - a.matchRaw || b.roi_5_years - a.roi_5_years);
+    const ranked     = fieldMatch.length >= 3 ? fieldMatch : scored.sort((a, b) => b.matchRaw - a.matchRaw || b.roi_5_years - a.roi_5_years);
+
+    // Scale percentages relative to the best result so top matches spread out
+    // instead of repeatedly hitting the same capped value.
+    const topRaw = ranked[0].matchRaw;
+    const topMatches = ranked.slice(0, 5).map((c, i) => {
+        const pct = i === 0
+            ? 99
+            : Math.round(Math.max(55, Math.min(98, (c.matchRaw / topRaw) * 99)));
+        return { ...c, matchScore: pct };
+    });
 
     renderResults(topMatches);
 }
@@ -1031,7 +1095,7 @@ function restartQuiz() {
     document.querySelector('.question[data-q="1"]').classList.add('active');
     document.getElementById('btnBack').style.display = 'none';
     document.getElementById('btnNext').disabled = true;
-    document.getElementById('btnNext').textContent = 'Next';
+    document.getElementById('btnNext').textContent = 'Next →';
     document.getElementById('quizNav').style.display = 'flex';
     document.getElementById('quizBody').style.paddingBottom = '';
     document.getElementById('results').style.display = 'none';
