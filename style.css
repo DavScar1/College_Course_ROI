@@ -1176,6 +1176,8 @@ input, select, textarea { font-size: 16px !important; } /* prevent iOS zoom */
 .cc-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; }
 .cc-name { font-size: 15px; font-weight: 600; color: var(--text); line-height: 1.35; letter-spacing: -0.02em; }
 .cc-uni  { font-size: 13px; color: var(--faint); margin-top: 4px; }
+.cc-cao  { font-size: 12px; font-weight: 600; color: var(--text); margin-top: 6px; }
+.cc-cao-year { font-weight: 400; color: var(--faint); }
 
 .cc-badge {
   padding: 4px 10px;
@@ -1831,6 +1833,25 @@ input, select, textarea { font-size: 16px !important; } /* prevent iOS zoom */
 .rv2-banner .rv2-university {
   color: rgba(255,255,255,0.75);
   margin-top: 2px;
+}
+
+.rv2-cao-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 10px;
+  padding: 4px 10px;
+  background: rgba(255,255,255,0.16);
+  border: 1px solid rgba(255,255,255,0.25);
+  border-radius: 100px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.rv2-cao-meta {
+  font-weight: 500;
+  color: rgba(255,255,255,0.75);
 }
 
 .rv2-pills-banner .rv2-pill {

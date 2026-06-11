@@ -9,6 +9,9 @@ COURSE_DATA = {
 
     # ==================== UCD (University College Dublin) ====================
     "Computer Science - UCD": {
+        "cao_code": "DN201",
+        "cao_points": 542,
+        "cao_points_year": 2025,
         "university": "University College Dublin",
         "starting_salary": 34000,
         "salary_5_years": 50000,
@@ -33,6 +36,9 @@ COURSE_DATA = {
         "startup_salary_range": {"min": 32000, "max": 39000},
     },
     "Data Science & Analytics - UCD": {
+        "cao_code": "DN201",
+        "cao_points": 542,
+        "cao_points_year": 2025,
         "university": "University College Dublin",
         "starting_salary": 37000,
         "salary_5_years": 54000,
@@ -57,6 +63,9 @@ COURSE_DATA = {
         "startup_salary_range": {"min": 35000, "max": 42000},
     },
     "Cybersecurity - UCD": {
+        "cao_code": "DN201",
+        "cao_points": 542,
+        "cao_points_year": 2025,
         "university": "University College Dublin",
         "starting_salary": 39000,
         "salary_5_years": 60000,
@@ -81,6 +90,9 @@ COURSE_DATA = {
         "startup_salary_range": {"min": 36000, "max": 44000},
     },
     "Engineering - UCD": {
+        "cao_code": "DN150",
+        "cao_points": 578,
+        "cao_points_year": 2025,
         "university": "University College Dublin",
         "starting_salary": 36000,
         "salary_5_years": 48000,
@@ -105,6 +117,9 @@ COURSE_DATA = {
         "startup_salary_range": {"min": 33000, "max": 40000},
     },
     "Business/Commerce - UCD": {
+        "cao_code": "DN650",
+        "cao_points": 555,
+        "cao_points_year": 2025,
         "university": "University College Dublin",
         "starting_salary": 30000,
         "salary_5_years": 42000,
@@ -129,6 +144,9 @@ COURSE_DATA = {
         "startup_salary_range": {"min": 27000, "max": 33000},
     },
     "Law - UCD": {
+        "cao_code": "DN600",
+        "cao_points": 567,
+        "cao_points_year": 2025,
         "university": "University College Dublin",
         "starting_salary": 36000,
         "salary_5_years": 65000,
@@ -153,6 +171,9 @@ COURSE_DATA = {
         "startup_salary_range": {"min": 30000, "max": 40000},
     },
     "Medicine - UCD": {
+        "cao_code": "DN400",
+        "cao_points": 738,
+        "cao_points_year": 2025,
         "university": "University College Dublin",
         "starting_salary": 45703,
         "salary_5_years": 70818,
@@ -177,6 +198,9 @@ COURSE_DATA = {
         "startup_salary_range": {"min": 45703, "max": 45703},
     },
     "Veterinary Medicine - UCD": {
+        "cao_code": "DN300",
+        "cao_points": 590,
+        "cao_points_year": 2025,
         "university": "University College Dublin",
         "starting_salary": 36000,
         "salary_5_years": 52000,
@@ -201,6 +225,9 @@ COURSE_DATA = {
         "startup_salary_range": {"min": 33000, "max": 39000},
     },
     "Nursing - UCD": {
+        "cao_code": "DN450",
+        "cao_points": 444,
+        "cao_points_year": 2025,
         "university": "University College Dublin",
         "starting_salary": 35919,
         "salary_5_years": 46984,
@@ -225,6 +252,9 @@ COURSE_DATA = {
         "startup_salary_range": {"min": 35919, "max": 38000},
     },
     "Physiotherapy - UCD": {
+        "cao_code": "DN420",
+        "cao_points": 579,
+        "cao_points_year": 2025,
         "university": "University College Dublin",
         "starting_salary": 44563,
         "salary_5_years": 56753,
@@ -249,6 +279,9 @@ COURSE_DATA = {
         "startup_salary_range": {"min": 42000, "max": 47000},
     },
     "Radiography - UCD": {
+        "cao_code": "DN410",
+        "cao_points": 545,
+        "cao_points_year": 2025,
         "university": "University College Dublin",
         "starting_salary": 44012,
         "salary_5_years": 57882,
@@ -273,6 +306,9 @@ COURSE_DATA = {
         "startup_salary_range": {"min": 42000, "max": 46000},
     },
     "Actuarial Science - UCD": {
+        "cao_code": "DN230",
+        "cao_points": 613,
+        "cao_points_year": 2025,
         "university": "University College Dublin",
         "starting_salary": 38000,
         "salary_5_years": 58000,
@@ -297,6 +333,9 @@ COURSE_DATA = {
         "startup_salary_range": {"min": 35000, "max": 42000},
     },
     "Architecture - UCD": {
+        "cao_code": "DN100",
+        "cao_points": 556,
+        "cao_points_year": 2025,
         "university": "University College Dublin",
         "starting_salary": 28000,
         "salary_5_years": 40000,
@@ -321,6 +360,9 @@ COURSE_DATA = {
         "startup_salary_range": {"min": 25000, "max": 31000},
     },
     "Psychology - UCD": {
+        "cao_code": "DN720",
+        "cao_points": 545,
+        "cao_points_year": 2025,
         "university": "University College Dublin",
         "starting_salary": 30000,
         "salary_5_years": 41000,
@@ -345,6 +387,9 @@ COURSE_DATA = {
         "startup_salary_range": {"min": 28000, "max": 35000},
     },
     "Economics & Finance - UCD": {
+        "cao_code": "DN670",
+        "cao_points": 625,
+        "cao_points_year": 2025,
         "university": "University College Dublin",
         "starting_salary": 34000,
         "salary_5_years": 50000,
@@ -369,6 +414,9 @@ COURSE_DATA = {
         "startup_salary_range": {"min": 30000, "max": 40000},
     },
     "Agricultural Science - UCD": {
+        "cao_code": "DN250",
+        "cao_points": 432,
+        "cao_points_year": 2025,
         "university": "University College Dublin",
         "starting_salary": 31000,
         "salary_5_years": 44000,
@@ -393,6 +441,9 @@ COURSE_DATA = {
         "startup_salary_range": {"min": 28000, "max": 35000},
     },
     "Arts (English/History) - UCD": {
+        "cao_code": "DN520",
+        "cao_points": 420,
+        "cao_points_year": 2025,
         "university": "University College Dublin",
         "starting_salary": 28000,
         "salary_5_years": 38000,
@@ -419,6 +470,9 @@ COURSE_DATA = {
 
     # ==================== TCD & RCSI ====================
     "Computer Science - TCD": {
+        "cao_code": "TR033",
+        "cao_points": 543,
+        "cao_points_year": 2025,
         "university": "Trinity College Dublin",
         "starting_salary": 35000,
         "salary_5_years": 49000,
@@ -443,6 +497,9 @@ COURSE_DATA = {
         "startup_salary_range": {"min": 32000, "max": 39000},
     },
     "Artificial Intelligence - TCD": {
+        "cao_code": "TR033",
+        "cao_points": 543,
+        "cao_points_year": 2025,
         "university": "Trinity College Dublin",
         "starting_salary": 42000,
         "salary_5_years": 65000,
@@ -467,6 +524,9 @@ COURSE_DATA = {
         "startup_salary_range": {"min": 40000, "max": 48000},
     },
     "Engineering - TCD": {
+        "cao_code": "TR032",
+        "cao_points": 577,
+        "cao_points_year": 2025,
         "university": "Trinity College Dublin",
         "starting_salary": 36500,
         "salary_5_years": 47500,
@@ -491,6 +551,9 @@ COURSE_DATA = {
         "startup_salary_range": {"min": 33000, "max": 40000},
     },
     "Business/Commerce - TCD": {
+        "cao_code": "TR081",
+        "cao_points": 566,
+        "cao_points_year": 2025,
         "university": "Trinity College Dublin",
         "starting_salary": 31938,
         "salary_5_years": 42000,
@@ -515,6 +578,9 @@ COURSE_DATA = {
         "startup_salary_range": {"min": 27000, "max": 33000},
     },
     "Law - TCD": {
+        "cao_code": "TR004",
+        "cao_points": 578,
+        "cao_points_year": 2025,
         "university": "Trinity College Dublin",
         "starting_salary": 40000,
         "salary_5_years": 70000,
@@ -539,6 +605,9 @@ COURSE_DATA = {
         "startup_salary_range": {"min": 38000, "max": 46000},
     },
     "Medicine - TCD": {
+        "cao_code": "TR051",
+        "cao_points": 739,
+        "cao_points_year": 2025,
         "university": "Trinity College Dublin",
         "starting_salary": 45980,
         "salary_5_years": 78000,
@@ -563,6 +632,9 @@ COURSE_DATA = {
         "startup_salary_range": {"min": 45980, "max": 45980},
     },
     "Nursing - TCD": {
+        "cao_code": "TR091",
+        "cao_points": 423,
+        "cao_points_year": 2025,
         "university": "Trinity College Dublin",
         "starting_salary": 35919,
         "salary_5_years": 47500,
@@ -587,6 +659,9 @@ COURSE_DATA = {
         "startup_salary_range": {"min": 35919, "max": 38000},
     },
     "Physiotherapy - TCD": {
+        "cao_code": "TR053",
+        "cao_points": 577,
+        "cao_points_year": 2025,
         "university": "Trinity College Dublin",
         "starting_salary": 39581,
         "salary_5_years": 53000,
@@ -611,6 +686,9 @@ COURSE_DATA = {
         "startup_salary_range": {"min": 38000, "max": 43000},
     },
     "Occupational Therapy - TCD": {
+        "cao_code": "TR054",
+        "cao_points": 544,
+        "cao_points_year": 2025,
         "university": "Trinity College Dublin",
         "starting_salary": 39581,
         "salary_5_years": 53000,
@@ -635,6 +713,9 @@ COURSE_DATA = {
         "startup_salary_range": {"min": 38000, "max": 43000},
     },
     "Speech & Language Therapy - TCD": {
+        "cao_code": "TR007",
+        "cao_points": 541,
+        "cao_points_year": 2025,
         "university": "Trinity College Dublin",
         "starting_salary": 39581,
         "salary_5_years": 53000,
@@ -659,6 +740,9 @@ COURSE_DATA = {
         "startup_salary_range": {"min": 38000, "max": 43000},
     },
     "Medicine - RCSI": {
+        "cao_code": "RC001",
+        "cao_points": 733,
+        "cao_points_year": 2025,
         "university": "Royal College of Surgeons Ireland",
         "starting_salary": 45980,
         "salary_5_years": 78000,
@@ -683,6 +767,9 @@ COURSE_DATA = {
         "startup_salary_range": {"min": 45980, "max": 45980},
     },
     "Pharmacy - RCSI": {
+        "cao_code": "RC005",
+        "cao_points": 589,
+        "cao_points_year": 2025,
         "university": "Royal College of Surgeons Ireland",
         "starting_salary": 49985,
         "salary_5_years": 60083,
@@ -707,6 +794,9 @@ COURSE_DATA = {
         "startup_salary_range": {"min": 48000, "max": 52000},
     },
     "Physiotherapy - RCSI": {
+        "cao_code": "RC004",
+        "cao_points": 566,
+        "cao_points_year": 2025,
         "university": "Royal College of Surgeons Ireland",
         "starting_salary": 39581,
         "salary_5_years": 53000,
@@ -731,6 +821,9 @@ COURSE_DATA = {
         "startup_salary_range": {"min": 38000, "max": 43000},
     },
     "Nursing - RCSI": {
+        "cao_code": None,
+        "cao_points": None,
+        "cao_points_year": None,
         "university": "Royal College of Surgeons Ireland",
         "starting_salary": 35919,
         "salary_5_years": 47500,
@@ -755,6 +848,9 @@ COURSE_DATA = {
         "startup_salary_range": {"min": 35919, "max": 38000},
     },
     "Economics - TCD": {
+        "cao_code": "TR081",
+        "cao_points": 566,
+        "cao_points_year": 2025,
         "university": "Trinity College Dublin",
         "starting_salary": 35000,
         "salary_5_years": 50000,
@@ -779,6 +875,9 @@ COURSE_DATA = {
         "startup_salary_range": {"min": 32000, "max": 37000},
     },
     "Biological & Biomedical Sciences - TCD": {
+        "cao_code": "TR060",
+        "cao_points": 554,
+        "cao_points_year": 2025,
         "university": "Trinity College Dublin",
         "starting_salary": 32000,
         "salary_5_years": 45000,
@@ -803,6 +902,9 @@ COURSE_DATA = {
         "startup_salary_range": {"min": 30000, "max": 34000},
     },
     "Pharmaceutical Sciences - RCSI": {
+        "cao_code": "RC005",
+        "cao_points": 589,
+        "cao_points_year": 2025,
         "university": "Royal College of Surgeons Ireland",
         "starting_salary": 38000,
         "salary_5_years": 52000,
@@ -829,6 +931,9 @@ COURSE_DATA = {
 
     # ==================== UCC & UL ====================
     "Nursing - UCC": {
+        "cao_code": "CK710",
+        "cao_points": 452,
+        "cao_points_year": 2025,
         "university": "University College Cork",
         "starting_salary": 37788,
         "salary_5_years": 49000,
@@ -853,6 +958,9 @@ COURSE_DATA = {
         "startup_salary_range": {"min": 37000, "max": 39500},
     },
     "Occupational Therapy - UCC": {
+        "cao_code": "CK704",
+        "cao_points": 566,
+        "cao_points_year": 2025,
         "university": "University College Cork",
         "starting_salary": 45063,
         "salary_5_years": 57500,
@@ -877,6 +985,9 @@ COURSE_DATA = {
         "startup_salary_range": {"min": 43000, "max": 47500},
     },
     "Speech & Language Therapy - UCC": {
+        "cao_code": "CK705",
+        "cao_points": 552,
+        "cao_points_year": 2025,
         "university": "University College Cork",
         "starting_salary": 45063,
         "salary_5_years": 57500,
@@ -901,6 +1012,9 @@ COURSE_DATA = {
         "startup_salary_range": {"min": 43000, "max": 47500},
     },
     "Dentistry - UCC": {
+        "cao_code": "CK702",
+        "cao_points": 613,
+        "cao_points_year": 2025,
         "university": "University College Cork",
         "starting_salary": 68000,
         "salary_5_years": 100000,
@@ -925,6 +1039,9 @@ COURSE_DATA = {
         "startup_salary_range": {"min": 60000, "max": 80000},
     },
     "Social Work - UCC": {
+        "cao_code": "CK115",
+        "cao_points": None,
+        "cao_points_year": None,
         "university": "University College Cork",
         "starting_salary": 40851,
         "salary_5_years": 50500,
@@ -949,6 +1066,9 @@ COURSE_DATA = {
         "startup_salary_range": {"min": 39000, "max": 42000},
     },
     "Computer Science - UL": {
+        "cao_code": "LM121",
+        "cao_points": 382,
+        "cao_points_year": 2025,
         "university": "University of Limerick",
         "starting_salary": 36000,
         "salary_5_years": 52000,
@@ -973,6 +1093,9 @@ COURSE_DATA = {
         "startup_salary_range": {"min": 33000, "max": 40000},
     },
     "Software Engineering - UL": {
+        "cao_code": "LM173",
+        "cao_points": 651,
+        "cao_points_year": 2025,
         "university": "University of Limerick",
         "starting_salary": 38000,
         "salary_5_years": 54000,
@@ -997,6 +1120,9 @@ COURSE_DATA = {
         "startup_salary_range": {"min": 34000, "max": 41000},
     },
     "Engineering - UL": {
+        "cao_code": "LM116",
+        "cao_points": 510,
+        "cao_points_year": 2025,
         "university": "University of Limerick",
         "starting_salary": 36500,
         "salary_5_years": 49000,
@@ -1021,6 +1147,9 @@ COURSE_DATA = {
         "startup_salary_range": {"min": 34000, "max": 40000},
     },
     "Business Analytics - UL": {
+        "cao_code": "LM050",
+        "cao_points": 444,
+        "cao_points_year": 2025,
         "university": "University of Limerick",
         "starting_salary": 33000,
         "salary_5_years": 45000,
@@ -1045,6 +1174,9 @@ COURSE_DATA = {
         "startup_salary_range": {"min": 30000, "max": 36000},
     },
     "Nursing - UL": {
+        "cao_code": "LM150",
+        "cao_points": 412,
+        "cao_points_year": 2025,
         "university": "University of Limerick",
         "starting_salary": 37788,
         "salary_5_years": 49000,
@@ -1069,6 +1201,9 @@ COURSE_DATA = {
         "startup_salary_range": {"min": 37000, "max": 39500},
     },
     "Physiotherapy - UL": {
+        "cao_code": "LM100",
+        "cao_points": 589,
+        "cao_points_year": 2025,
         "university": "University of Limerick",
         "starting_salary": 45063,
         "salary_5_years": 57500,
@@ -1093,6 +1228,9 @@ COURSE_DATA = {
         "startup_salary_range": {"min": 43000, "max": 47500},
     },
     "Occupational Therapy - UL": {
+        "cao_code": "LM104",
+        "cao_points": 543,
+        "cao_points_year": 2025,
         "university": "University of Limerick",
         "starting_salary": 45063,
         "salary_5_years": 57500,
@@ -1117,6 +1255,9 @@ COURSE_DATA = {
         "startup_salary_range": {"min": 43000, "max": 47500},
     },
     "Pharmacy - UCC": {
+        "cao_code": "CK703",
+        "cao_points": 602,
+        "cao_points_year": 2025,
         "university": "University College Cork",
         "starting_salary": 47000,
         "salary_5_years": 62000,
@@ -1141,6 +1282,9 @@ COURSE_DATA = {
         "startup_salary_range": {"min": 44000, "max": 52000},
     },
     "Law - UCC": {
+        "cao_code": "CK301",
+        "cao_points": 532,
+        "cao_points_year": 2025,
         "university": "University College Cork",
         "starting_salary": 32000,
         "salary_5_years": 48000,
@@ -1165,6 +1309,9 @@ COURSE_DATA = {
         "startup_salary_range": {"min": 28000, "max": 38000},
     },
     "Accounting & Finance - UL": {
+        "cao_code": "LM050",
+        "cao_points": 444,
+        "cao_points_year": 2025,
         "university": "University of Limerick",
         "starting_salary": 33000,
         "salary_5_years": 50000,
@@ -1191,6 +1338,9 @@ COURSE_DATA = {
 
     # ==================== Galway, Maynooth, DCU & TU Dublin ====================
     "Computer Science - Galway": {
+        "cao_code": "GY350",
+        "cao_points": 440,
+        "cao_points_year": 2025,
         "university": "University of Galway",
         "starting_salary": 35000,
         "salary_5_years": 50000,
@@ -1215,6 +1365,9 @@ COURSE_DATA = {
         "startup_salary_range": {"min": 30000, "max": 36000},
     },
     "Data Analytics - Galway": {
+        "cao_code": "GY301",
+        "cao_points": 440,
+        "cao_points_year": 2025,
         "university": "University of Galway",
         "starting_salary": 35000,
         "salary_5_years": 49000,
@@ -1239,6 +1392,9 @@ COURSE_DATA = {
         "startup_salary_range": {"min": 33000, "max": 39000},
     },
     "Engineering - Galway": {
+        "cao_code": "GY401",
+        "cao_points": 542,
+        "cao_points_year": 2025,
         "university": "University of Galway",
         "starting_salary": 36500,
         "salary_5_years": 48000,
@@ -1263,6 +1419,9 @@ COURSE_DATA = {
         "startup_salary_range": {"min": 32000, "max": 39000},
     },
     "Business/Commerce - Galway": {
+        "cao_code": "GY201",
+        "cao_points": 454,
+        "cao_points_year": 2025,
         "university": "University of Galway",
         "starting_salary": 29000,
         "salary_5_years": 40000,
@@ -1287,6 +1446,9 @@ COURSE_DATA = {
         "startup_salary_range": {"min": 25000, "max": 31000},
     },
     "Biomedical Engineering - Galway": {
+        "cao_code": "GY408",
+        "cao_points": 568,
+        "cao_points_year": 2025,
         "university": "University of Galway",
         "starting_salary": 37000,
         "salary_5_years": 49000,
@@ -1311,6 +1473,9 @@ COURSE_DATA = {
         "startup_salary_range": {"min": 35000, "max": 41000},
     },
     "Nursing - Galway": {
+        "cao_code": "GY515",
+        "cao_points": 441,
+        "cao_points_year": 2025,
         "university": "University of Galway",
         "starting_salary": 35919,
         "salary_5_years": 47000,
@@ -1335,6 +1500,9 @@ COURSE_DATA = {
         "startup_salary_range": {"min": 35000, "max": 37000},
     },
     "Speech & Language Therapy - Galway": {
+        "cao_code": "GY503",
+        "cao_points": 533,
+        "cao_points_year": 2025,
         "university": "University of Galway",
         "starting_salary": 42000,
         "salary_5_years": 53000,
@@ -1359,6 +1527,9 @@ COURSE_DATA = {
         "startup_salary_range": {"min": 42000, "max": 47000},
     },
     "Computer Science - Maynooth": {
+        "cao_code": "MH602",
+        "cao_points": 352,
+        "cao_points_year": 2025,
         "university": "Maynooth University",
         "starting_salary": 35000,
         "salary_5_years": 50000,
@@ -1383,6 +1554,9 @@ COURSE_DATA = {
         "startup_salary_range": {"min": 30000, "max": 36000},
     },
     "Data Science - Maynooth": {
+        "cao_code": "MH207",
+        "cao_points": 425,
+        "cao_points_year": 2025,
         "university": "Maynooth University",
         "starting_salary": 35000,
         "salary_5_years": 49000,
@@ -1407,6 +1581,9 @@ COURSE_DATA = {
         "startup_salary_range": {"min": 33000, "max": 39000},
     },
     "Business/Finance - Maynooth": {
+        "cao_code": "MH403",
+        "cao_points": 412,
+        "cao_points_year": 2025,
         "university": "Maynooth University",
         "starting_salary": 29000,
         "salary_5_years": 40000,
@@ -1431,6 +1608,9 @@ COURSE_DATA = {
         "startup_salary_range": {"min": 26000, "max": 32000},
     },
     "Education - Primary Teaching - Maynooth": {
+        "cao_code": "MH001",
+        "cao_points": 506,
+        "cao_points_year": 2025,
         "university": "Maynooth University",
         "starting_salary": 44435,
         "salary_5_years": 56000,
@@ -1455,6 +1635,9 @@ COURSE_DATA = {
         "startup_salary_range": {"min": 37000, "max": 39000},
     },
     "Computer Science - TU Dublin": {
+        "cao_code": "TU856",
+        "cao_points": 443,
+        "cao_points_year": 2025,
         "university": "TU Dublin",
         "starting_salary": 34000,
         "salary_5_years": 48000,
@@ -1479,6 +1662,9 @@ COURSE_DATA = {
         "startup_salary_range": {"min": 33000, "max": 40000},
     },
     "Computer Applications - DCU": {
+        "cao_code": "DC121",
+        "cao_points": 487,
+        "cao_points_year": 2025,
         "university": "Dublin City University",
         "starting_salary": 36000,
         "salary_5_years": 51000,
@@ -1503,6 +1689,9 @@ COURSE_DATA = {
         "startup_salary_range": {"min": 31000, "max": 37000},
     },
     "Engineering - DCU": {
+        "cao_code": "DC200",
+        "cao_points": 543,
+        "cao_points_year": 2025,
         "university": "Dublin City University",
         "starting_salary": 36500,
         "salary_5_years": 48500,
@@ -1527,6 +1716,9 @@ COURSE_DATA = {
         "startup_salary_range": {"min": 33000, "max": 39000},
     },
     "Business - DCU": {
+        "cao_code": "DC111",
+        "cao_points": 510,
+        "cao_points_year": 2025,
         "university": "Dublin City University",
         "starting_salary": 30000,
         "salary_5_years": 41000,
@@ -1551,6 +1743,9 @@ COURSE_DATA = {
         "startup_salary_range": {"min": 26000, "max": 32000},
     },
     "Nursing - DCU": {
+        "cao_code": "DC215",
+        "cao_points": 424,
+        "cao_points_year": 2025,
         "university": "Dublin City University",
         "starting_salary": 35919,
         "salary_5_years": 47000,
@@ -1575,6 +1770,9 @@ COURSE_DATA = {
         "startup_salary_range": {"min": 35000, "max": 37000},
     },
     "Psychology - DCU": {
+        "cao_code": "DC208",
+        "cao_points": 533,
+        "cao_points_year": 2025,
         "university": "Dublin City University",
         "starting_salary": 28000,
         "salary_5_years": 39000,
@@ -1599,6 +1797,9 @@ COURSE_DATA = {
         "startup_salary_range": {"min": 27000, "max": 34000},
     },
     "Education - DCU": {
+        "cao_code": "DC001",
+        "cao_points": 420,
+        "cao_points_year": 2025,
         "university": "Dublin City University",
         "starting_salary": 44435,
         "salary_5_years": 56000,
@@ -1623,6 +1824,9 @@ COURSE_DATA = {
         "startup_salary_range": {"min": 37000, "max": 39000},
     },
     "Communications - DCU": {
+        "cao_code": "DC131",
+        "cao_points": 360,
+        "cao_points_year": 2025,
         "university": "Dublin City University",
         "starting_salary": 28000,
         "salary_5_years": 37000,
@@ -1647,6 +1851,9 @@ COURSE_DATA = {
         "startup_salary_range": {"min": 24000, "max": 30000},
     },
     "Law - Galway": {
+        "cao_code": "GY251",
+        "cao_points": 520,
+        "cao_points_year": 2025,
         "university": "University of Galway",
         "starting_salary": 32000,
         "salary_5_years": 46000,
@@ -1671,6 +1878,9 @@ COURSE_DATA = {
         "startup_salary_range": {"min": 28000, "max": 36000},
     },
     "Psychology - Maynooth": {
+        "cao_code": "MH106",
+        "cao_points": 509,
+        "cao_points_year": 2025,
         "university": "Maynooth University",
         "starting_salary": 28000,
         "salary_5_years": 39000,
@@ -1695,6 +1905,9 @@ COURSE_DATA = {
         "startup_salary_range": {"min": 26000, "max": 32000},
     },
     "Accounting & Finance - DCU": {
+        "cao_code": "DC115",
+        "cao_points": 532,
+        "cao_points_year": 2025,
         "university": "Dublin City University",
         "starting_salary": 31000,
         "salary_5_years": 48000,

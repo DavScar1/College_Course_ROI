@@ -386,6 +386,7 @@ function displaySingleResult(d) {
                 <span class="rv2-field-pill">${fieldLabel}</span>
                 <div class="rv2-course-name">${shortName}</div>
                 <div class="rv2-university">${d.university}</div>
+                ${d.cao_points ? `<div class="rv2-cao-pill">CAO ${d.cao_points} points <span class="rv2-cao-meta">· ${d.cao_code} · ${d.cao_points_year} R1</span></div>` : ''}
             </div>
             <div class="rv2-banner-roi">
                 <div class="rv2-roi-label">5-yr ROI</div>
@@ -689,6 +690,7 @@ function renderCourseGrid(courses) {
                 <div>
                     <div class="cc-name">${shortName}</div>
                     <div class="cc-uni">${c.university}</div>
+                    ${c.cao_points ? `<div class="cc-cao">${c.cao_points} points <span class="cc-cao-year">· CAO ${c.cao_points_year}</span></div>` : ''}
                 </div>
                 <span class="cc-badge ${badgeClass}">${roiRating}</span>
             </div>

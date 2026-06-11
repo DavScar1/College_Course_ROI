@@ -64,7 +64,10 @@ def calculate_roi(course_name, tuition_per_year=None, course_length=None):
         "roi_5_years": round(roi_percentage, 1),
         "lifetime_roi": round(lifetime_roi, 0),
         "course_length": course_length,
-        "tuition_per_year": tuition_per_year
+        "tuition_per_year": tuition_per_year,
+        "cao_code": course_info.get("cao_code"),
+        "cao_points": course_info.get("cao_points"),
+        "cao_points_year": course_info.get("cao_points_year"),
     }
 
 
