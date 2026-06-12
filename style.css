@@ -300,22 +300,17 @@ input, select, textarea { font-size: 16px !important; } /* prevent iOS zoom */
   min-height: calc(100vh - 52px - 52px);
 }
 
-/* ── Side rail (desktop only, wide screens) ─────────────────── */
+/* ── CAO key dates card (desktop, in left column) ───────────── */
 
-.side-rail {
-  display: none;
+.cao-dates-card { margin-top: 12px; }
+
+.cao-dates-card .card-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
-@media (min-width: 1750px) {
-  .side-rail-right {
-    display: block;
-    position: fixed;
-    top: 140px;
-    right: 24px;
-    width: 220px;
-    z-index: 10;
-  }
-}
+.cao-dates-icon { color: var(--blue); flex-shrink: 0; }
 
 .cao-dates-card .card-body { padding: 14px 16px; }
 

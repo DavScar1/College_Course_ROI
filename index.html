@@ -91,18 +91,6 @@
   </div>
 </header>
 
-<!-- CAO key dates countdown (desktop side rail) -->
-<aside class="side-rail side-rail-right" id="caoDatesWidget" aria-label="CAO key dates">
-  <div class="card cao-dates-card">
-    <div class="card-head">
-      <span class="card-title">CAO Key Dates</span>
-    </div>
-    <div class="card-body" id="caoDatesList">
-      <!-- populated by script.js -->
-    </div>
-  </div>
-</aside>
-
 <!-- ── Calculator ────────────────────────────────────────── -->
 <div id="calculatorView" class="view active">
 
@@ -196,6 +184,18 @@
         </div>
 
         <p class="disclaimer">Can't find your course? Use <strong>Browse</strong> to see all 70+ programs.</p>
+
+        <div class="card cao-dates-card desktop-only">
+          <div class="card-head">
+            <span class="card-title">
+              <svg class="cao-dates-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+              CAO Key Dates
+            </span>
+          </div>
+          <div class="card-body" id="caoDatesList">
+            <!-- populated by script.js -->
+          </div>
+        </div>
 
       </aside>
 
