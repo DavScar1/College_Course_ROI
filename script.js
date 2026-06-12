@@ -68,6 +68,7 @@ window.onload = function () {
             populateCourseDropdowns();
             renderQuickPicks();
             renderCmpPopularGrid();
+            initHeroTicker(allCoursesData);
         })
         .catch(err => {
             console.error('Bootstrap error:', err);
@@ -109,6 +110,51 @@ function renderQuickPicks() {
             </div>
         </div>`;
     }).join('');
+}
+
+/* ============================================================
+   Hero stat ticker
+   ============================================================ */
+
+function initHeroTicker(courses) {
+    const textEl = document.getElementById('heroTickerText');
+    if (!textEl || !courses.length) return;
+
+    const shortName = c => c.course_name.includes(' - ')
+        ? c.course_name.split(' - ').slice(0, -1).join(' - ')
+        : c.course_name;
+
+    const byROI     = [...courses].sort((a, b) => b.roi_5_years - a.roi_5_years);
+    const byPayback = [...courses].sort((a, b) => a.payback_years - b.payback_years);
+    const byNatComp = courses
+        .filter(c => c.analysis && c.analysis.national_comparison)
+        .sort((a, b) => b.analysis.national_comparison.after5_vs_average_pct - a.analysis.national_comparison.after5_vs_average_pct);
+    const byCao = courses
+        .filter(c => c.cao_points)
+        .sort((a, b) => a.cao_points - b.cao_points);
+
+    const total  = courses.length;
+    const avgROI = Math.round(courses.reduce((sum, c) => sum + c.roi_5_years, 0) / total);
+
+    const facts = [];
+    if (byROI[0])     facts.push(`${shortName(byROI[0])} (${byROI[0].university}) has a ${byROI[0].roi_5_years}% 5-year ROI`);
+    if (byPayback[0]) facts.push(`${shortName(byPayback[0])} pays back its tuition in just ${byPayback[0].payback_years} years`);
+    if (byNatComp[0]) facts.push(`${shortName(byNatComp[0])} grads earn ${byNatComp[0].analysis.national_comparison.after5_vs_average_pct >= 0 ? '+' : ''}${byNatComp[0].analysis.national_comparison.after5_vs_average_pct}% vs the national average after 5 years`);
+    if (byCao[0])     facts.push(`${shortName(byCao[0])} needs just ${byCao[0].cao_points} CAO points`);
+    facts.push(`Average 5-year ROI across all ${total} courses: ${avgROI}%`);
+
+    if (!facts.length) return;
+
+    let i = 0;
+    function show() {
+        textEl.textContent = facts[i % facts.length];
+        textEl.classList.remove('ht-anim');
+        void textEl.offsetWidth;
+        textEl.classList.add('ht-anim');
+        i++;
+    }
+    show();
+    if (facts.length > 1) setInterval(show, 5000);
 }
 
 function quickPickCourse(course) {
