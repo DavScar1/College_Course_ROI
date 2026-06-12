@@ -300,6 +300,81 @@ input, select, textarea { font-size: 16px !important; } /* prevent iOS zoom */
   min-height: calc(100vh - 52px - 52px);
 }
 
+/* ── Side rail (desktop only, wide screens) ─────────────────── */
+
+.side-rail {
+  display: none;
+}
+
+@media (min-width: 1750px) {
+  .side-rail-right {
+    display: block;
+    position: fixed;
+    top: 140px;
+    right: 24px;
+    width: 220px;
+    z-index: 10;
+  }
+}
+
+.cao-dates-card .card-body { padding: 14px 16px; }
+
+.cao-date-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.cao-date-item:last-child { border-bottom: none; padding-bottom: 0; }
+.cao-date-item:first-child { padding-top: 0; }
+
+.cao-date-days {
+  flex-shrink: 0;
+  min-width: 44px;
+  text-align: center;
+  background: var(--blue-bg);
+  border: 1px solid var(--blue-border);
+  border-radius: 8px;
+  padding: 4px 6px;
+  font-size: 14px;
+  font-weight: 800;
+  color: #1e40af;
+  letter-spacing: -0.02em;
+}
+
+.cao-date-days span {
+  display: block;
+  font-size: 9px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #1e40af;
+  opacity: 0.7;
+}
+
+.cao-date-info { min-width: 0; }
+
+.cao-date-title {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--text);
+  line-height: 1.35;
+}
+
+.cao-date-sub {
+  font-size: 11px;
+  color: var(--faint);
+  margin-top: 2px;
+}
+
+.cao-dates-empty {
+  font-size: 12.5px;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
 /* calculator view: hero sits outside the wrap, so reset top padding */
 #calculatorView {
   padding-top: 0;

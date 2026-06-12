@@ -157,6 +157,44 @@ function initHeroTicker(courses) {
     if (facts.length > 1) setInterval(show, 5000);
 }
 
+/* ============================================================
+   CAO key dates countdown (desktop side rail)
+   ============================================================ */
+
+const CAO_KEY_DATES = [
+    { date: '2026-07-01T17:00:00', title: 'Change of Mind deadline', sub: 'Last chance to reorder/change CAO course choices' },
+    { date: '2026-08-21T10:00:00', title: 'Leaving Cert results', sub: 'Results released via the candidate portal' },
+    { date: '2026-08-22T00:00:00', title: 'CAO Round 1 offers', sub: 'First round college offers issued' },
+    { date: '2026-08-26T17:00:00', title: 'Round 1 acceptance deadline', sub: 'Last date to accept your Round 1 offer' },
+    { date: '2026-09-02T00:00:00', title: 'CAO Round 2 offers', sub: 'Second round offers issued (if applicable)' },
+];
+
+function renderCaoDatesWidget() {
+    const list = document.getElementById('caoDatesList');
+    if (!list) return;
+
+    const now = new Date();
+    const upcoming = CAO_KEY_DATES
+        .map(d => ({ ...d, daysLeft: Math.ceil((new Date(d.date) - now) / (1000 * 60 * 60 * 24)) }))
+        .filter(d => d.daysLeft >= 0)
+        .slice(0, 3);
+
+    if (!upcoming.length) {
+        list.innerHTML = '<div class="cao-dates-empty">No upcoming CAO deadlines right now. Check back closer to the next admissions cycle.</div>';
+        return;
+    }
+
+    list.innerHTML = upcoming.map(d => `
+        <div class="cao-date-item">
+            <div class="cao-date-days">${d.daysLeft}<span>${d.daysLeft === 1 ? 'day' : 'days'}</span></div>
+            <div class="cao-date-info">
+                <div class="cao-date-title">${d.title}</div>
+                <div class="cao-date-sub">${d.sub}</div>
+            </div>
+        </div>
+    `).join('');
+}
+
 function quickPickCourse(course) {
     document.getElementById('course').value = course;
     document.getElementById('resultsPlaceholder').style.display = 'none';
@@ -175,6 +213,7 @@ function populateCourseDropdowns() {
 document.addEventListener('DOMContentLoaded', function () {
 
     initCompareSearch();
+    renderCaoDatesWidget();
 
     // Search
     const searchInput = document.getElementById('courseSearch');
