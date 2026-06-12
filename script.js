@@ -195,6 +195,17 @@ function renderCaoDatesWidget() {
     `).join('');
 }
 
+function scheduleCaoDatesRefresh() {
+    const now = new Date();
+    const nextMidnight = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 5);
+    const msUntilMidnight = nextMidnight - now;
+
+    setTimeout(function tick() {
+        renderCaoDatesWidget();
+        setInterval(renderCaoDatesWidget, 24 * 60 * 60 * 1000);
+    }, msUntilMidnight);
+}
+
 function quickPickCourse(course) {
     document.getElementById('course').value = course;
     document.getElementById('resultsPlaceholder').style.display = 'none';
@@ -214,6 +225,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     initCompareSearch();
     renderCaoDatesWidget();
+    scheduleCaoDatesRefresh();
 
     // Search
     const searchInput = document.getElementById('courseSearch');
