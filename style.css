@@ -2553,14 +2553,16 @@ input, select, textarea { font-size: 16px !important; } /* prevent iOS zoom */
 
   .logo-sub { display: block; }
 
-  /* desktop: inline nav in header */
+  /* desktop: inline nav in header, spread across remaining width */
   .header-nav {
     position: static;
     background: transparent;
     border: none;
     padding: 0;
     display: flex;
-    gap: 2px;
+    justify-content: space-evenly;
+    flex: 1;
+    margin-left: 40px;
     grid-template-columns: none;
   }
 
