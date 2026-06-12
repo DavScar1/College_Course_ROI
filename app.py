@@ -144,15 +144,12 @@ def analyze_course(result):
     else:
         recommendation = f'Solid choice with {payback_label.lower()} and {roi_rating.lower()} ROI.'
 
-    career_years = 30
-    year_5_salary = result['salary_after_5_years']
-    lifetime_earnings = (result['starting_salary'] + year_5_salary) / 2 * 5
-    for year in range(6, career_years + 1):
-        lifetime_earnings += year_5_salary * (1.03 ** (year - 5))
+    # National wage comparison (CSO Earnings & Labour Costs, 2025)
+    NATIONAL_MEDIAN_WAGE = 38000   # median annual earnings, all employees
+    NATIONAL_AVERAGE_WAGE = 52600  # mean annual earnings, all employees
 
-    lifetime_profit = lifetime_earnings - result['total_cost']
-    lifetime_roi = (lifetime_profit / result['total_cost']) * 100
-    times_earned_back = lifetime_earnings / result['total_cost']
+    start_vs_median_pct = (result['starting_salary'] / NATIONAL_MEDIAN_WAGE - 1) * 100
+    after5_vs_average_pct = (result['salary_after_5_years'] / NATIONAL_AVERAGE_WAGE - 1) * 100
 
     result['analysis'] = {
         'payback_label': payback_label,
@@ -162,11 +159,11 @@ def analyze_course(result):
         'roi_stars': roi_stars,
         'roi_emoji': roi_emoji,
         'recommendation': recommendation,
-        'lifetime': {
-            'total_earnings': round(lifetime_earnings, 0),
-            'profit': round(lifetime_profit, 0),
-            'roi': round(lifetime_roi, 0),
-            'times_earned_back': round(times_earned_back, 1),
+        'national_comparison': {
+            'median_wage': NATIONAL_MEDIAN_WAGE,
+            'average_wage': NATIONAL_AVERAGE_WAGE,
+            'start_vs_median_pct': round(start_vs_median_pct, 0),
+            'after5_vs_average_pct': round(after5_vs_average_pct, 0),
         },
     }
     return result

@@ -373,7 +373,7 @@ function displaySingleResult(d) {
         `;
     }
 
-    const lifetime = d.analysis && d.analysis.lifetime;
+    const nat = d.analysis && d.analysis.national_comparison;
 
     const shortName = d.course_name.includes(' - ') ? d.course_name.split(' - ').slice(0,-1).join(' - ') : d.course_name;
 
@@ -460,12 +460,31 @@ function displaySingleResult(d) {
 
         ${careerHTML}
 
-        <!-- Lifetime -->
-        ${lifetime ? `
-        <div class="rv2-lifetime" style="background:linear-gradient(135deg,${accentColor}14,${accentColor}06);border-color:${accentColor}20">
-            <div class="rv2-lt-label">30-year career estimate</div>
-            <div class="rv2-lt-amount" style="color:${accentColor}">€${(lifetime.total_earnings/1_000_000).toFixed(2)}M</div>
-            <div class="rv2-lt-sub">${lifetime.times_earned_back}x your total investment returned over a career</div>
+        <!-- National wage comparison -->
+        ${nat ? `
+        <div class="rv2-nat-compare" style="background:linear-gradient(135deg,${accentColor}14,${accentColor}06);border-color:${accentColor}20">
+            <div class="rv2-lt-label">How this compares to Irish wages</div>
+            <div class="rv2-nat-row">
+                <div class="rv2-nat-row-top">
+                    <span>Starting salary vs national median (€${(nat.median_wage/1000).toFixed(0)}k)</span>
+                    <span class="rv2-nat-pct" style="color:${accentColor}">${nat.start_vs_median_pct >= 0 ? '+' : ''}${nat.start_vs_median_pct}%</span>
+                </div>
+                <div class="rv2-nat-track">
+                    <div class="rv2-nat-fill" style="width:${Math.min(100, Math.max(4, (d.starting_salary / (Math.max(d.starting_salary, nat.median_wage) * 1.1)) * 100))}%;background:${accentColor}"></div>
+                    <div class="rv2-nat-marker" style="left:${Math.min(100, (nat.median_wage / (Math.max(d.starting_salary, nat.median_wage) * 1.1)) * 100)}%"></div>
+                </div>
+            </div>
+            <div class="rv2-nat-row">
+                <div class="rv2-nat-row-top">
+                    <span>Salary after 5 yrs vs national average (€${(nat.average_wage/1000).toFixed(0)}k)</span>
+                    <span class="rv2-nat-pct" style="color:${accentColor}">${nat.after5_vs_average_pct >= 0 ? '+' : ''}${nat.after5_vs_average_pct}%</span>
+                </div>
+                <div class="rv2-nat-track">
+                    <div class="rv2-nat-fill" style="width:${Math.min(100, Math.max(4, (d.salary_after_5_years / (Math.max(d.salary_after_5_years, nat.average_wage) * 1.1)) * 100))}%;background:${accentColor}"></div>
+                    <div class="rv2-nat-marker" style="left:${Math.min(100, (nat.average_wage / (Math.max(d.salary_after_5_years, nat.average_wage) * 1.1)) * 100)}%"></div>
+                </div>
+            </div>
+            <div class="rv2-lt-sub">The marker shows where the national figure sits on the bar. Source: CSO Earnings &amp; Labour Costs 2025.</div>
         </div>` : ''}
 
     </div>`;

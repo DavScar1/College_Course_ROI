@@ -2137,31 +2137,68 @@ input, select, textarea { font-size: 16px !important; } /* prevent iOS zoom */
 }
 
 /* Lifetime */
-.rv2-lifetime {
+.rv2-nat-compare {
   border: 1px solid;
   border-radius: var(--radius);
-  padding: 24px 20px;
-  text-align: center;
+  padding: 20px;
 }
 
 .rv2-lt-label {
   font-size: 12px;
   font-weight: 500;
   color: var(--muted);
-  margin-bottom: 8px;
-}
-
-.rv2-lt-amount {
-  font-size: 48px;
-  font-weight: 800;
-  letter-spacing: -0.04em;
-  line-height: 1;
-  margin-bottom: 8px;
+  margin-bottom: 14px;
 }
 
 .rv2-lt-sub {
-  font-size: 13px;
+  font-size: 12px;
   color: var(--muted);
+  margin-top: 4px;
+}
+
+.rv2-nat-row + .rv2-nat-row {
+  margin-top: 16px;
+}
+
+.rv2-nat-row-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 10px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text);
+  margin-bottom: 6px;
+}
+
+.rv2-nat-pct {
+  font-size: 16px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  white-space: nowrap;
+}
+
+.rv2-nat-track {
+  position: relative;
+  height: 8px;
+  border-radius: 100px;
+  background: var(--border);
+  overflow: visible;
+}
+
+.rv2-nat-fill {
+  height: 100%;
+  border-radius: 100px;
+}
+
+.rv2-nat-marker {
+  position: absolute;
+  top: -4px;
+  width: 2px;
+  height: 16px;
+  background: var(--text);
+  opacity: 0.5;
+  transform: translateX(-1px);
 }
 
 /* ── Home: feature highlights ───────────────────────────────── */
