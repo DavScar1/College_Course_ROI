@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Computer Science vs Business Degree: Salary in Ireland</title>
+    <meta name="description" content="Computer Science vs Business in Ireland: we compare starting salary, 5-year salary, job market strength and payback period to help you choose between them.">
+    <link rel="canonical" href="https://roicollege.ie/blog/computer-science-vs-business-ireland">
+    <link rel="alternate" hreflang="en-ie" href="https://roicollege.ie/blog/computer-science-vs-business-ireland">
+    <link rel="alternate" hreflang="x-default" href="https://roicollege.ie/blog/computer-science-vs-business-ireland">
+    <meta name="google-site-verification" content="REPLACE_WITH_YOUR_VERIFICATION_CODE">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Computer Science vs Business Degree: Salary in Ireland">
+    <meta property="og:description" content="Computer Science vs Business in Ireland: we compare starting salary, 5-year salary, job market strength and payback period to help you choose between them.">
+    <meta property="og:url" content="https://roicollege.ie/blog/computer-science-vs-business-ireland">
+    <meta property="og:site_name" content="CollegeROI Ireland">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Computer Science vs Business Degree: Salary in Ireland">
+    <meta name="twitter:description" content="Computer Science vs Business in Ireland: we compare starting salary, 5-year salary, job market strength and payback period to help you choose between them.">
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": "Computer Science vs Business Degree: Salary in Ireland",
+      "description": "Computer Science vs Business in Ireland: we compare starting salary, 5-year salary, job market strength and payback period to help you choose between them.",
+      "author": { "@type": "Organization", "name": "CollegeROI Ireland" },
+      "publisher": { "@type": "Organization", "name": "CollegeROI Ireland" },
+      "mainEntityOfPage": "https://roicollege.ie/blog/computer-science-vs-business-ireland"
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://roicollege.ie/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Blog",
+          "item": "https://roicollege.ie/blog"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Computer Science vs Business Degree: Salary in Ireland",
+          "item": "https://roicollege.ie/blog/computer-science-vs-business-ireland"
+        }
+      ]
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Does Computer Science pay more than Business in Ireland?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "On average, Computer Science graduates tend to start on a higher salary than general Business graduates, but the gap narrows for specialised business courses like finance or actuarial science. The honest answer is 'it depends on the specific course' — compare the actual figures for the courses you're considering rather than the broad subject area."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Which has better job security, Computer Science or Business?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Both have reasonably strong employment rates in Ireland, but the nature of the security differs. Computer Science graduates benefit from a large, multinational tech sector based in Ireland, while Business graduates have more varied options across industries, which can mean more flexibility if one sector slows down."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is Computer Science harder than Business?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Most students find Computer Science more technically demanding day to day, particularly in the first two years when programming fundamentals and maths are front-loaded. Business degrees vary a lot depending on specialisation — a general business degree is typically less technically intensive than a CS degree, though specialised tracks like finance can be just as demanding in their own way."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I switch between Computer Science and Business careers later?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "It's more common to move from Business into tech-adjacent roles (product management, business analysis) than the reverse, though both directions happen. If you think you might want to keep options open, it's worth checking whether your shortlisted course offers electives or a minor in the other area."
+          }
+        }
+      ]
+    }
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/style.css">
+    <style>
+        /* Header nav links */
+        .blog-header-link {
+            display: inline-flex;
+            align-items: center;
+            padding: 6px 12px;
+            border-radius: var(--radius-sm);
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--muted);
+            text-decoration: none;
+            transition: color 0.15s, background 0.15s;
+        }
+        .blog-header-link:hover { color: var(--text); background: var(--bg); }
+        .blog-header-link.active { color: var(--blue); font-weight: 600; background: var(--blue-bg); }
+
+        /* Reading progress bar */
+        .read-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            background: var(--blue);
+            width: 0%;
+            z-index: 200;
+            transition: width 0.1s linear;
+            border-radius: 0 2px 2px 0;
+        }
+
+        /* Layout */
+        .post-wrap {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 32px 16px 80px;
+        }
+
+        /* Back nav */
+        .post-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--muted);
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 500;
+            margin-bottom: 28px;
+            transition: color 0.15s;
+        }
+        .post-back:hover { color: var(--blue); }
+
+        /* Hero */
+        .post-hero {
+            margin-bottom: 32px;
+        }
+
+        .post-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            background: var(--blue-bg);
+            color: var(--blue);
+            font-size: 11px;
+            font-weight: 600;
+            padding: 4px 10px;
+            border-radius: 100px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 14px;
+            border: 1px solid var(--blue-border);
+        }
+
+        .post-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--text);
+            letter-spacing: -0.025em;
+            line-height: 1.3;
+            margin-bottom: 16px;
+        }
+
+        .post-meta-bar {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 13px;
+            color: var(--muted);
+            padding-bottom: 24px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .post-meta-dot {
+            width: 3px;
+            height: 3px;
+            background: var(--border-dark);
+            border-radius: 50%;
+        }
+
+        /* Body */
+        .post-body {
+            font-size: 16px;
+            color: var(--text);
+            line-height: 1.8;
+        }
+
+        .post-body p {
+            margin-bottom: 22px;
+            color: #334155;
+        }
+
+        .post-body h2 {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text);
+            letter-spacing: -0.015em;
+            margin: 40px 0 14px;
+            padding-top: 8px;
+        }
+
+        .post-body h3 {
+            font-size: 17px;
+            font-weight: 700;
+            color: var(--text);
+            letter-spacing: -0.01em;
+            margin: 28px 0 12px;
+        }
+
+        .post-body strong {
+            color: var(--text);
+            font-weight: 600;
+        }
+
+        .post-body table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 24px 0;
+            font-size: 14px;
+        }
+
+        .post-body th, .post-body td {
+            border: 1px solid var(--border);
+            padding: 10px 12px;
+            text-align: left;
+        }
+
+        .post-body th {
+            background: var(--bg);
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .post-body td {
+            color: #334155;
+        }
+
+        /* Key stats row */
+        .stat-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin: 28px 0;
+        }
+
+        .stat-box {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 18px 16px;
+            text-align: center;
+            box-shadow: var(--shadow);
+        }
+
+        .stat-box-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--blue);
+            letter-spacing: -0.03em;
+            display: block;
+            line-height: 1;
+            margin-bottom: 6px;
+        }
+
+        .stat-box-label {
+            font-size: 12px;
+            color: var(--muted);
+            display: block;
+        }
+
+        /* Callout box */
+        .post-callout {
+            background: var(--blue-bg);
+            border: 1px solid var(--blue-border);
+            border-left: 3px solid var(--blue);
+            border-radius: var(--radius);
+            padding: 16px 20px;
+            margin: 28px 0;
+            font-size: 15px;
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        /* CTA */
+        .post-cta {
+            background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+            border: 1px solid var(--blue-border);
+            border-radius: var(--radius);
+            padding: 28px 24px;
+            margin: 40px 0 32px;
+        }
+
+        .post-cta-title {
+            font-size: 17px;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 8px;
+        }
+
+        .post-cta p {
+            font-size: 14px;
+            color: var(--muted);
+            margin-bottom: 18px !important;
+        }
+
+        .post-cta-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            background: var(--blue);
+            color: white;
+            padding: 11px 20px;
+            border-radius: var(--radius-sm);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            transition: background 0.15s;
+        }
+
+        .post-cta-btn:hover { background: var(--blue-hover); }
+
+        /* FAQ */
+        .post-faq {
+            margin: 40px 0 32px;
+        }
+
+        .post-faq h2 {
+            margin-top: 0;
+        }
+
+        .faq-item {
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 16px 18px;
+            margin-bottom: 10px;
+            background: var(--surface);
+        }
+
+        .faq-item h3 {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text);
+            margin: 0 0 6px;
+        }
+
+        .faq-item p {
+            font-size: 14px;
+            color: var(--muted);
+            margin-bottom: 0 !important;
+        }
+
+        /* Bottom nav */
+        .post-footer-nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            padding-top: 24px;
+            border-top: 1px solid var(--border);
+            flex-wrap: wrap;
+        }
+
+        @media (max-width: 520px) {
+            .post-title { font-size: 22px; }
+            .stat-row { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+            .stat-box { padding: 14px 10px; }
+            .stat-box-value { font-size: 20px; }
+            .post-body table { font-size: 12.5px; }
+            .post-body th, .post-body td { padding: 8px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="read-progress" id="readProgress"></div>
+
+    <header class="header">
+        <div class="header-inner">
+            <a href="/" style="text-decoration:none;">
+                <div class="logo">
+                    <div class="logo-icon-wrapper">
+                        <svg class="logo-svg" width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M20 8L4 16L20 24L36 16L20 8Z" fill="#334155" stroke="#1e293b" stroke-width="1.5" stroke-linejoin="round"/>
+                            <path d="M8 18V26C8 26 12 30 20 30C28 30 32 26 32 26V18" stroke="#334155" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M36 16V24" stroke="#1e293b" stroke-width="2" stroke-linecap="round"/>
+                            <path d="M24 14L28 10L32 14M28 10V18" stroke="#10b981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <div class="logo-text">
+                        <span class="logo-title">CollegeROI</span>
+                    </div>
+                </div>
+            </a>
+            <div style="display:flex;align-items:center;gap:4px;">
+                <a href="/" class="blog-header-link">Calculator</a>
+                <a href="/blog" class="blog-header-link active">Blog</a>
+            </div>
+        </div>
+    </header>
+
+    <div class="post-wrap">
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+            <a href="/">Home</a>
+            <span class="crumb-sep">/</span>
+            <a href="/blog">Blog</a>
+            <span class="crumb-sep">/</span>
+            <span class="crumb-current">Computer Science vs Business Degree: Salary in Ireland</span>
+        </nav>
+
+        <a href="/blog" class="post-back">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+            All posts
+        </a>
+
+        <div class="post-hero">
+            <div class="post-tag">
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+                Comparison
+            </div>
+            <h1 class="post-title">Computer Science vs Business Degree: Salary in Ireland</h1>
+            <div class="post-meta-bar">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                <span>June 2026</span>
+                <span class="post-meta-dot"></span>
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                <span>6 min read</span>
+            </div>
+        </div>
+
+        <div class="post-body">
+            <p>Computer Science and Business are two of the most popular CAO choices in Ireland, and it's common for students to be genuinely torn between the two — especially if they're interested in tech but not sure they want to code for a living, or interested in business but want to keep their options broad.</p>
+
+            <p>Here's how they actually compare on the numbers that matter: starting salary, 5-year salary, job market strength and how long it takes to pay back the cost of the degree.</p>
+
+            <h2>Starting salary: who comes out ahead?</h2>
+
+            <p>Computer Science graduates in Ireland tend to start on a higher salary than general Business graduates. This is largely down to demand: Ireland hosts the European headquarters of several major tech companies, and entry-level software roles are well paid relative to many other graduate jobs.</p>
+
+            <p>Business is more of a mixed bag. A general business degree can lead to a wide range of starting roles — sales, marketing, operations, graduate schemes — with correspondingly varied starting pay. Specialised business courses, particularly those with a finance, actuarial or analytics focus, narrow that gap considerably and can match or exceed general CS starting salaries in some cases.</p>
+
+            <table>
+                <tr>
+                    <th>Metric</th>
+                    <th>Computer Science</th>
+                    <th>Business</th>
+                </tr>
+                <tr>
+                    <td>Starting salary</td>
+                    <td>[INSERT]</td>
+                    <td>[INSERT]</td>
+                </tr>
+                <tr>
+                    <td>5-year salary</td>
+                    <td>[INSERT]</td>
+                    <td>[INSERT]</td>
+                </tr>
+                <tr>
+                    <td>5-year ROI</td>
+                    <td>[INSERT]</td>
+                    <td>[INSERT]</td>
+                </tr>
+                <tr>
+                    <td>Payback period</td>
+                    <td>[INSERT]</td>
+                    <td>[INSERT]</td>
+                </tr>
+            </table>
+
+            <p>[INSERT GRADUATE SALARY FROM CALCULATOR] — fill in this table with the actual figures for the specific CS and Business courses you're comparing, since outcomes vary noticeably between universities.</p>
+
+            <h2>5-year salary growth</h2>
+
+            <p>This is where the comparison gets more interesting. Computer Science salaries tend to grow quickly in the first five years as junior developers move into mid-level roles, particularly if they specialise in an in-demand area like cloud infrastructure, data engineering or security.</p>
+
+            <p>Business graduates' 5-year growth depends heavily on the path they take. Those who move into finance, consulting or fast-moving corporate graduate schemes can see steep early growth — sometimes steeper than CS — while those in slower-moving sectors may see more gradual increases.</p>
+
+            <div class="post-callout">
+                The honest takeaway: Computer Science has a more predictable, consistently strong salary trajectory across the board. Business has a wider range of outcomes — the ceiling can be just as high, but it depends more on which path within business you end up taking.
+            </div>
+
+            <h2>Job market strength and stability</h2>
+
+            <p>Both fields have reasonably strong employment rates for graduates in Ireland, but the type of stability differs. Computer Science benefits from a concentrated, well-funded sector — multinational tech — that has been a consistent employer in Ireland for over two decades, though it is also a sector that goes through hiring cycles and occasional layoff rounds.</p>
+
+            <p>Business graduates have access to a much broader range of industries, which can mean more flexibility if one sector slows down — a business graduate can move between retail, finance, FMCG, healthcare administration and more without retraining, whereas a software engineer's skills are more (though not entirely) tied to tech-adjacent roles.</p>
+
+            <h2>Payback period: which gets you to break-even faster?</h2>
+
+            <p>Payback period — how long it takes your degree's earnings to cover its cost — tends to favour Computer Science, largely because starting salaries are higher relative to the (similar) cost of either degree. If you want a deeper explanation of how payback period is calculated and what counts as a "good" number, see our guide on <a href="/blog/how-long-to-pay-back-college-degree-ireland">how long it takes to pay back a college degree in Ireland</a>.</p>
+
+            <p>That said, a Business graduate who moves quickly into a high-paying specialism (finance, consulting) can match or beat a CS graduate's payback period. The broad subject label matters less than the specific course and career path.</p>
+
+            <h2>So which should you choose?</h2>
+
+            <p>If you're equally drawn to both, Computer Science currently has the edge on predictability — strong starting salaries, fast early growth, and a short payback period are the norm rather than the exception. Business offers more breadth and a wider range of possible outcomes, with the ceiling depending heavily on which specialism and employer you land.</p>
+
+            <p>The best way to decide is to compare the actual courses you're considering side by side, rather than relying on the general reputation of "CS" or "Business" as subjects.</p>
+
+            <div class="post-cta">
+                <div class="post-cta-title">Compare Computer Science and Business directly</div>
+                <p>Use the compare tool on CollegeROI to see starting salary, 5-year salary, ROI and payback period for both courses side by side — free, no sign-up required.</p>
+                <a href="/" class="post-cta-btn">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+                    Open the Compare Tool
+                </a>
+            </div>
+
+            <div class="post-faq">
+                <h2>Frequently asked questions</h2>
+
+                <div class="faq-item">
+                    <h3>Does Computer Science pay more than Business in Ireland?</h3>
+                    <p>On average, Computer Science graduates tend to start on a higher salary than general Business graduates, but the gap narrows for specialised business courses like finance or actuarial science. The honest answer is "it depends on the specific course" — compare the actual figures for the courses you're considering rather than the broad subject area.</p>
+                </div>
+
+                <div class="faq-item">
+                    <h3>Which has better job security, Computer Science or Business?</h3>
+                    <p>Both have reasonably strong employment rates in Ireland, but the nature of the security differs. Computer Science graduates benefit from a large, multinational tech sector based in Ireland, while Business graduates have more varied options across industries, which can mean more flexibility if one sector slows down.</p>
+                </div>
+
+                <div class="faq-item">
+                    <h3>Is Computer Science harder than Business?</h3>
+                    <p>Most students find Computer Science more technically demanding day to day, particularly in the first two years when programming fundamentals and maths are front-loaded. Business degrees vary a lot depending on specialisation — a general business degree is typically less technically intensive than a CS degree, though specialised tracks like finance can be just as demanding in their own way.</p>
+                </div>
+
+                <div class="faq-item">
+                    <h3>Can I switch between Computer Science and Business careers later?</h3>
+                    <p>It's more common to move from Business into tech-adjacent roles (product management, business analysis) than the reverse, though both directions happen. If you think you might want to keep options open, it's worth checking whether your shortlisted course offers electives or a minor in the other area.</p>
+                </div>
+            </div>
+
+            <div class="post-footer-nav">
+                <a href="/blog/trinity-vs-ucd-graduate-salaries" class="post-back" style="margin-bottom:0;">
+                    Read: Trinity vs UCD Graduate Salaries
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </a>
+                <a href="/blog" class="post-back" style="margin-bottom:0;">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                    All posts
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Reading progress bar
+        const bar = document.getElementById('readProgress');
+        window.addEventListener('scroll', () => {
+            const doc  = document.documentElement;
+            const top  = doc.scrollTop || document.body.scrollTop;
+            const h    = doc.scrollHeight - doc.clientHeight;
+            bar.style.width = h > 0 ? (top / h * 100) + '%' : '0%';
+        });
+    </script>
+</body>
+</html>
