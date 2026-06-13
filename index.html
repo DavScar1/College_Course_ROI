@@ -8,6 +8,10 @@
   <meta name="description" content="Calculate and compare the ROI, starting salaries and payback periods for 70+ Irish university courses. Free tool · UCD, Trinity, DCU, UCC and more.">
   <meta name="keywords" content="college ROI Ireland, university degree salary, CAO course comparison, Irish degree worth it, UCD Trinity DCU UCC salary data">
   <link rel="canonical" href="https://roicollege.ie/">
+  <link rel="alternate" hreflang="en-ie" href="https://roicollege.ie/">
+  <link rel="alternate" hreflang="x-default" href="https://roicollege.ie/">
+  <meta name="google-site-verification" content="REPLACE_WITH_YOUR_VERIFICATION_CODE">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 
   <meta property="og:title" content="CollegeROI Ireland: Is Your Degree Worth It?">
   <meta property="og:description" content="Compare ROI, starting salaries and payback for 70+ Irish university courses. Free, data-driven tool.">
@@ -30,6 +34,56 @@
     "applicationCategory": "EducationApplication",
     "operatingSystem": "Web",
     "offers": { "@type": "Offer", "price": "0", "priceCurrency": "EUR" }
+  }
+  </script>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "CollegeROI Ireland",
+    "url": "https://roicollege.ie",
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": {
+        "@type": "EntryPoint",
+        "urlTemplate": "https://roicollege.ie/search?q={search_term_string}"
+      },
+      "query-input": "required name=search_term_string"
+    }
+  }
+  </script>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "How is the ROI calculated?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "ROI is calculated by comparing your total course cost (tuition plus living expenses over the course length) against the extra earnings you gain from having the degree over 5 years, compared to not having it."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Where does the salary data come from?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Starting and 5-year salary figures are based on published graduate outcome surveys and salary data for each course and university combination."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Is this tool free to use?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. CollegeROI is completely free, with no sign-up required. Calculate, compare and explore as many courses as you like."
+        }
+      }
+    ]
   }
   </script>
 
@@ -492,7 +546,7 @@
   </div>
 </footer>
 
-<script src="script.js"></script>
+<script src="script.js" defer></script>
 <script>
   // '/' shortcut → focus search
   document.addEventListener('keydown', e => {

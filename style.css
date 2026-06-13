@@ -286,6 +286,33 @@ input, select, textarea { font-size: 16px !important; } /* prevent iOS zoom */
 /* nav icons (simple SVG inline in each button) */
 .nav-btn svg { width: 20px; height: 20px; flex-shrink: 0; }
 
+/* ── Breadcrumb ──────────────────────────────────────────── */
+
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  font-size: 12.5px;
+  color: var(--muted);
+  margin-bottom: 16px;
+}
+
+.breadcrumb a {
+  color: var(--muted);
+  text-decoration: none;
+  transition: color 0.15s;
+}
+
+.breadcrumb a:hover { color: var(--blue); }
+
+.breadcrumb .crumb-sep { color: var(--faint); }
+
+.breadcrumb .crumb-current {
+  color: var(--text);
+  font-weight: 500;
+}
+
 /* ── Layout ──────────────────────────────────────────────── */
 
 .wrap {
