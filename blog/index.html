@@ -42,236 +42,31 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/style.css">
-    <style>
-        /* Header nav links */
-        .blog-header-link {
-            display: inline-flex;
-            align-items: center;
-            padding: 6px 12px;
-            border-radius: var(--radius-sm);
-            font-size: 13px;
-            font-weight: 500;
-            color: var(--muted);
-            text-decoration: none;
-            transition: color 0.15s, background 0.15s;
-        }
-        .blog-header-link:hover { color: var(--text); background: var(--bg); }
-        .blog-header-link.active { color: var(--blue); font-weight: 600; background: var(--blue-bg); }
-
-        .blog-wrap {
-            max-width: 760px;
-            margin: 0 auto;
-            padding: 32px 16px 80px;
-        }
-
-        /* Page hero */
-        .blog-hero {
-            margin-bottom: 32px;
-            padding-bottom: 24px;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .blog-hero-eyebrow {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 11px;
-            font-weight: 600;
-            color: var(--blue);
-            text-transform: uppercase;
-            letter-spacing: 0.06em;
-            margin-bottom: 10px;
-        }
-
-        .blog-hero h1 {
-            font-size: 28px;
-            font-weight: 700;
-            color: var(--text);
-            letter-spacing: -0.02em;
-            margin-bottom: 8px;
-            line-height: 1.2;
-        }
-
-        .blog-hero p {
-            font-size: 15px;
-            color: var(--muted);
-            line-height: 1.6;
-        }
-
-        /* Back link */
-        .blog-back {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            color: var(--muted);
-            text-decoration: none;
-            font-size: 13px;
-            font-weight: 500;
-            margin-bottom: 24px;
-            transition: color 0.15s;
-        }
-        .blog-back:hover { color: var(--blue); }
-
-        /* Post cards */
-        .posts-grid {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
-
-        .post-card {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            overflow: hidden;
-            text-decoration: none;
-            display: flex;
-            color: inherit;
-            transition: border-color 0.15s, box-shadow 0.15s, transform 0.15s;
-            box-shadow: var(--shadow);
-        }
-
-        .post-card:hover {
-            border-color: var(--blue);
-            box-shadow: 0 4px 16px rgba(37,99,235,0.1);
-            transform: translateY(-2px);
-        }
-
-        /* Coloured accent bar on left */
-        .post-card-accent {
-            width: 4px;
-            flex-shrink: 0;
-            background: var(--blue);
-        }
-
-        .post-card-body {
-            flex: 1;
-            padding: 20px 22px;
-        }
-
-        .post-tag {
-            display: inline-block;
-            background: var(--blue-bg);
-            color: var(--blue);
-            font-size: 10px;
-            font-weight: 600;
-            padding: 3px 8px;
-            border-radius: 100px;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            margin-bottom: 10px;
-        }
-
-        .post-card h2 {
-            font-size: 16px;
-            font-weight: 700;
-            color: var(--text);
-            margin-bottom: 8px;
-            line-height: 1.45;
-            letter-spacing: -0.01em;
-        }
-
-        .post-card p {
-            font-size: 14px;
-            color: var(--muted);
-            line-height: 1.55;
-            margin-bottom: 14px;
-        }
-
-        .post-meta {
-            font-size: 12px;
-            color: var(--faint);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .post-meta-dot {
-            width: 3px;
-            height: 3px;
-            background: var(--faint);
-            border-radius: 50%;
-        }
-
-        .post-read-more {
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            font-size: 13px;
-            font-weight: 600;
-            color: var(--blue);
-        }
-
-        /* Coming soon placeholder */
-        .blog-coming-soon {
-            background: var(--bg);
-            border: 1.5px dashed var(--border);
-            border-radius: var(--radius);
-            padding: 28px 24px;
-            text-align: center;
-            margin-top: 8px;
-        }
-
-        .blog-coming-soon p {
-            font-size: 14px;
-            color: var(--muted);
-            margin: 0;
-        }
-
-        /* Topics bar */
-        .blog-topics {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            flex-wrap: wrap;
-            margin-bottom: 24px;
-        }
-
-        .blog-topic-label {
-            font-size: 12px;
-            color: var(--faint);
-            font-weight: 500;
-            margin-right: 2px;
-        }
-
-        .topic-pill {
-            padding: 4px 12px;
-            border-radius: 100px;
-            border: 1px solid var(--border);
-            background: var(--surface);
-            font-size: 12px;
-            font-weight: 500;
-            color: var(--muted);
-            cursor: default;
-        }
-    </style>
 </head>
 <body>
     <header class="header">
         <div class="header-inner">
-            <a href="/" style="text-decoration:none;">
-                <div class="logo">
-                    <div class="logo-icon-wrapper">
-                        <svg class="logo-svg" width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M20 8L4 16L20 24L36 16L20 8Z" fill="#334155" stroke="#1e293b" stroke-width="1.5" stroke-linejoin="round"/>
-                            <path d="M8 18V26C8 26 12 30 20 30C28 30 32 26 32 26V18" stroke="#334155" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                            <path d="M36 16V24" stroke="#1e293b" stroke-width="2" stroke-linecap="round"/>
-                            <path d="M24 14L28 10L32 14M28 10V18" stroke="#10b981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                    </div>
-                    <div class="logo-text">
-                        <span class="logo-title">CollegeROI</span>
-                    </div>
+            <a class="logo" href="/">
+                <svg class="logo-cap" viewBox="0 0 40 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <path d="M20 4L2 13l18 9 18-9-18-9z" fill="#2563eb"/>
+                    <path d="M8 17.5v7c0 2.5 5.4 4.5 12 4.5s12-2 12-4.5v-7L20 22l-12-4.5z" fill="#2563eb" opacity="0.75"/>
+                    <rect x="35" y="13" width="2.5" height="9" rx="1.25" fill="#2563eb"/>
+                    <circle cx="36.25" cy="23" r="2" fill="#2563eb"/>
+                </svg>
+                <div>
+                    <div class="logo-name">CollegeROI Ireland</div>
+                    <div class="logo-sub">Course investment calculator</div>
                 </div>
             </a>
             <div style="display:flex;align-items:center;gap:4px;">
                 <a href="/" class="blog-header-link">Calculator</a>
+                <a href="/all-courses" class="blog-header-link">Browse</a>
                 <a href="/blog" class="blog-header-link active">Blog</a>
             </div>
         </div>
     </header>
 
-    <div class="blog-wrap">
+    <div class="post-wrap">
         <nav class="breadcrumb" aria-label="Breadcrumb">
             <a href="/">Home</a>
             <span class="crumb-sep">/</span>
@@ -324,7 +119,7 @@
             </a>
 
             <a href="/blog/is-a-law-degree-worth-it-ireland" class="post-card">
-                <div class="post-card-accent" style="background:#2563eb;"></div>
+                <div class="post-card-accent" style="background:#b45309;"></div>
                 <div class="post-card-body">
                     <span class="post-tag">Law</span>
                     <h2>Is a Law Degree Worth It in Ireland? Cost vs Salary</h2>
@@ -364,7 +159,7 @@
             </a>
 
             <a href="/blog/computer-science-vs-business-ireland" class="post-card">
-                <div class="post-card-accent" style="background:#2563eb;"></div>
+                <div class="post-card-accent" style="background:#7c3aed;"></div>
                 <div class="post-card-body">
                     <span class="post-tag">Comparison</span>
                     <h2>Computer Science vs Business Degree: Salary in Ireland</h2>
@@ -384,7 +179,7 @@
             </a>
 
             <a href="/blog/how-long-to-pay-back-college-degree-ireland" class="post-card">
-                <div class="post-card-accent" style="background:#2563eb;"></div>
+                <div class="post-card-accent" style="background:#64748b;"></div>
                 <div class="post-card-body">
                     <span class="post-tag">Guide</span>
                     <h2>How Long to Pay Back a College Degree in Ireland?</h2>
@@ -404,7 +199,7 @@
             </a>
 
             <a href="/blog/is-medicine-worth-it-ireland" class="post-card">
-                <div class="post-card-accent" style="background:#2563eb;"></div>
+                <div class="post-card-accent" style="background:#16a34a;"></div>
                 <div class="post-card-body">
                     <span class="post-tag">Medicine</span>
                     <h2>Is a Medicine Degree Worth It in Ireland? Cost &amp; Salary</h2>
@@ -424,7 +219,7 @@
             </a>
 
             <a href="/blog/trinity-vs-ucd-graduate-salaries" class="post-card">
-                <div class="post-card-accent" style="background:#2563eb;"></div>
+                <div class="post-card-accent" style="background:#7c3aed;"></div>
                 <div class="post-card-body">
                     <span class="post-tag">Comparison</span>
                     <h2>Trinity vs UCD: Graduate Salaries in Ireland Compared</h2>
@@ -464,7 +259,7 @@
             </a>
 
             <a href="/blog/lowest-roi-degrees-ireland" class="post-card">
-                <div class="post-card-accent" style="background:#2563eb;"></div>
+                <div class="post-card-accent" style="background:#0891b2;"></div>
                 <div class="post-card-body">
                     <span class="post-tag">Data</span>
                     <h2>Lowest ROI Degrees in Ireland: An Honest Look</h2>
@@ -485,5 +280,50 @@
 
         </div>
     </div>
+
+    <footer class="site-footer static-page">
+        <div class="wrap">
+            <div class="footer-grid">
+                <div>
+                    <a class="logo" href="/" style="display:inline-flex;">
+                        <svg class="logo-cap" viewBox="0 0 40 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="width:32px;height:26px;">
+                            <path d="M20 4L2 13l18 9 18-9-18-9z" fill="#2563eb"/>
+                            <path d="M8 17.5v7c0 2.5 5.4 4.5 12 4.5s12-2 12-4.5v-7L20 22l-12-4.5z" fill="#2563eb" opacity="0.75"/>
+                            <rect x="35" y="13" width="2.5" height="9" rx="1.25" fill="#2563eb"/>
+                            <circle cx="36.25" cy="23" r="2" fill="#2563eb"/>
+                        </svg>
+                        <div class="logo-name">CollegeROI Ireland</div>
+                    </a>
+                    <p class="footer-brand-desc">A free tool to help Irish students compare the real-world return on investment of university courses before they fill in their CAO.</p>
+                </div>
+                <div>
+                    <div class="footer-col-title">Tools</div>
+                    <div class="footer-links">
+                        <a href="/">ROI Calculator</a>
+                        <a href="/all-courses">Browse All Courses</a>
+                        <a href="/blog">Blog</a>
+                    </div>
+                </div>
+                <div>
+                    <div class="footer-col-title">Resources</div>
+                    <div class="footer-links">
+                        <a href="https://www.cao.ie" target="_blank" rel="noopener">CAO Website</a>
+                        <a href="https://hea.ie" target="_blank" rel="noopener">HEA Graduate Outcomes</a>
+                    </div>
+                </div>
+                <div>
+                    <div class="footer-col-title">About</div>
+                    <div class="footer-links">
+                        <a href="/">Methodology</a>
+                        <a href="mailto:hello@roicollege.ie">Contact</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <span>&copy; 2026 CollegeROI Ireland. Not affiliated with the CAO or any university.</span>
+                <span>Salary and ROI figures are estimates for guidance only.</span>
+            </div>
+        </div>
+    </footer>
 </body>
 </html>
