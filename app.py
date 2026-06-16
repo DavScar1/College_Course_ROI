@@ -754,6 +754,34 @@ def course_page(course_slug):
   }},
   "url": "{SITE_URL}/course/{course_slug}"
 }}
+</script>
+<script type="application/ld+json">
+{{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {{
+      "@type": "Question",
+      "name": "Is {course_title} worth it in Ireland?",
+      "acceptedAnswer": {{ "@type": "Answer", "text": "{course_title} at {university} has a 5-year ROI of {result['roi_5_years']}% and a payback period of {result['payback_years']} years. Graduates start on approximately €{result['starting_salary']:,} and earn around €{result['salary_after_5_years']:,.0f} after five years." }}
+    }},
+    {{
+      "@type": "Question",
+      "name": "What is the starting salary for {course_title} graduates in Ireland?",
+      "acceptedAnswer": {{ "@type": "Answer", "text": "{course_title} graduates from {university} earn approximately €{result['starting_salary']:,} in their first year of employment, rising to around €{result['salary_after_5_years']:,.0f} after five years in the workforce." }}
+    }},
+    {{
+      "@type": "Question",
+      "name": "How long does it take to pay back a {course_title} degree in Ireland?",
+      "acceptedAnswer": {{ "@type": "Answer", "text": "Based on total estimated costs of €{result['total_cost']:,.0f} over {result['course_length']} years and a starting salary of €{result['starting_salary']:,}, the payback period for {course_title} at {university} is approximately {result['payback_years']} years." }}
+    }},
+    {{
+      "@type": "Question",
+      "name": "What are the CAO points for {course_title} at {university}?",
+      "acceptedAnswer": {{ "@type": "Answer", "text": "{f'The most recent CAO points requirement for {course_title} at {university} was {cao_points} ({result.get(\"cao_points_year\", \"\")}).' if result.get('cao_points') else f'CAO points for {course_title} at {university} vary by year. Use the CAO website for the most up-to-date requirements.'}" }}
+    }}
+  ]
+}}
 </script>"""
 
     top_employers = cd.get('top_employers') or []
