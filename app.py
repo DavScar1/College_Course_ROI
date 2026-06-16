@@ -248,7 +248,7 @@ def home():
 def calculator_page():
     return home()
 
-@app.route('/quiz')
+@app.route('/quiz', strict_slashes=False)
 def quiz_page():
     try:
         return send_file('quiz.html')
@@ -304,18 +304,37 @@ def robots():
 
 @app.route('/sitemap.xml')
 def sitemap():
-    static_pages = ['/', '/quiz', '/blog', '/all-courses']
+    from datetime import date
+    today = date.today().isoformat()
 
-    urls = ''.join(f'  <url><loc>{SITE_URL}{path}</loc></url>\n' for path in static_pages)
+    static_pages = [
+        ('/', '1.0', 'weekly'),
+        ('/quiz', '0.9', 'monthly'),
+        ('/blog', '0.9', 'weekly'),
+        ('/all-courses', '0.8', 'monthly'),
+    ]
+
+    def url_entry(loc, priority, changefreq, lastmod=today):
+        return (
+            f'  <url>\n'
+            f'    <loc>{loc}</loc>\n'
+            f'    <lastmod>{lastmod}</lastmod>\n'
+            f'    <changefreq>{changefreq}</changefreq>\n'
+            f'    <priority>{priority}</priority>\n'
+            f'  </url>\n'
+        )
+
+    urls = ''.join(url_entry(f'{SITE_URL}{path}', priority, changefreq)
+                   for path, priority, changefreq in static_pages)
 
     blog_dir = os.path.join(os.path.dirname(__file__), 'blog')
     for filename in sorted(os.listdir(blog_dir)):
         if filename.endswith('.html') and filename != 'index.html':
             slug = filename[:-len('.html')]
-            urls += f'  <url><loc>{SITE_URL}/blog/{slug}</loc></url>\n'
+            urls += url_entry(f'{SITE_URL}/blog/{slug}', '0.8', 'monthly')
 
     for name in COURSE_DATA.keys():
-        urls += f'  <url><loc>{SITE_URL}/course/{slugify_course(name)}</loc></url>\n'
+        urls += url_entry(f'{SITE_URL}/course/{slugify_course(name)}', '0.7', 'monthly')
 
     xml = f"""<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
@@ -323,14 +342,14 @@ def sitemap():
 
     return xml, 200, {'Content-Type': 'application/xml'}
 
-@app.route('/blog')
+@app.route('/blog', strict_slashes=False)
 def blog_index():
     try:
         return send_file('blog/index.html')
     except FileNotFoundError:
         return 'Blog not found', 404
 
-@app.route('/blog/<post_slug>')
+@app.route('/blog/<post_slug>', strict_slashes=False)
 def blog_post(post_slug):
     try:
         return send_file(f'blog/{post_slug}.html')
@@ -696,7 +715,7 @@ def render_breadcrumb(items):
 # SEO pages — routes
 # ---------------------------------------------------------------------------
 
-@app.route('/course/<course_slug>')
+@app.route('/course/<course_slug>', strict_slashes=False)
 def course_page(course_slug):
     course_name = find_course_by_slug(course_slug)
     if not course_name:
@@ -850,7 +869,7 @@ def course_page(course_slug):
     return html
 
 
-@app.route('/all-courses')
+@app.route('/all-courses', strict_slashes=False)
 def courses_index():
     items = ''
     for name in COURSE_DATA.keys():
