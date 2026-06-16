@@ -14,10 +14,12 @@
     <meta property="og:title" content="Trinity vs UCD: Graduate Salaries in Ireland Compared">
     <meta property="og:description" content="Trinity vs UCD graduate salaries: how the two universities compare across Business, Computer Science, Law and Engineering, and whether the name matters.">
     <meta property="og:url" content="https://roicollege.ie/blog/trinity-vs-ucd-graduate-salaries">
+    <meta property="og:image" content="https://roicollege.ie/og-image.png">
     <meta property="og:site_name" content="CollegeROI Ireland">
-    <meta name="twitter:card" content="summary">
+    <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Trinity vs UCD: Graduate Salaries in Ireland Compared">
     <meta name="twitter:description" content="Trinity vs UCD graduate salaries: how the two universities compare across Business, Computer Science, Law and Engineering, and whether the name matters.">
+    <meta name="twitter:image" content="https://roicollege.ie/og-image.png">
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -175,27 +177,27 @@
                 </tr>
                 <tr>
                     <td>Computer Science — starting salary</td>
-                    <td>[INSERT]</td>
-                    <td>[INSERT]</td>
+                    <td>€35,000</td>
+                    <td>€34,000</td>
                 </tr>
                 <tr>
                     <td>Business — starting salary</td>
-                    <td>[INSERT]</td>
-                    <td>[INSERT]</td>
+                    <td>€31,938</td>
+                    <td>€30,000</td>
                 </tr>
                 <tr>
                     <td>Law — starting salary</td>
-                    <td>[INSERT]</td>
-                    <td>[INSERT]</td>
+                    <td>€40,000</td>
+                    <td>€36,000</td>
                 </tr>
                 <tr>
                     <td>Engineering — starting salary</td>
-                    <td>[INSERT]</td>
-                    <td>[INSERT]</td>
+                    <td>€36,500</td>
+                    <td>€36,000</td>
                 </tr>
             </table>
 
-            <p>[INSERT GRADUATE SALARY FROM CALCULATOR] — fill in this table with the current figures for each course and university combination to see exactly where, if anywhere, a meaningful gap appears.</p>
+            <p>These figures are directly from the CollegeROI calculator. Law shows the largest gap (€40k Trinity vs €36k UCD), while CS and Engineering are almost identical across both universities. The calculator lets you compare any course at both universities side-by-side.</p>
 
             <h2>Law: does the university name carry more weight here?</h2>
 
@@ -306,6 +308,14 @@
         </div>
     </footer>
 
+
+    <!-- Sticky CTA bar -->
+    <div class="sticky-cta" id="stickyCta">
+        <span class="sticky-cta-text">Find the ROI for your CAO course</span>
+        <a href="/" class="sticky-cta-btn">Open Calculator →</a>
+        <button class="sticky-cta-close" onclick="document.getElementById('stickyCta').style.display='none'" aria-label="Close">✕</button>
+    </div>
+
     <script>
         // Reading progress bar
         const bar = document.getElementById('readProgress');
@@ -315,6 +325,16 @@
             const h    = doc.scrollHeight - doc.clientHeight;
             bar.style.width = h > 0 ? (top / h * 100) + '%' : '0%';
         });
+
+        // Sticky CTA bar
+        const cta = document.getElementById('stickyCta');
+        if (cta) {
+            window.addEventListener('scroll', () => {
+                const d = document.documentElement;
+                const pct = (d.scrollTop || document.body.scrollTop) / (d.scrollHeight - d.clientHeight);
+                if (pct > 0.35) cta.classList.add('visible');
+            }, {passive: true});
+        }
     </script>
 </body>
 </html>

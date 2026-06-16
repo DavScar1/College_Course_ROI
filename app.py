@@ -285,6 +285,14 @@ def favicon_ico():
         return jsonify({'error': 'favicon.svg not found'}), 404
 
 
+@app.route('/og-image.png')
+def og_image():
+    try:
+        return send_file('og-image.png', mimetype='image/png')
+    except FileNotFoundError:
+        return jsonify({'error': 'og-image.png not found'}), 404
+
+
 @app.route('/robots.txt')
 def robots():
     return (

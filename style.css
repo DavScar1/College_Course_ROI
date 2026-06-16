@@ -2817,6 +2817,57 @@ input, select, textarea { font-size: 16px !important; } /* prevent iOS zoom */
 /* Static-page footer (no mobile bottom-nav clearance needed) */
 .site-footer.static-page { padding-bottom: 36px; }
 
+/* Sticky "Try the Calculator" bar on blog post pages */
+.sticky-cta {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: var(--blue);
+  color: #fff;
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  z-index: 150;
+  font-size: 14px;
+  font-weight: 500;
+  transform: translateY(100%);
+  transition: transform 0.3s ease;
+  box-shadow: 0 -4px 16px rgba(37,99,235,0.25);
+}
+.sticky-cta.visible { transform: translateY(0); }
+.sticky-cta-text { color: rgba(255,255,255,0.9); }
+.sticky-cta-btn {
+  background: #fff;
+  color: var(--blue);
+  padding: 7px 16px;
+  border-radius: var(--radius-sm);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 13px;
+  white-space: nowrap;
+  transition: box-shadow 0.15s;
+}
+.sticky-cta-btn:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.15); }
+.sticky-cta-close {
+  background: none;
+  border: none;
+  color: rgba(255,255,255,0.65);
+  cursor: pointer;
+  font-size: 18px;
+  line-height: 1;
+  padding: 0;
+  margin-left: auto;
+  transition: color 0.15s;
+}
+.sticky-cta-close:hover { color: #fff; }
+@media (max-width: 480px) {
+  .sticky-cta { gap: 10px; padding: 10px 14px; font-size: 13px; }
+  .sticky-cta-text { display: none; }
+}
+
 @media (max-width: 520px) {
   .post-title { font-size: 22px; }
   .stat-row { gap: 8px; }

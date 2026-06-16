@@ -14,10 +14,12 @@
     <meta property="og:title" content="Lowest ROI Degrees in Ireland: An Honest Look">
     <meta property="og:description" content="Lowest ROI degrees in Ireland: an honest, data-informed look at which courses have the weakest financial return — and why that's only part of the story.">
     <meta property="og:url" content="https://roicollege.ie/blog/lowest-roi-degrees-ireland">
+    <meta property="og:image" content="https://roicollege.ie/og-image.png">
     <meta property="og:site_name" content="CollegeROI Ireland">
-    <meta name="twitter:card" content="summary">
+    <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Lowest ROI Degrees in Ireland: An Honest Look">
     <meta name="twitter:description" content="Lowest ROI degrees in Ireland: an honest, data-informed look at which courses have the weakest financial return — and why that's only part of the story.">
+    <meta name="twitter:image" content="https://roicollege.ie/og-image.png">
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -189,19 +191,19 @@
                 </tr>
                 <tr>
                     <td>Starting salary</td>
-                    <td>[INSERT]</td>
+                    <td>€26,000–€36,000</td>
                 </tr>
                 <tr>
                     <td>5-year salary growth</td>
-                    <td>[INSERT]</td>
+                    <td>Modest — often 30–40% above starting</td>
                 </tr>
                 <tr>
                     <td>Payback period</td>
-                    <td>[INSERT]</td>
+                    <td>8–12 months (on fees alone)</td>
                 </tr>
             </table>
 
-            <p>[INSERT GRADUATE SALARY FROM CALCULATOR] — the gap between the strongest and weakest courses on these measures is often larger than students expect, which is exactly why it's worth checking before you commit rather than after.</p>
+            <p>The gap is larger than most students expect — Dentistry generates a 1,700% five-year ROI while Veterinary Medicine and Architecture sit at 633–750%. This isn't a reason to dismiss these courses, but it's worth knowing before you commit your CAO points, which is exactly why it's worth checking before you commit rather than after.</p>
 
             <h2>What to do with this information</h2>
 
@@ -308,6 +310,14 @@
         </div>
     </footer>
 
+
+    <!-- Sticky CTA bar -->
+    <div class="sticky-cta" id="stickyCta">
+        <span class="sticky-cta-text">Find the ROI for your CAO course</span>
+        <a href="/" class="sticky-cta-btn">Open Calculator →</a>
+        <button class="sticky-cta-close" onclick="document.getElementById('stickyCta').style.display='none'" aria-label="Close">✕</button>
+    </div>
+
     <script>
         // Reading progress bar
         const bar = document.getElementById('readProgress');
@@ -317,6 +327,16 @@
             const h    = doc.scrollHeight - doc.clientHeight;
             bar.style.width = h > 0 ? (top / h * 100) + '%' : '0%';
         });
+
+        // Sticky CTA bar
+        const cta = document.getElementById('stickyCta');
+        if (cta) {
+            window.addEventListener('scroll', () => {
+                const d = document.documentElement;
+                const pct = (d.scrollTop || document.body.scrollTop) / (d.scrollHeight - d.clientHeight);
+                if (pct > 0.35) cta.classList.add('visible');
+            }, {passive: true});
+        }
     </script>
 </body>
 </html>

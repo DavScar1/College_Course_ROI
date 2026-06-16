@@ -14,10 +14,12 @@
     <meta property="og:title" content="CAO 2026: How to Pick a Course (Practical Guide)">
     <meta property="og:description" content="CAO 2026: a practical guide to picking a course — balancing interest vs salary, points vs ROI, and why choosing on points alone can backfire.">
     <meta property="og:url" content="https://roicollege.ie/blog/cao-2026-how-to-pick-a-course">
+    <meta property="og:image" content="https://roicollege.ie/og-image.png">
     <meta property="og:site_name" content="CollegeROI Ireland">
-    <meta name="twitter:card" content="summary">
+    <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="CAO 2026: How to Pick a Course (Practical Guide)">
     <meta name="twitter:description" content="CAO 2026: a practical guide to picking a course — balancing interest vs salary, points vs ROI, and why choosing on points alone can backfire.">
+    <meta name="twitter:image" content="https://roicollege.ie/og-image.png">
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -173,20 +175,20 @@
 
             <div class="stat-row">
                 <div class="stat-box">
-                    <span class="stat-box-value">[INSERT]</span>
-                    <span class="stat-box-label">Starting salary</span>
+                    <span class="stat-box-value">€34,000</span>
+                    <span class="stat-box-label">CS starting salary (UCD)</span>
                 </div>
                 <div class="stat-box">
-                    <span class="stat-box-value">[INSERT]</span>
-                    <span class="stat-box-label">5-year ROI</span>
+                    <span class="stat-box-value">1,213%</span>
+                    <span class="stat-box-label">CS 5-year ROI (UCD)</span>
                 </div>
                 <div class="stat-box">
-                    <span class="stat-box-value">[INSERT]</span>
-                    <span class="stat-box-label">Payback period</span>
+                    <span class="stat-box-value">~6 months</span>
+                    <span class="stat-box-label">CS payback period (UCD)</span>
                 </div>
             </div>
 
-            <p>[INSERT GRADUATE SALARY FROM CALCULATOR] — run each course on your shortlist through the calculator and note these three figures side by side. It takes a few minutes and gives you a much clearer picture than relying on general reputation.</p>
+            <p>€34,000 starting, 1,213% ROI, ~6-month payback — those are the numbers for Computer Science at UCD. Run each course on your shortlist through the calculator and note these three figures side by side. It takes a few minutes and gives you a much clearer picture than relying on general reputation.</p>
 
             <h2>Step 3: Don't confuse points with quality (or salary)</h2>
 
@@ -297,6 +299,14 @@
         </div>
     </footer>
 
+
+    <!-- Sticky CTA bar -->
+    <div class="sticky-cta" id="stickyCta">
+        <span class="sticky-cta-text">Find the ROI for your CAO course</span>
+        <a href="/" class="sticky-cta-btn">Open Calculator →</a>
+        <button class="sticky-cta-close" onclick="document.getElementById('stickyCta').style.display='none'" aria-label="Close">✕</button>
+    </div>
+
     <script>
         // Reading progress bar
         const bar = document.getElementById('readProgress');
@@ -306,6 +316,16 @@
             const h    = doc.scrollHeight - doc.clientHeight;
             bar.style.width = h > 0 ? (top / h * 100) + '%' : '0%';
         });
+
+        // Sticky CTA bar
+        const cta = document.getElementById('stickyCta');
+        if (cta) {
+            window.addEventListener('scroll', () => {
+                const d = document.documentElement;
+                const pct = (d.scrollTop || document.body.scrollTop) / (d.scrollHeight - d.clientHeight);
+                if (pct > 0.35) cta.classList.add('visible');
+            }, {passive: true});
+        }
     </script>
 </body>
 </html>

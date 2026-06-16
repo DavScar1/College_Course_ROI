@@ -14,10 +14,12 @@
     <meta property="og:title" content="Is a Law Degree Worth It in Ireland? Cost vs Salary">
     <meta property="og:description" content="Is a law degree worth it in Ireland? We compare the cost of a BCL/LLB against solicitor and barrister starting salaries, payback periods and the 5-year path.">
     <meta property="og:url" content="https://roicollege.ie/blog/is-a-law-degree-worth-it-ireland">
+    <meta property="og:image" content="https://roicollege.ie/og-image.png">
     <meta property="og:site_name" content="CollegeROI Ireland">
-    <meta name="twitter:card" content="summary">
+    <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Is a Law Degree Worth It in Ireland? Cost vs Salary">
     <meta name="twitter:description" content="Is a law degree worth it in Ireland? We compare the cost of a BCL/LLB against solicitor and barrister starting salaries, payback periods and the 5-year path.">
+    <meta name="twitter:image" content="https://roicollege.ie/og-image.png">
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -89,7 +91,7 @@
           "name": "How long does it take to pay back the cost of a law degree?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "It depends heavily on which path you take after your degree, since professional training adds extra years and costs before you're earning a full solicitor or barrister salary. [INSERT PAYBACK PERIOD FROM CALCULATOR] is the figure to use as your starting point — the ROI calculator factors in tuition, living costs and the additional professional training stage."
+            "text": "It depends heavily on which path you take after your degree, since professional training adds extra years and costs before you're earning a full solicitor or barrister salary. The calculator puts tuition-fee payback at under 6 months for Law at UCD, though the real time to a full practitioner salary is longer once professional training is factored in."
           }
         }
       ]
@@ -181,20 +183,20 @@
 
             <div class="stat-row">
                 <div class="stat-box">
-                    <span class="stat-box-value">[INSERT]</span>
+                    <span class="stat-box-value">€36,000</span>
                     <span class="stat-box-label">Starting salary</span>
                 </div>
                 <div class="stat-box">
-                    <span class="stat-box-value">[INSERT]</span>
+                    <span class="stat-box-value">€65,000</span>
                     <span class="stat-box-label">After 5 years</span>
                 </div>
                 <div class="stat-box">
-                    <span class="stat-box-value">[INSERT]</span>
+                    <span class="stat-box-value">1,478%</span>
                     <span class="stat-box-label">5-year ROI</span>
                 </div>
             </div>
 
-            <p>[INSERT GRADUATE SALARY FROM CALCULATOR] is the figure to use as your baseline for a law graduate's early-career earnings. Keep in mind this reflects the degree itself — your actual income in the first few years will depend heavily on whether you're in a training contract, devilling at the Bar, or working in a non-legal graduate role while you study for professional exams part-time.</p>
+            <p>€36,000 a year is a representative starting salary for a Law graduate (UCD) from the calculator, and a useful baseline for early-career earnings. Keep in mind this reflects the degree itself — your actual income in the first few years will depend heavily on whether you're in a training contract, devilling at the Bar, or working in a non-legal graduate role while you study for professional exams part-time.</p>
 
             <h2>Solicitor vs barrister: two very different economics</h2>
 
@@ -237,7 +239,7 @@
 
                 <div class="faq-item">
                     <h3>How long does it take to pay back the cost of a law degree?</h3>
-                    <p>It depends heavily on which path you take after your degree, since professional training adds extra years and costs before you're earning a full solicitor or barrister salary. [INSERT PAYBACK PERIOD FROM CALCULATOR] is the figure to use as your starting point — the ROI calculator factors in tuition, living costs and the additional professional training stage.</p>
+                    <p>It depends heavily on which path you take after your degree, since professional training adds extra years and costs before you're earning a full solicitor or barrister salary. The calculator puts the tuition-fee payback at under 6 months for Law at UCD — though the real timeline to a full solicitor or barrister salary is longer once professional training is factored in.</p>
                 </div>
             </div>
 
@@ -299,6 +301,14 @@
         </div>
     </footer>
 
+
+    <!-- Sticky CTA bar -->
+    <div class="sticky-cta" id="stickyCta">
+        <span class="sticky-cta-text">Find the ROI for your CAO course</span>
+        <a href="/" class="sticky-cta-btn">Open Calculator →</a>
+        <button class="sticky-cta-close" onclick="document.getElementById('stickyCta').style.display='none'" aria-label="Close">✕</button>
+    </div>
+
     <script>
         // Reading progress bar
         const bar = document.getElementById('readProgress');
@@ -308,6 +318,16 @@
             const h    = doc.scrollHeight - doc.clientHeight;
             bar.style.width = h > 0 ? (top / h * 100) + '%' : '0%';
         });
+
+        // Sticky CTA bar
+        const cta = document.getElementById('stickyCta');
+        if (cta) {
+            window.addEventListener('scroll', () => {
+                const d = document.documentElement;
+                const pct = (d.scrollTop || document.body.scrollTop) / (d.scrollHeight - d.clientHeight);
+                if (pct > 0.35) cta.classList.add('visible');
+            }, {passive: true});
+        }
     </script>
 </body>
 </html>

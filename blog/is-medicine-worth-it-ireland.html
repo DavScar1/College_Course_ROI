@@ -14,10 +14,12 @@
     <meta property="og:title" content="Is a Medicine Degree Worth It in Ireland? Cost & Salary">
     <meta property="og:description" content="Is a medicine degree worth it in Ireland? An honest look at the cost, the long training pipeline through intern and specialist years, and long-run earnings.">
     <meta property="og:url" content="https://roicollege.ie/blog/is-medicine-worth-it-ireland">
+    <meta property="og:image" content="https://roicollege.ie/og-image.png">
     <meta property="og:site_name" content="CollegeROI Ireland">
-    <meta name="twitter:card" content="summary">
+    <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Is a Medicine Degree Worth It in Ireland? Cost & Salary">
     <meta name="twitter:description" content="Is a medicine degree worth it in Ireland? An honest look at the cost, the long training pipeline through intern and specialist years, and long-run earnings.">
+    <meta name="twitter:image" content="https://roicollege.ie/og-image.png">
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -184,20 +186,20 @@
 
             <div class="stat-row">
                 <div class="stat-box">
-                    <span class="stat-box-value">[INSERT]</span>
+                    <span class="stat-box-value">€45,700</span>
                     <span class="stat-box-label">Starting salary</span>
                 </div>
                 <div class="stat-box">
-                    <span class="stat-box-value">[INSERT]</span>
+                    <span class="stat-box-value">€70,800</span>
                     <span class="stat-box-label">After 5 years</span>
                 </div>
                 <div class="stat-box">
-                    <span class="stat-box-value">[INSERT]</span>
-                    <span class="stat-box-label">Payback period</span>
+                    <span class="stat-box-value">~7 months</span>
+                    <span class="stat-box-label">Payback period (fees only)</span>
                 </div>
             </div>
 
-            <p>[INSERT GRADUATE SALARY FROM CALCULATOR] — use the calculator's figures as your starting point, but read them with the training pipeline in mind. The "5-year salary" figure for medicine reflects someone still relatively early in specialist training, not a consultant. If you want a refresher on exactly what payback period means and how it's calculated, see our guide on <a href="/blog/how-long-to-pay-back-college-degree-ireland">how long it takes to pay back a college degree in Ireland</a> — medicine is a good example of a course where this number needs careful interpretation.</p>
+            <p>€45,700 a year is the calculator's starting salary figure for a UCD Medicine graduate — use it as your starting point, but read them with the training pipeline in mind. The "5-year salary" figure for medicine reflects someone still relatively early in specialist training, not a consultant. If you want a refresher on exactly what payback period means and how it's calculated, see our guide on <a href="/blog/how-long-to-pay-back-college-degree-ireland">how long it takes to pay back a college degree in Ireland</a> — medicine is a good example of a course where this number needs careful interpretation.</p>
 
             <p>Compared to many other high-points courses, medicine's payback period is longer — not because the eventual earnings are weak, but because the training pipeline delays them substantially.</p>
 
@@ -304,6 +306,14 @@
         </div>
     </footer>
 
+
+    <!-- Sticky CTA bar -->
+    <div class="sticky-cta" id="stickyCta">
+        <span class="sticky-cta-text">Find the ROI for your CAO course</span>
+        <a href="/" class="sticky-cta-btn">Open Calculator →</a>
+        <button class="sticky-cta-close" onclick="document.getElementById('stickyCta').style.display='none'" aria-label="Close">✕</button>
+    </div>
+
     <script>
         // Reading progress bar
         const bar = document.getElementById('readProgress');
@@ -313,6 +323,16 @@
             const h    = doc.scrollHeight - doc.clientHeight;
             bar.style.width = h > 0 ? (top / h * 100) + '%' : '0%';
         });
+
+        // Sticky CTA bar
+        const cta = document.getElementById('stickyCta');
+        if (cta) {
+            window.addEventListener('scroll', () => {
+                const d = document.documentElement;
+                const pct = (d.scrollTop || document.body.scrollTop) / (d.scrollHeight - d.clientHeight);
+                if (pct > 0.35) cta.classList.add('visible');
+            }, {passive: true});
+        }
     </script>
 </body>
 </html>

@@ -14,10 +14,12 @@
     <meta property="og:title" content="Best CAO Courses for Salary in Ireland (2026 Guide)">
     <meta property="og:description" content="A 2026 guide to the best CAO courses for salary in Ireland — the fields that consistently lead on starting pay, 5-year salary and ROI for Irish graduates.">
     <meta property="og:url" content="https://roicollege.ie/blog/best-cao-courses-salary-ireland-2026">
+    <meta property="og:image" content="https://roicollege.ie/og-image.png">
     <meta property="og:site_name" content="CollegeROI Ireland">
-    <meta name="twitter:card" content="summary">
+    <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Best CAO Courses for Salary in Ireland (2026 Guide)">
     <meta name="twitter:description" content="A 2026 guide to the best CAO courses for salary in Ireland — the fields that consistently lead on starting pay, 5-year salary and ROI for Irish graduates.">
+    <meta name="twitter:image" content="https://roicollege.ie/og-image.png">
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -191,20 +193,20 @@
 
             <div class="stat-row">
                 <div class="stat-box">
-                    <span class="stat-box-value">[INSERT]</span>
-                    <span class="stat-box-label">Top starting salary field</span>
+                    <span class="stat-box-value">€68,000</span>
+                    <span class="stat-box-label">Dentistry starting salary</span>
                 </div>
                 <div class="stat-box">
-                    <span class="stat-box-value">[INSERT]</span>
-                    <span class="stat-box-label">Fastest 5-yr growth</span>
+                    <span class="stat-box-value">75–80%</span>
+                    <span class="stat-box-label">Salary growth (Law & Medicine)</span>
                 </div>
                 <div class="stat-box">
-                    <span class="stat-box-value">[INSERT]</span>
-                    <span class="stat-box-label">Shortest payback period</span>
+                    <span class="stat-box-value">~4 months</span>
+                    <span class="stat-box-label">Shortest payback (Dentistry)</span>
                 </div>
             </div>
 
-            <p>[INSERT GRADUATE SALARY FROM CALCULATOR] — use the actual figures from the calculator above to fill in the field-by-field comparison once you've shortlisted your courses.</p>
+            <p>Dentistry tops the starting salary table at €68,000, with Medicine and Pharmacy at €46,000–€50,000. CS and Engineering start at €34,000–€37,000 — lower initially, but with very fast payback periods (under 6 months on fees) and strong 5-year growth to €48,000–€54,000.</p>
 
             <h2>High points doesn't always mean high ROI</h2>
 
@@ -311,6 +313,14 @@
         </div>
     </footer>
 
+
+    <!-- Sticky CTA bar -->
+    <div class="sticky-cta" id="stickyCta">
+        <span class="sticky-cta-text">Find the ROI for your CAO course</span>
+        <a href="/" class="sticky-cta-btn">Open Calculator →</a>
+        <button class="sticky-cta-close" onclick="document.getElementById('stickyCta').style.display='none'" aria-label="Close">✕</button>
+    </div>
+
     <script>
         // Reading progress bar
         const bar = document.getElementById('readProgress');
@@ -320,6 +330,16 @@
             const h    = doc.scrollHeight - doc.clientHeight;
             bar.style.width = h > 0 ? (top / h * 100) + '%' : '0%';
         });
+
+        // Sticky CTA bar
+        const cta = document.getElementById('stickyCta');
+        if (cta) {
+            window.addEventListener('scroll', () => {
+                const d = document.documentElement;
+                const pct = (d.scrollTop || document.body.scrollTop) / (d.scrollHeight - d.clientHeight);
+                if (pct > 0.35) cta.classList.add('visible');
+            }, {passive: true});
+        }
     </script>
 </body>
 </html>
