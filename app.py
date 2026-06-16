@@ -742,6 +742,14 @@ def course_page(course_slug):
         (f'{course_title} ({school_code})', None),
     ])
 
+    cao_points = result.get('cao_points')
+    cao_code = result.get('cao_code')
+    if cao_points:
+        _cao_year = result.get('cao_points_year', '')
+        _cao_answer = f'The most recent CAO points requirement for {course_title} at {university} was {cao_points} ({_cao_year}).'
+    else:
+        _cao_answer = f'CAO points for {course_title} at {university} vary by year. Use the CAO website for the most up-to-date requirements.'
+
     course_schema = f"""<script type="application/ld+json">
 {{
   "@context": "https://schema.org",
@@ -778,7 +786,7 @@ def course_page(course_slug):
     {{
       "@type": "Question",
       "name": "What are the CAO points for {course_title} at {university}?",
-      "acceptedAnswer": {{ "@type": "Answer", "text": "{f'The most recent CAO points requirement for {course_title} at {university} was {cao_points} ({result.get(\"cao_points_year\", \"\")}).' if result.get('cao_points') else f'CAO points for {course_title} at {university} vary by year. Use the CAO website for the most up-to-date requirements.'}" }}
+      "acceptedAnswer": {{ "@type": "Answer", "text": "{_cao_answer}" }}
     }}
   ]
 }}
@@ -789,8 +797,6 @@ def course_page(course_slug):
     employment_rate = cd.get('employment_rate')
     career_progression = cd.get('career_progression')
     skills_demand = cd.get('skills_demand')
-    cao_points = result.get('cao_points')
-    cao_code = result.get('cao_code')
 
     extra_paragraphs = ''
     if employment_rate or career_progression or skills_demand:
