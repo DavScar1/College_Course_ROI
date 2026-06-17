@@ -758,19 +758,37 @@ input, select, textarea { font-size: 16px !important; } /* prevent iOS zoom */
   margin-top: 12px;
 }
 
-.living-toggle {
-  display: inline-flex;
+.living-section {
   background: var(--surface);
+  border: 1.5px solid var(--blue);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  margin: 14px 0 10px;
+}
+.living-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 10px;
+}
+.living-toggle {
+  display: flex;
+  background: var(--bg);
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
   padding: 3px;
   gap: 2px;
+  width: 100%;
 }
 .living-btn {
+  flex: 1;
   background: none;
   border: none;
   border-radius: calc(var(--radius-sm) - 2px);
-  padding: 5px 14px;
+  padding: 8px 10px;
   font-size: 13px;
   font-weight: 500;
   color: var(--muted);
@@ -783,8 +801,8 @@ input, select, textarea { font-size: 16px !important; } /* prevent iOS zoom */
 }
 .living-hint {
   font-size: 11px;
-  color: var(--faint);
-  margin-top: 5px;
+  color: var(--muted);
+  margin-top: 8px;
 }
 
 .disclaimer {
