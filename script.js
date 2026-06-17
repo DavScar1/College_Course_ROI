@@ -337,7 +337,7 @@ function showAllCourses(evt) {
 function setLiving(btn) {
     livingSituation = btn.dataset.val;
     document.querySelectorAll('.living-btn').forEach(b => b.classList.toggle('active', b === btn));
-    const hints = { renting: '~€16,000/yr incl. rent, food &amp; transport', home: '~€6,500/yr incl. food &amp; transport' };
+    const hints = { renting: '~€16,000/yr incl. rent, food &amp; transport', home: '~€4,000/yr transport, books &amp; college costs only' };
     const hint = document.getElementById('livingHint');
     if (hint) hint.innerHTML = hints[livingSituation];
     if (currentCourseData) calculateROI();

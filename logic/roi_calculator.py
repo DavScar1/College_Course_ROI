@@ -6,9 +6,10 @@ from course_data import COURSE_DATA, get_all_courses
 
 # Annual living cost estimates (HEA/CSO 2024-2026 data)
 # Renting: rent €900/mo + food €300/mo + transport €133/mo + misc €167/mo = €16,000/yr
-# At home: food contribution €200/mo + transport €150/mo + personal €192/mo = €6,500/yr
+# At home (incremental only — what you spend because of college, not what you'd spend anyway):
+#   transport €1,700 + books €600 + college misc €700 + incremental food €1,000 = €4,000/yr
 LIVING_COST_RENTING = 16_000
-LIVING_COST_HOME = 6_500
+LIVING_COST_HOME = 4_000
 
 def calculate_roi(course_name, tuition_per_year=None, course_length=None, living_situation='renting'):
     """
