@@ -5,10 +5,13 @@
 from course_data import COURSE_DATA, get_all_courses
 
 # Annual living cost estimates (HEA/CSO 2024-2026 data)
-# Renting: rent €900/mo + food €300/mo + transport €133/mo + misc €167/mo = €16,000/yr
+# Renting (national average, 2024-2026):
+#   Shared room rent €1,050/mo (Dublin ~€1,250, outside Dublin ~€800, blended)
+#   + food €260/mo + transport €65/mo (Young Adult Leap 50% discount since 2021)
+#   + utilities €55/mo + phone €22/mo + books/personal/misc €148/mo = ~€18,000/yr
 # At home (incremental only — what you spend because of college, not what you'd spend anyway):
 #   transport €1,700 + books €600 + college misc €700 + incremental food €1,000 = €4,000/yr
-LIVING_COST_RENTING = 16_000
+LIVING_COST_RENTING = 18_000
 LIVING_COST_HOME = 4_000
 
 def calculate_roi(course_name, tuition_per_year=None, course_length=None, living_situation='renting'):
