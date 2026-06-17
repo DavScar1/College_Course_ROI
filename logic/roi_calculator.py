@@ -9,10 +9,12 @@ from course_data import COURSE_DATA, get_all_courses
 #   Shared room rent €1,050/mo (Dublin ~€1,250, outside Dublin ~€800, blended)
 #   + food €260/mo + transport €65/mo (Young Adult Leap 50% discount since 2021)
 #   + utilities €55/mo + phone €22/mo + books/personal/misc €148/mo = ~€18,000/yr
-# At home (incremental only — what you spend because of college, not what you'd spend anyway):
-#   transport €1,700 + books €600 + college misc €700 + incremental food €1,000 = €4,000/yr
+#   Source: TU Dublin Cost of Living Guide 2025/26 (PBSA €19,479), University Times 2024
+#   (national avg €15,632, Dublin €19,527). €18k sits in the middle for private renting.
+# At home: TU Dublin official data shows €7,977/yr total incl. €3,000 student charge.
+#   Living costs only (excl. charge already counted in tuition_per_year): €4,977 ≈ €5,000/yr
 LIVING_COST_RENTING = 18_000
-LIVING_COST_HOME = 4_000
+LIVING_COST_HOME = 5_000
 
 def calculate_roi(course_name, tuition_per_year=None, course_length=None, living_situation='renting'):
     """
