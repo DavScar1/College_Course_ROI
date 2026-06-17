@@ -4,7 +4,13 @@
 
 from course_data import COURSE_DATA, get_all_courses
 
-def calculate_roi(course_name, tuition_per_year=None, course_length=None):
+# Annual living cost estimates (HEA/CSO 2024-2026 data)
+# Renting: rent €900/mo + food €300/mo + transport €133/mo + misc €167/mo = €16,000/yr
+# At home: food contribution €200/mo + transport €150/mo + personal €192/mo = €6,500/yr
+LIVING_COST_RENTING = 16_000
+LIVING_COST_HOME = 6_500
+
+def calculate_roi(course_name, tuition_per_year=None, course_length=None, living_situation='renting'):
     """
     Calculate ROI for a college course.
     
@@ -31,8 +37,9 @@ def calculate_roi(course_name, tuition_per_year=None, course_length=None):
     salary_5_years = course_info["salary_5_years"]
     growth_rate = course_info["growth_rate"]
     
-    # Calculate total education cost
-    total_cost = tuition_per_year * course_length
+    # Calculate total cost including living expenses
+    living_cost_per_year = LIVING_COST_RENTING if living_situation == 'renting' else LIVING_COST_HOME
+    total_cost = (tuition_per_year + living_cost_per_year) * course_length
     
     # Calculate take-home pay (assuming 25% effective tax rate for graduates)
     annual_net_income = starting_salary * 0.75
@@ -65,6 +72,8 @@ def calculate_roi(course_name, tuition_per_year=None, course_length=None):
         "lifetime_roi": round(lifetime_roi, 0),
         "course_length": course_length,
         "tuition_per_year": tuition_per_year,
+        "living_cost_per_year": living_cost_per_year,
+        "living_situation": living_situation,
         "cao_code": course_info.get("cao_code"),
         "cao_points": course_info.get("cao_points"),
         "cao_points_year": course_info.get("cao_points_year"),

@@ -11,6 +11,7 @@ let investmentChartInstance = null;
 let coursesLoaded  = false;
 let currentCourseData = null;
 let activeFilters  = { universities: [], fields: [], sortBy: 'roi-desc' };
+let livingSituation = 'renting'; // 'renting' | 'home'
 
 const API_BASE_URL = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
     ? 'http://127.0.0.1:5000'
@@ -333,13 +334,22 @@ function showAllCourses(evt) {
    Calculate ROI (single course)
    ============================================================ */
 
+function setLiving(btn) {
+    livingSituation = btn.dataset.val;
+    document.querySelectorAll('.living-btn').forEach(b => b.classList.toggle('active', b === btn));
+    const hints = { renting: '~€16,000/yr incl. rent, food &amp; transport', home: '~€6,500/yr incl. food &amp; transport' };
+    const hint = document.getElementById('livingHint');
+    if (hint) hint.innerHTML = hints[livingSituation];
+    if (currentCourseData) calculateROI();
+}
+
 function calculateROI() {
     if (!coursesLoaded) { showError('Courses are still loading. Please wait a moment.'); return; }
 
     const course = document.getElementById('course').value;
     if (!course) { showError('Please select a course first.'); return; }
 
-    const url = `${API_BASE_URL}/calculate?course=${encodeURIComponent(course)}`;
+    const url = `${API_BASE_URL}/calculate?course=${encodeURIComponent(course)}&living=${livingSituation}`;
 
     const btn = document.getElementById('calcBtn');
     if (btn) { btn.textContent = 'Calculating…'; btn.disabled = true; }
@@ -500,7 +510,7 @@ function displaySingleResult(d) {
                 </div>
                 <div class="rv2-ks-value">€${(d.total_cost/1000).toFixed(0)}k</div>
                 <div class="rv2-ks-label">Total cost</div>
-                <div class="rv2-ks-sub">€${(d.tuition_per_year/1000).toFixed(1)}k/yr × ${d.course_length} yrs</div>
+                <div class="rv2-ks-sub">Fees + ${d.living_situation === 'home' ? 'home' : 'rent'} × ${d.course_length} yrs</div>
             </div>
             <div class="rv2-key-stat">
                 <div class="rv2-ks-icon" style="background:${accentColor}14;color:${accentColor}">

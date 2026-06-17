@@ -420,12 +420,16 @@ def calculate():
 
     custom_tuition = request.args.get('tuition', type=float)
     custom_years = request.args.get('years', type=int)
+    living_situation = request.args.get('living', 'renting')
+    if living_situation not in ('renting', 'home'):
+        living_situation = 'renting'
 
     try:
         result = calculate_roi(
             course_name=course_name,
             tuition_per_year=custom_tuition,
             course_length=custom_years,
+            living_situation=living_situation,
         )
         result = analyze_course(result)
 
