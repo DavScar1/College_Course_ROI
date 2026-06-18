@@ -70,6 +70,7 @@ window.onload = function () {
             renderQuickPicks();
             renderCmpPopularGrid();
             initHeroTicker(allCoursesData);
+            checkShareParams();
         })
         .catch(err => {
             console.error('Bootstrap error:', err);
@@ -653,6 +654,15 @@ function displaySingleResult(d) {
             <div class="rv2-lt-sub">The marker shows where the national figure sits on the bar. Source: CSO Earnings &amp; Labour Costs 2025.</div>
         </div>` : ''}
 
+        <!-- Share button -->
+        <div class="rv2-share-row">
+            <button class="rv2-share-btn" onclick="shareResult()" id="shareBtn">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+                Share this result
+            </button>
+            <span class="rv2-share-toast" id="shareToast">Link copied!</span>
+        </div>
+
     </div>`;
 
     el.innerHTML = html;
@@ -661,6 +671,48 @@ function displaySingleResult(d) {
     if (window.innerWidth < 768) {
         setTimeout(() => el.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
     }
+}
+
+/* ============================================================
+   Share result
+   ============================================================ */
+
+function checkShareParams() {
+    const params = new URLSearchParams(window.location.search);
+    const course = params.get('course');
+    const living = params.get('living');
+    if (!course) return;
+    if (living === 'home' || living === 'renting') {
+        livingSituation = living;
+        document.querySelectorAll('.living-btn').forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.val === living);
+        });
+        const hint = document.getElementById('livingHint');
+        if (hint) hint.textContent = living === 'home' ? '~€5,000/yr · food, transport & bills (parents cover rent)' : '~€18,000/yr · rent, food, transport & bills (Dublin higher)';
+    }
+    const dd = document.getElementById('course');
+    if (dd) {
+        for (let i = 0; i < dd.options.length; i++) {
+            if (dd.options[i].value === course) { dd.selectedIndex = i; break; }
+        }
+    }
+    calculateROI();
+}
+
+function shareResult() {
+    if (!currentCourseData) return;
+    const course = currentCourseData.course_name;
+    const living = currentCourseData.living_situation || livingSituation;
+    const url = `${window.location.origin}/?course=${encodeURIComponent(course)}&living=${encodeURIComponent(living)}`;
+    navigator.clipboard.writeText(url).then(() => {
+        const toast = document.getElementById('shareToast');
+        if (toast) {
+            toast.classList.add('visible');
+            setTimeout(() => toast.classList.remove('visible'), 2200);
+        }
+    }).catch(() => {
+        prompt('Copy this link:', url);
+    });
 }
 
 /* ============================================================
