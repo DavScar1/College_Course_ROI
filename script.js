@@ -334,6 +334,64 @@ function showAllCourses(evt) {
    Calculate ROI (single course)
    ============================================================ */
 
+/* ── Email capture ───────────────────────────────────────── */
+
+let subShown = false;
+
+function maybeShowSubModal() {
+    if (subShown) return;
+    if (localStorage.getItem('sub_done')) return;
+    const dismissed = localStorage.getItem('sub_dismissed');
+    if (dismissed && Date.now() - parseInt(dismissed) < 7 * 24 * 60 * 60 * 1000) return;
+    subShown = true;
+    setTimeout(() => {
+        document.getElementById('subModal')?.classList.add('visible');
+        document.getElementById('subOverlay')?.classList.add('visible');
+    }, 2500);
+}
+
+function closeSubModal() {
+    document.getElementById('subModal')?.classList.remove('visible');
+    document.getElementById('subOverlay')?.classList.remove('visible');
+    localStorage.setItem('sub_dismissed', Date.now());
+}
+
+function handleSubscribe(e, source) {
+    e.preventDefault();
+    const form = e.target;
+    const email = form.querySelector('input[type="email"]').value.trim();
+    const msgEl = document.getElementById(source === 'modal' ? 'modalSubMsg' : 'footerSubMsg');
+    const btn = form.querySelector('button[type="submit"]');
+
+    btn.disabled = true;
+    btn.textContent = 'Sending…';
+
+    fetch(`${API_BASE_URL}/subscribe`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, source })
+    })
+    .then(r => r.json())
+    .then(data => {
+        if (data.success) {
+            localStorage.setItem('sub_done', '1');
+            form.innerHTML = '<p class="sub-success">✓ You\'re on the list!</p>';
+            if (source === 'modal') {
+                setTimeout(closeSubModal, 1800);
+            }
+        } else {
+            if (msgEl) msgEl.textContent = data.error || 'Something went wrong.';
+            btn.disabled = false;
+            btn.textContent = source === 'modal' ? 'Notify me' : 'Notify me';
+        }
+    })
+    .catch(() => {
+        if (msgEl) msgEl.textContent = 'Could not connect. Please try again.';
+        btn.disabled = false;
+        btn.textContent = 'Notify me';
+    });
+}
+
 function setLiving(btn) {
     livingSituation = btn.dataset.val;
     document.querySelectorAll('.living-btn').forEach(b => b.classList.toggle('active', b === btn));
@@ -364,6 +422,7 @@ function calculateROI() {
 
             currentCourseData = data.data;
             displaySingleResult(currentCourseData);
+            maybeShowSubModal();
         })
         .catch(err => {
             console.error(err);

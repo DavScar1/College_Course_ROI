@@ -2,8 +2,10 @@ from flask import Flask, request, jsonify, send_file, redirect
 import sys
 import os
 import re
+import csv
 import traceback
 import json as json_module
+from datetime import datetime
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'logic'))
 
@@ -291,6 +293,34 @@ def og_image():
         return send_file('og-image.png', mimetype='image/png')
     except FileNotFoundError:
         return jsonify({'error': 'og-image.png not found'}), 404
+
+
+SUBSCRIBERS_FILE = os.path.join(os.path.dirname(__file__), 'subscribers.csv')
+
+@app.route('/subscribe', methods=['POST'])
+def subscribe():
+    data = request.get_json(silent=True) or {}
+    email = (data.get('email') or '').strip().lower()
+    source = (data.get('source') or 'unknown')[:50]
+
+    if not re.match(r'^[^@\s]+@[^@\s]+\.[^@\s]+$', email):
+        return jsonify({'success': False, 'error': 'Invalid email address'}), 400
+
+    # Check for duplicate in existing file
+    if os.path.exists(SUBSCRIBERS_FILE):
+        with open(SUBSCRIBERS_FILE, newline='', encoding='utf-8') as f:
+            for row in csv.DictReader(f):
+                if row.get('email') == email:
+                    return jsonify({'success': True, 'message': 'Already subscribed'})
+
+    file_exists = os.path.exists(SUBSCRIBERS_FILE)
+    with open(SUBSCRIBERS_FILE, 'a', newline='', encoding='utf-8') as f:
+        writer = csv.DictWriter(f, fieldnames=['email', 'source', 'timestamp'])
+        if not file_exists:
+            writer.writeheader()
+        writer.writerow({'email': email, 'source': source, 'timestamp': datetime.utcnow().isoformat()})
+
+    return jsonify({'success': True, 'message': 'Subscribed successfully'})
 
 
 @app.route('/robots.txt')

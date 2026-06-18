@@ -551,12 +551,42 @@
         </div>
       </div>
     </div>
+    <div class="footer-subscribe">
+      <div class="footer-subscribe-inner">
+        <div>
+          <div class="footer-subscribe-title">Stay updated</div>
+          <p class="footer-subscribe-desc">New salary data and courses added regularly. No spam.</p>
+        </div>
+        <form class="footer-sub-form" onsubmit="handleSubscribe(event,'footer')">
+          <input type="email" class="footer-sub-input" placeholder="your@email.com" required>
+          <button type="submit" class="footer-sub-btn">Notify me</button>
+        </form>
+      </div>
+      <div class="footer-sub-msg" id="footerSubMsg"></div>
+    </div>
     <div class="footer-bottom">
       <span>&copy; 2026 CollegeROI Ireland. Not affiliated with the CAO or any university.</span>
       <span>Salary and ROI figures are estimates for guidance only.</span>
     </div>
   </div>
 </footer>
+
+<!-- Email capture modal -->
+<div class="sub-overlay" id="subOverlay" onclick="closeSubModal()"></div>
+<div class="sub-modal" id="subModal" role="dialog" aria-modal="true" aria-labelledby="subModalTitle">
+  <button class="sub-close" onclick="closeSubModal()" aria-label="Close">&times;</button>
+  <div class="sub-icon">
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+  </div>
+  <h2 class="sub-title" id="subModalTitle">Get notified when we update</h2>
+  <p class="sub-body">New salary data, courses and ROI insights — delivered straight to your inbox. No spam, unsubscribe any time.</p>
+  <form class="sub-form" onsubmit="handleSubscribe(event,'modal')">
+    <input type="email" class="sub-input" placeholder="your@email.com" required autocomplete="email">
+    <button type="submit" class="sub-btn">Notify me</button>
+  </form>
+  <div class="sub-msg" id="modalSubMsg"></div>
+  <button class="sub-skip" onclick="closeSubModal()">No thanks</button>
+</div>
 
 <script src="script.js" defer></script>
 <script>
