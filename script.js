@@ -230,79 +230,179 @@ document.addEventListener('DOMContentLoaded', function () {
     scheduleCaoDatesRefresh();
 
     // Search
-    const searchInput = document.getElementById('courseSearch');
-    const searchDrop  = document.getElementById('searchDrop');
-    const clearBtn    = document.getElementById('clearSearch');
-
-    if (searchInput && searchDrop) {
-        searchInput.addEventListener('input', function () {
-            const q = this.value.trim();
-            if (q.length > 0) {
-                if (clearBtn) clearBtn.style.display = 'flex';
-                showSearchDrop(searchCourses(q), q);
-            } else {
-                if (clearBtn) clearBtn.style.display = 'none';
-                searchDrop.style.display = 'none';
-            }
-        });
-
-        if (clearBtn) {
-            clearBtn.addEventListener('click', function () {
-                searchInput.value = '';
-                clearBtn.style.display = 'none';
-                searchDrop.style.display = 'none';
-                searchInput.focus();
-            });
-        }
-
-        document.addEventListener('click', function (e) {
-            if (!searchInput.contains(e.target) && !searchDrop.contains(e.target)) {
-                searchDrop.style.display = 'none';
-            }
-        });
-    }
+    initSearchBox({
+        inputId: 'courseSearch',
+        dropId:  'searchDrop',
+        clearId: 'clearSearch',
+        onPick:  pickFromSearch,
+        excludeFn: () => []
+    });
 });
 
 /* ============================================================
    Search
    ============================================================ */
 
-function searchCourses(query) {
-    const lq = query.toLowerCase();
-    return allCourses.filter(c => c.toLowerCase().includes(lq));
+// Lets users type a full university name and still match the
+// short suffix used in course keys (e.g. "Computer Science - UCD").
+const UNI_ALIASES = {
+    'university college dublin': 'UCD', 'ucd': 'UCD',
+    'trinity college dublin': 'TCD', 'trinity': 'TCD', 'tcd': 'TCD',
+    'university college cork': 'UCC', 'cork': 'UCC', 'ucc': 'UCC',
+    'university of limerick': 'UL', 'limerick': 'UL',
+    'university of galway': 'Galway', 'nuig': 'Galway', 'galway': 'Galway',
+    'maynooth university': 'Maynooth', 'maynooth': 'Maynooth', 'nuim': 'Maynooth',
+    'dublin city university': 'DCU', 'dcu': 'DCU',
+    'tu dublin': 'TU Dublin', 'technological university dublin': 'TU Dublin',
+    'royal college of surgeons': 'RCSI', 'rcsi': 'RCSI',
+};
+
+function resolveUniAlias(query) {
+    const lq = query.toLowerCase().trim();
+    if (lq.length < 3) return null; // avoid noisy matches while the user is still typing
+    for (const [alias, abbr] of Object.entries(UNI_ALIASES)) {
+        if (alias.includes(lq) || lq.includes(alias)) return abbr;
+    }
+    return null;
 }
 
-function showSearchDrop(results, query) {
-    const el = document.getElementById('searchDrop');
-    if (!el) return;
+function searchCourses(query) {
+    const lq = query.toLowerCase();
+    const direct = allCourses.filter(c => c.toLowerCase().includes(lq));
+    const aliasAbbr = resolveUniAlias(query);
+    if (!aliasAbbr) return direct;
+    const aliasMatches = allCourses.filter(c => c.endsWith(` - ${aliasAbbr}`));
+    // merge, direct matches first, no duplicates
+    const seen = new Set(direct);
+    aliasMatches.forEach(c => { if (!seen.has(c)) { direct.push(c); seen.add(c); } });
+    return direct;
+}
 
-    if (results.length === 0) {
-        el.innerHTML = '<div style="padding:12px 14px;font-size:14px;color:var(--faint);text-align:center;">No courses found</div>';
-        el.style.display = 'block';
-        return;
+/**
+ * Generic, reusable search box: handles input, debounced filtering,
+ * keyboard navigation (Up/Down/Enter/Escape), click-outside-to-close,
+ * and ARIA combobox attributes. Used by both the course search and
+ * the compare search so behaviour stays consistent everywhere.
+ */
+function initSearchBox({ inputId, dropId, clearId, onPick, excludeFn, renderItem }) {
+    const input = document.getElementById(inputId);
+    const drop  = document.getElementById(dropId);
+    const clearBtn = clearId ? document.getElementById(clearId) : null;
+    if (!input || !drop) return;
+
+    let results = [];
+    let activeIndex = -1;
+    let debounceTimer = null;
+
+    function close() {
+        drop.style.display = 'none';
+        input.setAttribute('aria-expanded', 'false');
+        input.removeAttribute('aria-activedescendant');
+        activeIndex = -1;
     }
 
-    const escapedQ = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-    const re = new RegExp(escapedQ, 'gi');
+    function highlight(idx) {
+        const items = drop.querySelectorAll('.search-item');
+        items.forEach(it => it.classList.remove('active'));
+        if (idx >= 0 && items[idx]) {
+            items[idx].classList.add('active');
+            items[idx].scrollIntoView({ block: 'nearest' });
+            input.setAttribute('aria-activedescendant', items[idx].id);
+        } else {
+            input.removeAttribute('aria-activedescendant');
+        }
+        activeIndex = idx;
+    }
 
-    let html = '';
-    results.slice(0, 8).forEach(course => {
-        const uni  = course.includes(' - ') ? course.split(' - ').pop() : '';
-        const safe = course.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-        const hl   = safe.replace(re, m => `<mark>${m}</mark>`);
-        const enc  = course.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
-        html += `<div class="search-item" onclick="pickFromSearch('${enc}')" role="option">
-            <div>${hl}</div>
-            ${uni ? `<div class="search-meta">${uni}</div>` : ''}
-        </div>`;
+    function runSearch(q) {
+        const excluded = excludeFn ? excludeFn() : [];
+        results = searchCourses(q).filter(c => !excluded.includes(c)).slice(0, 8);
+
+        if (results.length === 0) {
+            drop.innerHTML = `<div class="search-empty">No courses match "${q.replace(/</g, '&lt;')}"</div>`;
+            drop.style.display = 'block';
+            input.setAttribute('aria-expanded', 'true');
+            activeIndex = -1;
+            return;
+        }
+
+        const escapedQ = q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        const re = new RegExp(`(${escapedQ})`, 'gi');
+
+        drop.innerHTML = results.map((course, i) => {
+            if (renderItem) return renderItem(course, re, i, dropId);
+            const uni  = course.includes(' - ') ? course.split(' - ').pop() : '';
+            const safe = course.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+            const hl   = safe.replace(re, m => `<mark>${m}</mark>`);
+            return `<div class="search-item" id="${dropId}-opt-${i}" data-idx="${i}" role="option">
+                <div>${hl}</div>
+                ${uni ? `<div class="search-meta">${uni}</div>` : ''}
+            </div>`;
+        }).join('');
+        drop.style.display = 'block';
+        input.setAttribute('aria-expanded', 'true');
+        activeIndex = -1;
+
+        drop.querySelectorAll('.search-item').forEach((el, i) => {
+            el.addEventListener('click', () => { onPick(results[i]); close(); });
+        });
+    }
+
+    input.addEventListener('input', function () {
+        const q = this.value.trim();
+        if (clearBtn) clearBtn.style.display = q.length ? 'flex' : 'none';
+        clearTimeout(debounceTimer);
+        if (q.length === 0) { close(); return; }
+        debounceTimer = setTimeout(() => runSearch(q), 80);
     });
 
-    el.innerHTML = html;
-    el.style.display = 'block';
+    input.addEventListener('keydown', function (e) {
+        const visible = drop.style.display === 'block';
+        if (e.key === 'ArrowDown') {
+            e.preventDefault();
+            if (!visible || results.length === 0) return;
+            highlight(Math.min(activeIndex + 1, results.length - 1));
+        } else if (e.key === 'ArrowUp') {
+            e.preventDefault();
+            if (!visible || results.length === 0) return;
+            highlight(Math.max(activeIndex - 1, 0));
+        } else if (e.key === 'Enter') {
+            if (visible && activeIndex >= 0 && results[activeIndex]) {
+                e.preventDefault();
+                onPick(results[activeIndex]);
+                close();
+            }
+        } else if (e.key === 'Escape') {
+            close();
+        }
+    });
+
+    if (clearBtn) {
+        clearBtn.addEventListener('click', function () {
+            input.value = '';
+            clearBtn.style.display = 'none';
+            close();
+            input.focus();
+        });
+    }
+
+    document.addEventListener('click', function (e) {
+        if (!input.contains(e.target) && !drop.contains(e.target)) close();
+    });
 }
 
 function pickFromSearch(course) {
-    document.getElementById('course').value = course;
+    const select = document.getElementById('course');
+    select.value = course;
+    // brief visual confirmation so the choice is obvious on mobile,
+    // where the long listbox may be scrolled out of view
+    Array.from(select.options).forEach(o => o.selected = o.value === course);
+    select.classList.add('select-flash');
+    setTimeout(() => select.classList.remove('select-flash'), 600);
+    if (typeof select.scrollIntoView === 'function') {
+        const selectedOpt = Array.from(select.options).find(o => o.value === course);
+        if (selectedOpt) selectedOpt.scrollIntoView({ block: 'center' });
+    }
     document.getElementById('courseSearch').value = '';
     const clearBtn = document.getElementById('clearSearch');
     if (clearBtn) clearBtn.style.display = 'none';
@@ -971,22 +1071,12 @@ function selectCourseFromGrid(course) {
 let compareSelectedCourses = [];
 
 function initCompareSearch() {
-    const input = document.getElementById('compareSearch');
-    const drop  = document.getElementById('compareSearchDrop');
-    if (!input || !drop) return;
-
-    input.addEventListener('input', function () {
-        const q = this.value.trim();
-        if (q.length === 0) { drop.style.display = 'none'; return; }
-        const results = allCourses.filter(c => c.toLowerCase().includes(q.toLowerCase()) && !compareSelectedCourses.includes(c));
-        if (results.length === 0) {
-            drop.innerHTML = '<div style="padding:12px 14px;font-size:14px;color:var(--faint);text-align:center;">No courses found</div>';
-            drop.style.display = 'block';
-            return;
-        }
-        const escapedQ = q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-        const re = new RegExp(escapedQ, 'gi');
-        drop.innerHTML = results.slice(0, 8).map(course => {
+    initSearchBox({
+        inputId: 'compareSearch',
+        dropId:  'compareSearchDrop',
+        onPick:  addToCompare,
+        excludeFn: () => compareSelectedCourses,
+        renderItem: (course, re, i, dropId) => {
             const parts = course.includes(' - ') ? course.split(' - ') : [course, ''];
             const uni   = parts[parts.length - 1];
             const name  = parts.slice(0, -1).join(' - ') || course;
@@ -994,17 +1084,11 @@ function initCompareSearch() {
             const safeUni  = uni.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
             const hlName   = safeName.replace(re, m => `<mark>${m}</mark>`);
             const hlUni    = safeUni.replace(re, m => `<mark>${m}</mark>`);
-            const enc  = course.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
-            return `<div class="search-item" onclick="addToCompare('${enc}')" role="option" style="display:flex;flex-direction:column;gap:2px;padding:9px 14px">
+            return `<div class="search-item" id="${dropId}-opt-${i}" data-idx="${i}" role="option" style="display:flex;flex-direction:column;gap:2px;padding:9px 14px">
                 <span class="search-item-name">${hlName}</span>
                 <span class="search-item-uni">${hlUni}</span>
             </div>`;
-        }).join('');
-        drop.style.display = 'block';
-    });
-
-    document.addEventListener('click', function (e) {
-        if (!input.contains(e.target) && !drop.contains(e.target)) drop.style.display = 'none';
+        }
     });
 }
 

@@ -221,13 +221,13 @@
               </div>
             </div>
 
-            <!-- search (desktop) -->
-            <div class="field desktop-only" style="position:relative;">
+            <!-- search (desktop + mobile) -->
+            <div class="field" style="position:relative;">
               <label class="label" for="courseSearch">Search</label>
               <div class="search-wrap">
                 <svg class="search-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
-                <input type="text" id="courseSearch" class="input search-input" placeholder="Type to search…" autocomplete="off" aria-label="Search courses">
-                <button class="search-clear" id="clearSearch" style="display:none;" aria-label="Clear">&times;</button>
+                <input type="text" id="courseSearch" class="input search-input" placeholder="Search by course or university…" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Search courses" aria-autocomplete="list" aria-expanded="false" aria-controls="searchDrop" role="combobox">
+                <button class="search-clear" id="clearSearch" style="display:none;" aria-label="Clear search">&times;</button>
               </div>
               <div id="searchDrop" class="search-dropdown" style="display:none;" role="listbox"></div>
             </div>
@@ -393,7 +393,7 @@
       <div class="cmp-search-row">
         <div class="cmp-search-field" style="position:relative;">
           <svg class="search-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
-          <input type="text" id="compareSearch" class="cmp-search-input" placeholder="Search and add a course…" autocomplete="off" aria-label="Search courses to compare">
+          <input type="text" id="compareSearch" class="cmp-search-input" placeholder="Search and add a course…" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Search courses to compare" aria-autocomplete="list" aria-expanded="false" aria-controls="compareSearchDrop" role="combobox">
           <div id="compareSearchDrop" class="search-dropdown" style="display:none;" role="listbox"></div>
         </div>
         <button class="btn-primary cmp-compare-btn" onclick="compareMultipleCourses()" id="compareBtn" disabled>

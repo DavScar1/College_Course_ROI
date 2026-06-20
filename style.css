@@ -503,6 +503,15 @@ input, select, textarea { font-size: 16px !important; } /* prevent iOS zoom */
   line-height: 1.6;
 }
 
+.select-flash {
+  animation: selectFlash 0.6s ease-out;
+}
+
+@keyframes selectFlash {
+  0%   { box-shadow: 0 0 0 3px rgba(37,99,235,0.35); border-color: var(--blue); }
+  100% { box-shadow: 0 0 0 0 rgba(37,99,235,0); }
+}
+
 .select option { padding: 4px 6px; }
 
 /* prefixed input */
@@ -666,7 +675,12 @@ input, select, textarea { font-size: 16px !important; } /* prevent iOS zoom */
   pointer-events: none;
 }
 
-.search-input { padding-left: 34px !important; padding-right: 36px !important; }
+.search-input {
+  padding-left: 34px !important;
+  padding-right: 36px !important;
+  font-size: 16px !important; /* prevents iOS auto-zoom on focus */
+  min-height: 44px;           /* comfortable touch target */
+}
 
 .search-clear {
   position: absolute;
@@ -675,42 +689,74 @@ input, select, textarea { font-size: 16px !important; } /* prevent iOS zoom */
   transform: translateY(-50%);
   background: var(--border);
   border: none;
-  border-radius: 4px;
-  width: 22px;
-  height: 22px;
-  font-size: 14px;
+  border-radius: 5px;
+  width: 26px;
+  height: 26px;
+  font-size: 15px;
   line-height: 1;
   cursor: pointer;
   color: var(--muted);
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: background 0.15s, color 0.15s;
 }
+.search-clear:hover { background: var(--border-dark); color: var(--text); }
 
 .search-dropdown {
   position: absolute;
   left: 0; right: 0;
-  top: calc(100% + 4px);
+  top: calc(100% + 6px);
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  box-shadow: 0 8px 24px rgba(0,0,0,0.12);
-  max-height: 260px;
+  box-shadow: 0 10px 28px rgba(0,0,0,0.14);
+  max-height: 320px;
   overflow-y: auto;
   z-index: 500;
+  animation: searchDropIn 0.12s ease-out;
+}
+
+@keyframes searchDropIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
 .search-item {
-  padding: 10px 14px;
+  padding: 11px 14px;
+  min-height: 44px;
   cursor: pointer;
   border-bottom: 1px solid var(--bg);
   font-size: 14px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1px;
+  transition: background 0.1s;
 }
 
-.search-item:hover { background: var(--blue-bg); }
+.search-item:hover,
+.search-item.active { background: var(--blue-bg); }
 .search-item:last-child { border-bottom: none; }
-.search-item mark { background: #fef9c3; padding: 0 2px; border-radius: 2px; font-style: normal; }
-.search-meta { font-size: 12px; color: var(--faint); margin-top: 2px; }
+.search-item mark { background: #fef9c3; padding: 0 2px; border-radius: 2px; font-style: normal; color: inherit; }
+.search-meta { font-size: 12px; color: var(--faint); margin-top: 1px; }
+
+.search-empty {
+  padding: 16px 14px;
+  font-size: 14px;
+  color: var(--faint);
+  text-align: center;
+}
+
+.search-hint {
+  font-size: 12px;
+  color: var(--faint);
+  margin-top: 6px;
+}
+
+@media (max-width: 767px) {
+  .search-dropdown { max-height: 280px; }
+}
 
 /* ── Pill filters ────────────────────────────────────────── */
 
@@ -1560,10 +1606,11 @@ input, select, textarea { font-size: 16px !important; } /* prevent iOS zoom */
 .cmp-search-input {
   width: 100%;
   padding: 11px 14px 11px 38px;
+  min-height: 44px;
   border: 1.5px solid var(--border);
   border-radius: var(--radius-sm);
   font-family: 'Inter', sans-serif;
-  font-size: 14px;
+  font-size: 16px;
   color: var(--text);
   background: var(--bg);
   outline: none;
