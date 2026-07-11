@@ -3156,6 +3156,42 @@ input, select, textarea { font-size: 16px !important; } /* prevent iOS zoom */
 }
 .rv2-share-toast.visible { opacity: 1; }
 
+/* ── Helpful feedback ─────────────────────────────────────── */
+
+.rv2-helpful-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 20px 20px;
+}
+
+.rv2-helpful-label {
+  font-size: 13px;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.rv2-helpful-btn {
+  padding: 5px 14px;
+  border: 1.5px solid var(--border);
+  border-radius: 20px;
+  background: var(--surface);
+  color: var(--text);
+  font-size: 13px;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.rv2-helpful-btn:hover { background: var(--blue-bg); border-color: var(--blue); }
+
+.rv2-helpful-thanks {
+  display: none;
+  padding: 0 20px 20px;
+  font-size: 13px;
+  color: #16a34a;
+  font-weight: 500;
+}
+
 /* ── Footer ──────────────────────────────────────────────── */
 
 .site-footer {

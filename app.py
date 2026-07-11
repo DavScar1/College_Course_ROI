@@ -296,6 +296,7 @@ def og_image():
 
 
 SUBSCRIBERS_FILE = os.path.join(os.path.dirname(__file__), 'subscribers.csv')
+FEEDBACK_FILE = os.path.join(os.path.dirname(__file__), 'feedback.csv')
 
 @app.route('/subscribe', methods=['POST'])
 def subscribe():
@@ -321,6 +322,86 @@ def subscribe():
         writer.writerow({'email': email, 'source': source, 'timestamp': datetime.utcnow().isoformat()})
 
     return jsonify({'success': True, 'message': 'Subscribed successfully'})
+
+
+@app.route('/feedback', methods=['POST'])
+def feedback():
+    data = request.get_json(silent=True) or {}
+    helpful = data.get('helpful', '').strip().lower()
+    course = (data.get('course') or 'unknown')[:200]
+
+    if helpful not in ('yes', 'no'):
+        return jsonify({'success': False, 'error': 'Invalid value'}), 400
+
+    file_exists = os.path.exists(FEEDBACK_FILE)
+    with open(FEEDBACK_FILE, 'a', newline='', encoding='utf-8') as f:
+        writer = csv.DictWriter(f, fieldnames=['timestamp', 'helpful', 'course'])
+        if not file_exists:
+            writer.writeheader()
+        writer.writerow({
+            'timestamp': datetime.utcnow().isoformat(),
+            'helpful': helpful,
+            'course': course,
+        })
+
+    return jsonify({'success': True})
+
+
+@app.route('/feedback-stats')
+def feedback_stats():
+    if not os.path.exists(FEEDBACK_FILE):
+        rows = []
+    else:
+        with open(FEEDBACK_FILE, newline='', encoding='utf-8') as f:
+            rows = list(csv.DictReader(f))
+
+    total = len(rows)
+    yes = sum(1 for r in rows if r.get('helpful') == 'yes')
+    no = total - yes
+    pct = round(yes / total * 100) if total else 0
+
+    # Top courses by feedback count
+    from collections import Counter
+    course_counts = Counter(r.get('course', 'unknown') for r in rows)
+    top_courses = course_counts.most_common(20)
+
+    rows_html = ''.join(
+        f'<tr><td>{c}</td><td>{n}</td></tr>' for c, n in top_courses
+    )
+
+    html = f"""<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><title>Feedback Stats</title>
+<style>
+  body {{ font-family: sans-serif; max-width: 520px; margin: 60px auto; padding: 0 20px; color: #111; }}
+  h1 {{ font-size: 1.4rem; margin-bottom: 24px; }}
+  .stat {{ display: flex; gap: 32px; margin-bottom: 32px; }}
+  .box {{ background: #f4f4f5; border-radius: 10px; padding: 20px 28px; text-align: center; flex: 1; }}
+  .box .n {{ font-size: 2.4rem; font-weight: 700; }}
+  .box .lbl {{ font-size: 0.85rem; color: #555; margin-top: 4px; }}
+  .pct {{ font-size: 3rem; font-weight: 800; color: #16a34a; text-align: center; margin-bottom: 8px; }}
+  .pct-lbl {{ text-align: center; color: #555; font-size: 0.9rem; margin-bottom: 36px; }}
+  table {{ width: 100%; border-collapse: collapse; font-size: 0.9rem; }}
+  th {{ text-align: left; border-bottom: 2px solid #e5e7eb; padding: 6px 4px; }}
+  td {{ padding: 5px 4px; border-bottom: 1px solid #f0f0f0; }}
+</style>
+</head>
+<body>
+  <h1>Feedback Summary</h1>
+  <div class="pct">{pct}%</div>
+  <div class="pct-lbl">of users said this was helpful</div>
+  <div class="stat">
+    <div class="box"><div class="n">{yes}</div><div class="lbl">Yes</div></div>
+    <div class="box"><div class="n">{no}</div><div class="lbl">No</div></div>
+    <div class="box"><div class="n">{total}</div><div class="lbl">Total</div></div>
+  </div>
+  <h2 style="font-size:1rem;margin-bottom:12px;">Top courses by feedback</h2>
+  <table><thead><tr><th>Course</th><th>Responses</th></tr></thead>
+  <tbody>{rows_html}</tbody></table>
+</body>
+</html>"""
+
+    return html, 200, {'Content-Type': 'text/html'}
 
 
 @app.route('/robots.txt')

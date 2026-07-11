@@ -763,6 +763,14 @@ function displaySingleResult(d) {
             <span class="rv2-share-toast" id="shareToast">Link copied!</span>
         </div>
 
+        <!-- Helpful feedback -->
+        <div class="rv2-helpful-row" id="helpfulRow">
+            <span class="rv2-helpful-label">Was this helpful?</span>
+            <button class="rv2-helpful-btn" onclick="sendFeedback('yes')" aria-label="Yes, helpful">👍 Yes</button>
+            <button class="rv2-helpful-btn" onclick="sendFeedback('no')" aria-label="No, not helpful">👎 No</button>
+        </div>
+        <div class="rv2-helpful-thanks" id="helpfulThanks">Thanks for the feedback!</div>
+
     </div>`;
 
     el.innerHTML = html;
@@ -797,6 +805,21 @@ function checkShareParams() {
         }
     }
     calculateROI();
+}
+
+function sendFeedback(helpful) {
+    const row = document.getElementById('helpfulRow');
+    const thanks = document.getElementById('helpfulThanks');
+    if (!row) return;
+    row.style.display = 'none';
+    thanks.style.display = 'block';
+
+    const course = (currentCourseData && currentCourseData.course_name) || 'unknown';
+    fetch('/feedback', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ helpful, course }),
+    }).catch(() => {});
 }
 
 function shareResult() {
